@@ -7,17 +7,18 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.bonsai.sciencetodo.model.IntValue
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface IntValueDao {
     @Query("SELECT * FROM int_value")
-    suspend fun getAll(): List<IntValue>
+    fun getAll(): Flow<List<IntValue>>
 
     @Query("SELECT * FROM int_value WHERE id = :id")
-    suspend fun getById(id: Int): IntValue
+    fun getById(id: Int): Flow<IntValue>
 
     @Query("SELECT * FROM int_value WHERE name LIKE :name")
-    suspend fun getByName(name: String): List<IntValue>
+    fun getByName(name: String): Flow<IntValue>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(intValue: IntValue)

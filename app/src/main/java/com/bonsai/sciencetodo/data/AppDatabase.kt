@@ -22,11 +22,18 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun intValueDao(): IntValueDao
 
     companion object {
+        @Volatile
+        private var INSTANCE: AppDatabase? = null
+
         fun getDatabase(context: Context): AppDatabase {
             return Room.databaseBuilder(
                 context,
                 AppDatabase::class.java, "science-todo"
-            ).build()
+            )
+                .build()
+                .also {
+                    INSTANCE = it
+                }
         }
     }
 }

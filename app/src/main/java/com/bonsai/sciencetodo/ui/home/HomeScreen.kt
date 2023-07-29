@@ -19,10 +19,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.bonsai.sciencetodo.ui.AppViewModelProvider
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel, navController: NavController) {
+fun HomeScreen(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
     val uiState by viewModel.uiState.collectAsState()
 
     if (uiState.showDialog) {
@@ -58,9 +64,12 @@ fun HomeScreen(viewModel: HomeViewModel, navController: NavController) {
             FloatingActionButton(onClick = { viewModel.showDialog() }) {
                 Icon(Icons.Default.Add, contentDescription = "Add DataFlow")
             }
-        }
-    ) {paddingValues ->
-        LazyColumn(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
+        },
+        modifier = modifier
+    ) { paddingValues ->
+        LazyColumn(modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues)) {
             items(uiState.dataFlows) { dataFlow ->
                 Text(
                     text = dataFlow.name,

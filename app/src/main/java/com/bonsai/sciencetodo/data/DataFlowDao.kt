@@ -12,13 +12,13 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface DataFlowDao {
     @Query("SELECT * FROM data_flow")
-    suspend fun getAll(): Flow<List<DataFlow>>
+    fun getAll(): Flow<List<DataFlow>>
 
     @Query("SELECT * FROM data_flow WHERE id = :id")
-    suspend fun getById(id: Int): DataFlow
+    fun getById(id: Int): Flow<DataFlow>
 
     @Query("SELECT * FROM data_flow WHERE name LIKE :name")
-    suspend fun getByName(name: String): List<DataFlow>
+    fun getByName(name: String): Flow<DataFlow>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(dataFlow: DataFlow)
