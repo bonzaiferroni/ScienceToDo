@@ -7,11 +7,12 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.bonsai.sciencetodo.model.DataFlow
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DataFlowDao {
     @Query("SELECT * FROM data_flow")
-    suspend fun getAll(): List<DataFlow>
+    suspend fun getAll(): Flow<List<DataFlow>>
 
     @Query("SELECT * FROM data_flow WHERE id = :id")
     suspend fun getById(id: Int): DataFlow
