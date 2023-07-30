@@ -3,7 +3,7 @@ package com.bonsai.sciencetodo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.bonsai.sciencetodo.ui.AppNavHost
+import com.bonsai.sciencetodo.ui.ScienceToDoApp
 import com.bonsai.sciencetodo.ui.theme.ScienceToDoTheme
 
 class MainActivity : ComponentActivity() {
@@ -11,7 +11,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ScienceToDoTheme {
-                AppNavHost()
+                ScienceToDoApp()
             }
         }
     }

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Science ToDo</string>
+    <string name="back_button">back</string>
 </resources>
