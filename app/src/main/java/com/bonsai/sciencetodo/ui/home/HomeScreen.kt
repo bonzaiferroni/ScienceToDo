@@ -1,13 +1,17 @@
 package com.bonsai.sciencetodo.ui.home
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Card
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -19,8 +23,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.bonsai.sciencetodo.model.DataFlow
 import com.bonsai.sciencetodo.ui.AppViewModelProvider
 
 @Composable
@@ -30,6 +36,9 @@ fun HomeScreen(
     viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val onClickCard: (DataFlow) -> Unit = { dataFlow ->
+        navController.navigate("dataFlowDetails/${dataFlow.id}")
+    }
 
     if (uiState.showDialog) {
         AlertDialog(
@@ -67,17 +76,33 @@ fun HomeScreen(
         },
         modifier = modifier
     ) { paddingValues ->
-        LazyColumn(modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues)) {
+        LazyColumn(
+            contentPadding = PaddingValues(8.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
             items(uiState.dataFlows) { dataFlow ->
-                Text(
-                    text = dataFlow.name,
-                    modifier = Modifier.clickable {
-                        navController.navigate("dataFlowDetails/${dataFlow.id}")
-                    }
-                )
+                DataFlowCard(dataFlow, onClickCard)
             }
+        }
+    }
+}
+
+@Composable
+fun DataFlowCard(
+    dataFlow: DataFlow,
+    onClickCard: (DataFlow) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Card(modifier = modifier
+        .fillMaxWidth()
+        .padding(vertical = 4.dp)) {
+        Column(modifier = Modifier.padding(8.dp)) {
+            Text(
+                text = dataFlow.name,
+                modifier = Modifier.clickable { onClickCard(dataFlow) }
+            )
         }
     }
 }
