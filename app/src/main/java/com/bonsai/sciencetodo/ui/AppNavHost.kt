@@ -55,13 +55,13 @@ fun AppNavHost(
         modifier = modifier
     ) {
         composable(route = AppScreens.Home.name) {
-            HomeScreen()
+            HomeScreen(navController = navController)
         }
         composable(
             route = AppScreens.DataFlowProfile.routeWithArgs,
             arguments = listOf(AppScreens.DataFlowProfile.getNavArg())
         ) {
-            DataFlowProfileScreen()
+            DataFlowProfileScreen(navController = navController)
         }
     }
 }

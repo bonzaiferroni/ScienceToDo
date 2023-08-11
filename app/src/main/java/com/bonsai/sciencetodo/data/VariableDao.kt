@@ -17,6 +17,9 @@ interface VariableDao {
     @Query("SELECT * FROM variable WHERE id = :id")
     fun getById(id: Int): Flow<Variable>
 
+    @Query("SELECT * FROM variable where data_flow_id = :id")
+    fun getByFlowId(id: Int): Flow<List<Variable>>
+
     @Query("SELECT * FROM variable WHERE name LIKE :name")
     fun getByName(name: String): Flow<Variable>
 

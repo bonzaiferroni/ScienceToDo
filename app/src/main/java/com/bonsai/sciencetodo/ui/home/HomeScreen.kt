@@ -27,7 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavController
 import com.bonsai.sciencetodo.R
 import com.bonsai.sciencetodo.data.FakeDataFlowDao
 import com.bonsai.sciencetodo.model.DataFlow
@@ -39,12 +39,13 @@ import com.bonsai.sciencetodo.ui.ScienceToDoTopAppBar
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    navController: NavController? = null,
     viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    val navController = rememberNavController()
     val uiState by viewModel.uiState.collectAsState()
     val onClickCard: (DataFlow) -> Unit = { dataFlow ->
-        navController.navigate(AppScreens.DataFlowProfile.getRoute(dataFlow))
+        val route = AppScreens.DataFlowProfile.getRoute(dataFlow)
+        navController?.navigate(route)
     }
 
     if (uiState.showDialog) {
