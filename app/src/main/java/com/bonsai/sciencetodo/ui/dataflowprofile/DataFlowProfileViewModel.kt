@@ -67,6 +67,12 @@ class DataFlowProfileViewModel(
     fun updateVariableType(variableType: VariableType) {
         _uiState.value = _uiState.value.copy(newVariableType = variableType)
     }
+
+    fun removeVariable(variable: Variable) {
+        viewModelScope.launch {
+            variableDao.delete(variable)
+        }
+    }
 }
 
 data class DataFlowProfileUiState(

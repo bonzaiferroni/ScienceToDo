@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenuItem
@@ -20,6 +21,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -68,15 +70,21 @@ fun DataFlowProfileScreen(
                 .padding(paddingValues)
                 .fillMaxWidth(),
         ) {
-            DataFlowDetails(uiState)
-            VariableList(uiState)
-            AddVariableControl(uiState = uiState, viewModel = viewModel)
+            DataFlowDetails(uiState.dataFlow.name)
+            VariableList(uiState.variables, viewModel::removeVariable)
+            AddVariableControl(
+                newVariableName = uiState.newVariableName,
+                newVariableType = uiState.newVariableType,
+                updateVariableName = viewModel::updateVariableName,
+                updateVariableType = viewModel::updateVariableType,
+                addVariable = viewModel::addVariable
+            )
         }
     }
 }
 
 @Composable
-fun DataFlowDetails(uiState: DataFlowProfileUiState, modifier: Modifier = Modifier) {
+fun DataFlowDetails(dataFlowName: String, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .background(MaterialTheme.colorScheme.primaryContainer)
@@ -87,7 +95,7 @@ fun DataFlowDetails(uiState: DataFlowProfileUiState, modifier: Modifier = Modifi
                 .fillMaxWidth(),
         ) {
             Text(
-                text = uiState.dataFlow?.name ?: "404",
+                text = dataFlowName,
                 style = MaterialTheme.typography.titleMedium
             )
         }
@@ -96,20 +104,28 @@ fun DataFlowDetails(uiState: DataFlowProfileUiState, modifier: Modifier = Modifi
 }
 
 @Composable
-fun VariableList(uiState: DataFlowProfileUiState, modifier: Modifier = Modifier) {
+fun VariableList(
+    variables: List<Variable>,
+    onRemoveVariable: (variable: Variable) -> Unit,
+    modifier: Modifier = Modifier
+) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.gap_medium)),
         contentPadding = PaddingValues(dimensionResource(R.dimen.padding_small)),
         modifier = modifier
     ) {
-        items(uiState.variables, key = { it.id }) {
-            VariableCard(variable = it)
+        items(variables, key = { it.id }) { variable ->
+            VariableCard(variable, onRemoveVariable)
         }
     }
 }
 
 @Composable
-fun VariableCard(variable: Variable, modifier: Modifier = Modifier) {
+fun VariableCard(
+    variable: Variable,
+    onRemoveVariable: (variable: Variable) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -126,6 +142,12 @@ fun VariableCard(variable: Variable, modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.outline
             )
+            IconButton(onClick = { onRemoveVariable(variable) }) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "remove variable"
+                )
+            }
         }
     }
 }
@@ -133,8 +155,11 @@ fun VariableCard(variable: Variable, modifier: Modifier = Modifier) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddVariableControl(
-    uiState: DataFlowProfileUiState,
-    viewModel: DataFlowProfileViewModel,
+    newVariableName: String,
+    newVariableType: VariableType,
+    updateVariableName: (variableName: String) -> Unit,
+    updateVariableType: (variableType: VariableType) -> Unit,
+    addVariable: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -144,8 +169,8 @@ fun AddVariableControl(
             .padding(dimensionResource(R.dimen.padding_small))
     ) {
         TextField(
-            value = uiState.newVariableName,
-            onValueChange = viewModel::updateVariableName,
+            value = newVariableName,
+            onValueChange = updateVariableName,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = dimensionResource(R.dimen.gap_medium)),
@@ -164,7 +189,7 @@ fun AddVariableControl(
                     .weight(1f)
             ) {
                 TextField(
-                    value = uiState.newVariableType.name,
+                    value = newVariableType.name,
                     onValueChange = {},
                     readOnly = true,
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
@@ -177,16 +202,16 @@ fun AddVariableControl(
                             text = {
                                 Text(text = variableType.name)
                             }, onClick = {
-                                viewModel.updateVariableType(variableType)
+                                updateVariableType(variableType)
                                 expanded = false
                             })
                     }
                 }
             }
-            Button(onClick = viewModel::addVariable) {
+            Button(onClick = addVariable) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription = "Add variable"
+                    contentDescription = "add variable"
                 )
             }
         }
