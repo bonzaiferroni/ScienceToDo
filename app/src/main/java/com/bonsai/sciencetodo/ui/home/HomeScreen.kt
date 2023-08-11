@@ -1,6 +1,7 @@
 package com.bonsai.sciencetodo.ui.home
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,10 +24,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.bonsai.sciencetodo.R
+import com.bonsai.sciencetodo.data.FakeDataFlowDao
 import com.bonsai.sciencetodo.model.DataFlow
 import com.bonsai.sciencetodo.ui.AppScreens
 import com.bonsai.sciencetodo.ui.AppViewModelProvider
@@ -35,10 +38,10 @@ import com.bonsai.sciencetodo.ui.ScienceToDoTopAppBar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    navController: NavController,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    val navController = rememberNavController()
     val uiState by viewModel.uiState.collectAsState()
     val onClickCard: (DataFlow) -> Unit = { dataFlow ->
         navController.navigate(AppScreens.DataFlowProfile.getRoute(dataFlow))
@@ -84,7 +87,8 @@ fun HomeScreen(
         modifier = modifier
     ) { paddingValues ->
         LazyColumn(
-            contentPadding = PaddingValues(8.dp),
+            contentPadding = PaddingValues(dimensionResource(R.dimen.padding_small)),
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.gap_medium)),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
@@ -105,12 +109,13 @@ fun DataFlowCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp)
+            .clickable { onClickCard(dataFlow) }
     ) {
-        Column(modifier = Modifier.padding(8.dp)) {
+        Column(
+            modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
+        ) {
             Text(
-                text = dataFlow.name,
-                modifier = Modifier.clickable { onClickCard(dataFlow) }
+                text = dataFlow.name
             )
         }
     }
@@ -119,4 +124,9 @@ fun DataFlowCard(
 @Preview
 @Composable
 fun HomeScreenPreview() {
+    HomeScreen(
+        viewModel = HomeViewModel(
+            dataFlowDao = FakeDataFlowDao()
+        )
+    )
 }
