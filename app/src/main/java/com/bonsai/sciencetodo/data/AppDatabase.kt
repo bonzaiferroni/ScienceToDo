@@ -12,7 +12,7 @@ import com.bonsai.sciencetodo.model.Variable
 
 @Database(
     entities = [DataFlow::class, Variable::class, StringValue::class, IntValue::class],
-    version = 1
+    version = 2
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -30,6 +30,7 @@ abstract class AppDatabase : RoomDatabase() {
                 context,
                 AppDatabase::class.java, "science-todo"
             )
+                .fallbackToDestructiveMigration()
                 .build()
                 .also {
                     INSTANCE = it

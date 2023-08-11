@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.flowOf
 
 class FakeVariableDao : VariableDao {
     private val fakeVariables = listOf(
-        Variable(1, "Calories", 1),
-        Variable(2, "Meal", 1),
-        Variable(3, "Rating", 1)
+        Variable(1, "Calories", 1, VariableType.Integer),
+        Variable(2, "Meal", 1, VariableType.String),
+        Variable(3, "Rating", 1, VariableType.Integer)
     )
 
     override fun getAll(): Flow<List<Variable>> {

@@ -1,12 +1,12 @@
 package com.bonsai.sciencetodo.ui.dataflowprofile
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,7 +15,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -24,6 +27,9 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -34,6 +40,7 @@ import androidx.navigation.NavController
 import com.bonsai.sciencetodo.R
 import com.bonsai.sciencetodo.data.FakeDataFlowDao
 import com.bonsai.sciencetodo.data.FakeVariableDao
+import com.bonsai.sciencetodo.data.VariableType
 import com.bonsai.sciencetodo.model.Variable
 import com.bonsai.sciencetodo.ui.AppScreens
 import com.bonsai.sciencetodo.ui.AppViewModelProvider
@@ -88,7 +95,6 @@ fun DataFlowDetails(uiState: DataFlowProfileUiState, modifier: Modifier = Modifi
 
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun VariableList(uiState: DataFlowProfileUiState, modifier: Modifier = Modifier) {
     LazyColumn(
@@ -108,43 +114,83 @@ fun VariableCard(variable: Variable, modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxWidth()
     ) {
-        Column(
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .padding(dimensionResource(R.dimen.padding_small))
         ) {
             Text(text = variable.name)
+            Spacer(modifier = Modifier.weight(1f))
+            Text(
+                text = variable.type.name,
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.outline
+            )
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddVariableControl(
     uiState: DataFlowProfileUiState,
     viewModel: DataFlowProfileViewModel,
     modifier: Modifier = Modifier
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
+    var expanded by remember { mutableStateOf(false) }
+
+    Column(
         modifier = modifier
             .padding(dimensionResource(R.dimen.padding_small))
     ) {
         TextField(
             value = uiState.newVariableName,
             onValueChange = viewModel::updateVariableName,
-            shape = MaterialTheme.shapes.medium,
             modifier = Modifier
-                .weight(1f)
-                .padding(end = dimensionResource(R.dimen.gap_medium)),
+                .fillMaxWidth()
+                .padding(bottom = dimensionResource(R.dimen.gap_medium)),
             label = {
                 Text(text = "add variable")
             }
         )
-        Button(onClick = viewModel::addVariable) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "Add variable"
-            )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+
+            ExposedDropdownMenuBox(
+                expanded = expanded,
+                onExpandedChange = { expanded = !expanded },
+                modifier = Modifier
+                    .weight(1f)
+            ) {
+                TextField(
+                    value = uiState.newVariableType.name,
+                    onValueChange = {},
+                    readOnly = true,
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                    modifier = Modifier.menuAnchor()
+                )
+
+                ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                    VariableType.values().forEach { variableType ->
+                        DropdownMenuItem(
+                            text = {
+                                Text(text = variableType.name)
+                            }, onClick = {
+                                viewModel.updateVariableType(variableType)
+                                expanded = false
+                            })
+                    }
+                }
+            }
+            Button(onClick = viewModel::addVariable) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Add variable"
+                )
+            }
         }
+
     }
 }
 

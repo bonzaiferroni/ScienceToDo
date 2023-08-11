@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.bonsai.sciencetodo.data.VariableType
 
 @Entity(
     tableName = "variable",
@@ -24,4 +25,6 @@ data class Variable(
     val name: String,
     @ColumnInfo(name = "data_flow_id")
     val dataFlowId: Int,
+    @ColumnInfo(name = "type")
+    val type: VariableType,
 )
