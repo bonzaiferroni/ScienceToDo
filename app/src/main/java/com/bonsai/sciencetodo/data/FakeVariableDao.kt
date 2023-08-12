@@ -1,6 +1,7 @@
 package com.bonsai.sciencetodo.data
 
 import com.bonsai.sciencetodo.model.Variable
+import com.bonsai.sciencetodo.model.VariableType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 

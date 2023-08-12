@@ -32,7 +32,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.bonsai.sciencetodo.R
 import com.bonsai.sciencetodo.data.FakeVariableDao
-import com.bonsai.sciencetodo.data.VariableType
+import com.bonsai.sciencetodo.model.VariableType
 import java.util.Locale
 
 @Composable

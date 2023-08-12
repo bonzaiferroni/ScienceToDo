@@ -5,7 +5,6 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.bonsai.sciencetodo.data.VariableType
 
 @Entity(
     tableName = "variable",

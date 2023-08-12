@@ -1,6 +1,7 @@
 package com.bonsai.sciencetodo.data
 
 import androidx.room.TypeConverter
+import com.bonsai.sciencetodo.model.VariableType
 import java.util.Date
 
 class Converters {

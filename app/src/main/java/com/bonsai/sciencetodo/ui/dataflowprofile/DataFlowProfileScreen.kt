@@ -46,7 +46,7 @@ import com.bonsai.sciencetodo.data.FakeObservationDao
 import com.bonsai.sciencetodo.data.FakeStringValueDao
 import com.bonsai.sciencetodo.data.FakeVariableDao
 import com.bonsai.sciencetodo.data.ObservationRepository
-import com.bonsai.sciencetodo.data.VariableType
+import com.bonsai.sciencetodo.model.VariableType
 import com.bonsai.sciencetodo.model.Variable
 import com.bonsai.sciencetodo.ui.AppScreens
 import com.bonsai.sciencetodo.ui.AppViewModelProvider

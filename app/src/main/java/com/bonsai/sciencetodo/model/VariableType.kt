@@ -1,4 +1,4 @@
-package com.bonsai.sciencetodo.data
+package com.bonsai.sciencetodo.model
 
 enum class VariableType(val intValue: Int) {
     Undefined(0),
