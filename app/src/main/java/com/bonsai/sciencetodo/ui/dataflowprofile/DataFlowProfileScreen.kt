@@ -40,13 +40,18 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.bonsai.sciencetodo.R
+import com.bonsai.sciencetodo.data.DataDaoManager
 import com.bonsai.sciencetodo.data.FakeDataFlowDao
+import com.bonsai.sciencetodo.data.FakeIntValueDao
+import com.bonsai.sciencetodo.data.FakeStringValueDao
 import com.bonsai.sciencetodo.data.FakeVariableDao
 import com.bonsai.sciencetodo.data.VariableType
 import com.bonsai.sciencetodo.model.Variable
 import com.bonsai.sciencetodo.ui.AppScreens
 import com.bonsai.sciencetodo.ui.AppViewModelProvider
 import com.bonsai.sciencetodo.ui.ScienceToDoTopAppBar
+import com.bonsai.sciencetodo.ui.datavalues.DataDialog
+import com.bonsai.sciencetodo.ui.datavalues.NewDataValue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -78,6 +83,12 @@ fun DataFlowProfileScreen(
                 updateVariableName = viewModel::updateVariableName,
                 updateVariableType = viewModel::updateVariableType,
                 addVariable = viewModel::addVariable
+            )
+            AddDataControl(
+                viewModel::openDataDialog,
+                viewModel::saveDataDialog,
+                viewModel::cancelDataDialog,
+                uiState.newDataValues
             )
         }
     }
@@ -219,6 +230,33 @@ fun AddVariableControl(
     }
 }
 
+@Composable
+fun AddDataControl(
+    onOpenDialog: () -> Unit,
+    onSaveDialog: () -> Unit,
+    onCancelDialog: () -> Unit,
+    newDataValues: List<NewDataValue>?,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .padding(dimensionResource(R.dimen.padding_small))
+    ) {
+        Button(
+            onClick = onOpenDialog,
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Text(text = "add data")
+        }
+        DataDialog(
+            onSaveDialog,
+            onCancelDialog,
+            newDataValues
+        )
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun PreviewDataFlowProfileScreen() {
@@ -228,11 +266,14 @@ fun PreviewDataFlowProfileScreen() {
         )
     )
 
+    val dataDaoManager = DataDaoManager(FakeStringValueDao(), FakeIntValueDao())
+
     DataFlowProfileScreen(
         viewModel = DataFlowProfileViewModel(
             dataFlowDao = FakeDataFlowDao(),
             variableDao = FakeVariableDao(),
-            savedStateHandle = savedStateHandle
+            savedStateHandle = savedStateHandle,
+            dataDaoManager = dataDaoManager
         )
     )
 }

@@ -12,7 +12,7 @@ import com.bonsai.sciencetodo.model.Variable
 
 @Database(
     entities = [DataFlow::class, Variable::class, StringValue::class, IntValue::class],
-    version = 2
+    version = 3
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {

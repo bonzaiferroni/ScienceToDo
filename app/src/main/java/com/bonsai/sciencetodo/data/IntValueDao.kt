@@ -17,9 +17,6 @@ interface IntValueDao {
     @Query("SELECT * FROM int_value WHERE id = :id")
     fun getById(id: Int): Flow<IntValue>
 
-    @Query("SELECT * FROM int_value WHERE name LIKE :name")
-    fun getByName(name: String): Flow<IntValue>
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(intValue: IntValue)
 

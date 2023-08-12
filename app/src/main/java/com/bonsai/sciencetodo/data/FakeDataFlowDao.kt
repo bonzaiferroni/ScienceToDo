@@ -6,11 +6,6 @@ import kotlinx.coroutines.flow.flowOf
 
 class FakeDataFlowDao : DataFlowDao {
 
-    private val dataFlows = listOf(
-        DataFlow(id = 1, name = "Food"),
-        DataFlow(id = 2, name = "Sleep")
-    )
-
     override fun getAll(): Flow<List<DataFlow>> {
         return flowOf(dataFlows)
     }
@@ -41,5 +36,12 @@ class FakeDataFlowDao : DataFlowDao {
 
     override suspend fun deleteAll() {
         TODO("Not yet implemented")
+    }
+
+    companion object {
+        val dataFlows = listOf(
+            DataFlow(id = 1, name = "Food"),
+            DataFlow(id = 2, name = "Sleep")
+        )
     }
 }

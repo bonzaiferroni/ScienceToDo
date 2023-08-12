@@ -3,12 +3,14 @@ package com.bonsai.sciencetodo.ui.dataflowprofile
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bonsai.sciencetodo.data.DataDaoManager
 import com.bonsai.sciencetodo.data.DataFlowDao
 import com.bonsai.sciencetodo.data.VariableDao
 import com.bonsai.sciencetodo.data.VariableType
 import com.bonsai.sciencetodo.model.DataFlow
 import com.bonsai.sciencetodo.model.Variable
 import com.bonsai.sciencetodo.ui.AppScreens
+import com.bonsai.sciencetodo.ui.datavalues.NewDataValue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -16,7 +18,8 @@ import kotlinx.coroutines.launch
 class DataFlowProfileViewModel(
     savedStateHandle: SavedStateHandle,
     private val dataFlowDao: DataFlowDao,
-    private val variableDao: VariableDao
+    private val variableDao: VariableDao,
+    private val dataDaoManager: DataDaoManager,
 ) : ViewModel() {
     private val dataFlowId: Int =
         checkNotNull(savedStateHandle[AppScreens.DataFlowProfile.dataFlowIdArg])
@@ -73,11 +76,36 @@ class DataFlowProfileViewModel(
             variableDao.delete(variable)
         }
     }
+
+    fun openDataDialog() {
+        val newDataValues = _uiState.value.variables.map { variable ->
+            NewDataValue(variable)
+        }
+        _uiState.value = _uiState.value.copy(newDataValues = newDataValues)
+    }
+
+    fun saveDataDialog() {
+        val newDataValues = _uiState.value.newDataValues
+            ?: throw NullPointerException("newDataValues is null")
+
+        newDataValues.forEach {
+            viewModelScope.launch {
+                dataDaoManager.insertNewDataValue(it)
+            }
+        }
+
+        _uiState.value = _uiState.value.copy(newDataValues = null)
+    }
+
+    fun cancelDataDialog() {
+        _uiState.value = _uiState.value.copy(newDataValues = null)
+    }
 }
 
 data class DataFlowProfileUiState(
     val dataFlow: DataFlow = DataFlow(0, "404"),
     val variables: List<Variable> = emptyList(),
     val newVariableName: String = "",
-    val newVariableType: VariableType = VariableType.Undefined
+    val newVariableType: VariableType = VariableType.Undefined,
+    val newDataValues: List<NewDataValue>? = null
 )

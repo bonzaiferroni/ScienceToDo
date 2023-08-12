@@ -5,11 +5,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 class FakeVariableDao : VariableDao {
-    private val fakeVariables = listOf(
-        Variable(1, "Calories", 1, VariableType.Integer),
-        Variable(2, "Meal", 1, VariableType.String),
-        Variable(3, "Rating", 1, VariableType.Integer)
-    )
 
     override fun getAll(): Flow<List<Variable>> {
         TODO("Not yet implemented")
@@ -20,7 +15,7 @@ class FakeVariableDao : VariableDao {
     }
 
     override fun getByFlowId(id: Int): Flow<List<Variable>> {
-        return flowOf(fakeVariables)
+        return flowOf(variables)
     }
 
     override fun getByName(name: String): Flow<Variable> {
@@ -45,5 +40,13 @@ class FakeVariableDao : VariableDao {
 
     override suspend fun deleteAll() {
         TODO("Not yet implemented")
+    }
+
+    companion object {
+        val variables = listOf(
+            Variable(1, "Calories", 1, VariableType.Integer),
+            Variable(2, "Meal", 1, VariableType.String),
+            Variable(3, "Rating", 1, VariableType.Integer)
+        )
     }
 }

@@ -8,10 +8,7 @@ import androidx.room.PrimaryKey
 data class IntValue(
     @PrimaryKey(autoGenerate = true)
     override val id: Int,
-    override val name: String,
     override val value: Int,
-    @ColumnInfo(name = "data_flow_id")
-    override val dataFlowId: Int,
     @ColumnInfo(name = "variable_id")
     override val variableId: Int
 ) : DataValue<Int>

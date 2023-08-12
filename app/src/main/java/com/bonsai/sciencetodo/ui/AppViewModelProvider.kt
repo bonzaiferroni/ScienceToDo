@@ -7,7 +7,6 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bonsai.sciencetodo.ScienceToDoApplication
-import com.bonsai.sciencetodo.data.AppDatabase
 import com.bonsai.sciencetodo.ui.dataflowprofile.DataFlowProfileViewModel
 import com.bonsai.sciencetodo.ui.home.HomeViewModel
 
@@ -24,6 +23,7 @@ object AppViewModelProvider {
                 this.createSavedStateHandle(),
                 scienceToDoApplication().database.dataFlowDao(),
                 scienceToDoApplication().database.variableDao(),
+                scienceToDoApplication().dataDaoManager,
             )
         }
     }
