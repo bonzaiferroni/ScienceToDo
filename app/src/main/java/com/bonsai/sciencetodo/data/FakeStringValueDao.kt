@@ -12,6 +12,10 @@ class FakeStringValueDao : StringValueDao {
         TODO("Not yet implemented")
     }
 
+    override fun getCountByVariableId(id: Int): Flow<Int> {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun insert(stringValue: StringValue) {
         TODO("Not yet implemented")
     }

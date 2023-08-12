@@ -88,9 +88,11 @@ class DataFlowProfileViewModel(
         val newDataValues = _uiState.value.newDataValues
             ?: throw NullPointerException("newDataValues is null")
 
-        newDataValues.forEach {
-            viewModelScope.launch {
-                dataDaoManager.insertNewDataValue(it)
+        viewModelScope.launch {
+            val observation = dataDaoManager.createObservation(dataFlowId)
+
+            newDataValues.forEach {
+                dataDaoManager.insertNewDataValue(observation, it)
             }
         }
 

@@ -7,6 +7,10 @@ import com.bonsai.sciencetodo.data.DataDaoManager
 class ScienceToDoApplication : Application() {
     val database: AppDatabase by lazy { AppDatabase.getDatabase(this) }
     val dataDaoManager: DataDaoManager by lazy {
-        DataDaoManager(database.stringValueDao(), database.intValueDao())
+        DataDaoManager(
+            database.observationDao(),
+            database.stringValueDao(),
+            database.intValueDao()
+        )
     }
 }

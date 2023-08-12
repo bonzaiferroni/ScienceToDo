@@ -43,6 +43,7 @@ import com.bonsai.sciencetodo.R
 import com.bonsai.sciencetodo.data.DataDaoManager
 import com.bonsai.sciencetodo.data.FakeDataFlowDao
 import com.bonsai.sciencetodo.data.FakeIntValueDao
+import com.bonsai.sciencetodo.data.FakeObservationDao
 import com.bonsai.sciencetodo.data.FakeStringValueDao
 import com.bonsai.sciencetodo.data.FakeVariableDao
 import com.bonsai.sciencetodo.data.VariableType
@@ -266,7 +267,7 @@ fun PreviewDataFlowProfileScreen() {
         )
     )
 
-    val dataDaoManager = DataDaoManager(FakeStringValueDao(), FakeIntValueDao())
+    val dataDaoManager = DataDaoManager(FakeObservationDao(), FakeStringValueDao(), FakeIntValueDao())
 
     DataFlowProfileScreen(
         viewModel = DataFlowProfileViewModel(

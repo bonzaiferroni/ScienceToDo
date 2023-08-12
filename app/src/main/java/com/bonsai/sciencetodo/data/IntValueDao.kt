@@ -17,6 +17,9 @@ interface IntValueDao {
     @Query("SELECT * FROM int_value WHERE id = :id")
     fun getById(id: Int): Flow<IntValue>
 
+    @Query("SELECT COUNT(*) FROM int_value WHERE variable_id = :id")
+    fun getCountByVariableId(id: Int): Flow<Int>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(intValue: IntValue)
 

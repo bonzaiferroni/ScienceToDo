@@ -10,6 +10,8 @@ data class IntValue(
     override val id: Int,
     override val value: Int,
     @ColumnInfo(name = "variable_id")
-    override val variableId: Int
+    override val variableId: Int,
+    @ColumnInfo(name = "observation_id")
+    override val observationId: Int
 ) : DataValue<Int>
 

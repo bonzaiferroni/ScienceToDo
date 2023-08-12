@@ -17,6 +17,9 @@ interface StringValueDao {
     @Query("SELECT * FROM string_value WHERE id = :id")
     fun getById(id: Int): Flow<StringValue>
 
+    @Query("SELECT COUNT(*) FROM string_value WHERE variable_id = :id")
+    fun getCountByVariableId(id: Int): Flow<Int>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(stringValue: StringValue)
 
