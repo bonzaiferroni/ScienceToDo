@@ -261,11 +261,7 @@ fun AddDataControl(
 @Preview(showBackground = true)
 @Composable
 fun PreviewDataFlowProfileScreen() {
-    val savedStateHandle = SavedStateHandle(
-        mapOf(
-            AppScreens.dataFlowIdArg to 1
-        )
-    )
+    val savedStateHandle = SavedStateHandle(mapOf(AppScreens.dataFlowIdArg to 1))
 
     DataProfileScreen(
         viewModel = DataProfileVm(
