@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bonsai.sciencetodo.data.DataFlowDao
-import com.bonsai.sciencetodo.data.ObservationManager
+import com.bonsai.sciencetodo.data.ObservationRepository
 import com.bonsai.sciencetodo.data.VariableDao
 import com.bonsai.sciencetodo.data.VariableType
 import com.bonsai.sciencetodo.model.DataFlow
@@ -19,7 +19,7 @@ class DataFlowProfileViewModel(
     savedStateHandle: SavedStateHandle,
     private val dataFlowDao: DataFlowDao,
     private val variableDao: VariableDao,
-    private val observationManager: ObservationManager,
+    private val observationRepository: ObservationRepository,
 ) : ViewModel() {
     private val dataFlowId: Int =
         checkNotNull(savedStateHandle[AppScreens.DataFlowProfile.dataFlowIdArg])
@@ -41,7 +41,7 @@ class DataFlowProfileViewModel(
         }
 
         viewModelScope.launch {
-            observationManager.getObservationCount(dataFlowId).collect {
+            observationRepository.getObservationCount(dataFlowId).collect {
                 _uiState.value = _uiState.value.copy(observationCount = it)
             }
         }
@@ -95,7 +95,7 @@ class DataFlowProfileViewModel(
             ?: throw NullPointerException("newDataValues is null")
 
         viewModelScope.launch {
-            observationManager.createObservation(dataFlowId, newDataValues)
+            observationRepository.createObservation(dataFlowId, newDataValues)
         }
 
         _uiState.value = _uiState.value.copy(newDataValues = null)

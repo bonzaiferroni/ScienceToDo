@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 import java.util.Date
 
-class ObservationManager(
+class ObservationRepository(
     private val observationDao: ObservationDao,
     private val stringValueDao: StringValueDao,
     private val intValueDao: IntValueDao,
