@@ -15,7 +15,9 @@ object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
             HomeViewModel(
-                scienceToDoApplication().database.dataFlowDao()
+                scienceToDoApplication().database.dataFlowDao(),
+                scienceToDoApplication().database.variableDao(),
+                scienceToDoApplication().observationRepository,
             )
         }
         initializer {

@@ -3,12 +3,20 @@ package com.bonsai.sciencetodo.ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bonsai.sciencetodo.data.DataFlowDao
+import com.bonsai.sciencetodo.data.ObservationRepository
+import com.bonsai.sciencetodo.data.VariableDao
 import com.bonsai.sciencetodo.model.DataFlow
+import com.bonsai.sciencetodo.ui.datavalues.NewDataValue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-class HomeViewModel(private val dataFlowDao: DataFlowDao) : ViewModel() {
+class HomeViewModel(
+    private val dataFlowDao: DataFlowDao,
+    private val variableDao: VariableDao,
+    private val observationRepository: ObservationRepository,
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState
@@ -38,10 +46,51 @@ class HomeViewModel(private val dataFlowDao: DataFlowDao) : ViewModel() {
         dataFlowDao.insert(newFlow)
         _uiState.value = _uiState.value.copy(showDialog = false, dataFlowName = "")
     }
+
+    fun openDataDialog(dataFlowId: Int) {
+        viewModelScope.launch {
+            variableDao.getByFlowId(dataFlowId)
+                .map { variables ->
+                    variables.map { NewDataValue(it) }
+                }
+                .collect {
+                    _uiState.value = _uiState.value.copy(
+                        newDataValues = it,
+                        newDataTargetId = dataFlowId
+                    )
+                }
+        }
+    }
+
+    fun saveDataDialog() {
+        val newDataValues = _uiState.value.newDataValues
+            ?: throw NullPointerException("newDataValues is null")
+        val dataFlowId = _uiState.value.newDataTargetId
+            ?: throw NullPointerException("newDataTargetId is null")
+
+        viewModelScope.launch {
+            observationRepository.createObservation(dataFlowId, newDataValues)
+        }
+
+        clearNewDataState()
+    }
+
+    fun cancelDataDialog() {
+        clearNewDataState()
+    }
+
+    private fun clearNewDataState() {
+        _uiState.value = _uiState.value.copy(
+            newDataValues = null,
+            newDataTargetId = null
+        )
+    }
 }
 
 data class HomeUiState(
     val dataFlows: List<DataFlow> = emptyList(),
     val showDialog: Boolean = false,
-    val dataFlowName: String = ""
+    val dataFlowName: String = "",
+    val newDataValues: List<NewDataValue>? = null,
+    val newDataTargetId: Int? = null
 )

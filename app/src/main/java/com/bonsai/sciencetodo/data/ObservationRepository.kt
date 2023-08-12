@@ -48,4 +48,14 @@ class ObservationRepository(
             }
         }
     }
+
+    companion object {
+        fun getFake(): ObservationRepository {
+            return ObservationRepository(
+                FakeObservationDao(),
+                FakeStringValueDao(),
+                FakeIntValueDao()
+            )
+        }
+    }
 }

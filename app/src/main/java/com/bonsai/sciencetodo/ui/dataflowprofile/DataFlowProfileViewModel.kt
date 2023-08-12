@@ -109,8 +109,8 @@ class DataFlowProfileViewModel(
 data class DataFlowProfileUiState(
     val dataFlow: DataFlow = DataFlow(0, "404"),
     val variables: List<Variable> = emptyList(),
+    val newDataValues: List<NewDataValue>? = null,
     val newVariableName: String = "",
     val newVariableType: VariableType = VariableType.Undefined,
-    val newDataValues: List<NewDataValue>? = null,
     val observationCount: Int = 0
 )

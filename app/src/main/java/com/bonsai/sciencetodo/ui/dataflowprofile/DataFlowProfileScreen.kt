@@ -41,13 +41,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.bonsai.sciencetodo.R
 import com.bonsai.sciencetodo.data.FakeDataFlowDao
-import com.bonsai.sciencetodo.data.FakeIntValueDao
-import com.bonsai.sciencetodo.data.FakeObservationDao
-import com.bonsai.sciencetodo.data.FakeStringValueDao
 import com.bonsai.sciencetodo.data.FakeVariableDao
 import com.bonsai.sciencetodo.data.ObservationRepository
-import com.bonsai.sciencetodo.model.VariableType
 import com.bonsai.sciencetodo.model.Variable
+import com.bonsai.sciencetodo.model.VariableType
 import com.bonsai.sciencetodo.ui.AppScreens
 import com.bonsai.sciencetodo.ui.AppViewModelProvider
 import com.bonsai.sciencetodo.ui.ScienceToDoTopAppBar
@@ -270,18 +267,12 @@ fun PreviewDataFlowProfileScreen() {
         )
     )
 
-    val observationRepository = ObservationRepository(
-        FakeObservationDao(),
-        FakeStringValueDao(),
-        FakeIntValueDao()
-    )
-
     DataFlowProfileScreen(
         viewModel = DataFlowProfileViewModel(
             dataFlowDao = FakeDataFlowDao(),
             variableDao = FakeVariableDao(),
             savedStateHandle = savedStateHandle,
-            observationRepository = observationRepository
+            observationRepository = ObservationRepository.getFake()
         )
     )
 }
