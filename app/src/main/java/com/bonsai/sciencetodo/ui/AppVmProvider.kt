@@ -7,22 +7,22 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bonsai.sciencetodo.ScienceToDoApplication
-import com.bonsai.sciencetodo.ui.dataflowprofile.DataFlowProfileViewModel
-import com.bonsai.sciencetodo.ui.dataview.DataViewViewModel
-import com.bonsai.sciencetodo.ui.home.HomeViewModel
+import com.bonsai.sciencetodo.ui.dataflowprofile.DataProfileVm
+import com.bonsai.sciencetodo.ui.dataview.DataViewVm
+import com.bonsai.sciencetodo.ui.home.HomeVm
 
-object AppViewModelProvider {
+object AppVmProvider {
 
     val Factory = viewModelFactory {
         initializer {
-            HomeViewModel(
+            HomeVm(
                 scienceToDoApplication().database.dataFlowDao(),
                 scienceToDoApplication().database.variableDao(),
                 scienceToDoApplication().observationRepository,
             )
         }
         initializer {
-            DataFlowProfileViewModel(
+            DataProfileVm(
                 this.createSavedStateHandle(),
                 scienceToDoApplication().database.dataFlowDao(),
                 scienceToDoApplication().database.variableDao(),
@@ -30,7 +30,7 @@ object AppViewModelProvider {
             )
         }
         initializer {
-            DataViewViewModel(
+            DataViewVm(
                 this.createSavedStateHandle(),
                 scienceToDoApplication().database.dataFlowDao(),
             )

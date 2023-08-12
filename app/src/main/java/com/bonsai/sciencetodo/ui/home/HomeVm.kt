@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-class HomeViewModel(
+class HomeVm(
     private val dataFlowDao: DataFlowDao,
     private val variableDao: VariableDao,
     private val observationRepository: ObservationRepository,

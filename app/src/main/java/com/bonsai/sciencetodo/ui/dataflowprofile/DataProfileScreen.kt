@@ -46,17 +46,17 @@ import com.bonsai.sciencetodo.data.ObservationRepository
 import com.bonsai.sciencetodo.model.Variable
 import com.bonsai.sciencetodo.model.VariableType
 import com.bonsai.sciencetodo.ui.AppScreens
-import com.bonsai.sciencetodo.ui.AppViewModelProvider
+import com.bonsai.sciencetodo.ui.AppVmProvider
 import com.bonsai.sciencetodo.ui.ScienceToDoTopAppBar
 import com.bonsai.sciencetodo.ui.datavalues.DataDialog
 import com.bonsai.sciencetodo.ui.datavalues.NewDataValue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DataFlowProfileScreen(
+fun DataProfileScreen(
     modifier: Modifier = Modifier,
     navController: NavController? = null,
-    viewModel: DataFlowProfileViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: DataProfileVm = viewModel(factory = AppVmProvider.Factory)
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -267,8 +267,8 @@ fun PreviewDataFlowProfileScreen() {
         )
     )
 
-    DataFlowProfileScreen(
-        viewModel = DataFlowProfileViewModel(
+    DataProfileScreen(
+        viewModel = DataProfileVm(
             dataFlowDao = FakeDataFlowDao(),
             variableDao = FakeVariableDao(),
             savedStateHandle = savedStateHandle,

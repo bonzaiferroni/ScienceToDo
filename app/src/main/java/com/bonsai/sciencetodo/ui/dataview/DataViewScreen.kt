@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.bonsai.sciencetodo.ui.AppViewModelProvider
+import com.bonsai.sciencetodo.ui.AppVmProvider
 import com.bonsai.sciencetodo.ui.ScienceToDoTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -16,7 +16,7 @@ import com.bonsai.sciencetodo.ui.ScienceToDoTopAppBar
 fun DataViewScreen(
     modifier: Modifier = Modifier,
     navController: NavController? = null,
-    viewModel: DataViewViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: DataViewVm = viewModel(factory = AppVmProvider.Factory)
 ) {
     Scaffold(
         topBar = {

@@ -39,7 +39,7 @@ import com.bonsai.sciencetodo.data.FakeVariableDao
 import com.bonsai.sciencetodo.data.ObservationRepository
 import com.bonsai.sciencetodo.model.DataFlow
 import com.bonsai.sciencetodo.ui.AppScreens
-import com.bonsai.sciencetodo.ui.AppViewModelProvider
+import com.bonsai.sciencetodo.ui.AppVmProvider
 import com.bonsai.sciencetodo.ui.ScienceToDoTopAppBar
 import com.bonsai.sciencetodo.ui.datavalues.DataDialog
 
@@ -48,7 +48,7 @@ import com.bonsai.sciencetodo.ui.datavalues.DataDialog
 fun HomeScreen(
     modifier: Modifier = Modifier,
     navController: NavController? = null,
-    viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: HomeVm = viewModel(factory = AppVmProvider.Factory)
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val onClickCard: (dataFlowId: Int) -> Unit = { dataFlowId ->
@@ -162,7 +162,7 @@ fun DataFlowCard(
 @Composable
 fun HomeScreenPreview() {
     HomeScreen(
-        viewModel = HomeViewModel(
+        viewModel = HomeVm(
             dataFlowDao = FakeDataFlowDao(),
             variableDao = FakeVariableDao(),
             ObservationRepository.getFake()

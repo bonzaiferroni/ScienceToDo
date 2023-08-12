@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class DataFlowProfileViewModel(
+class DataProfileVm(
     savedStateHandle: SavedStateHandle,
     private val dataFlowDao: DataFlowDao,
     private val variableDao: VariableDao,

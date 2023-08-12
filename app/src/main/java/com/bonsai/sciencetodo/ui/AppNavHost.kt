@@ -18,7 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.bonsai.sciencetodo.R
-import com.bonsai.sciencetodo.ui.dataflowprofile.DataFlowProfileScreen
+import com.bonsai.sciencetodo.ui.dataflowprofile.DataProfileScreen
 import com.bonsai.sciencetodo.ui.dataview.DataViewScreen
 import com.bonsai.sciencetodo.ui.home.HomeScreen
 
@@ -72,7 +72,7 @@ fun AppNavHost(
             route = AppScreens.DataFlowProfile.routeWithArgs,
             arguments = listOf(AppScreens.DataFlowProfile.getNavArg())
         ) {
-            DataFlowProfileScreen(navController = navController)
+            DataProfileScreen(navController = navController)
         }
         composable(
             route = AppScreens.DataView.routeWithArgs,
