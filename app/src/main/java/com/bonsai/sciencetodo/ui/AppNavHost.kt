@@ -18,8 +18,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.bonsai.sciencetodo.R
-import com.bonsai.sciencetodo.model.DataFlow
 import com.bonsai.sciencetodo.ui.dataflowprofile.DataFlowProfileScreen
+import com.bonsai.sciencetodo.ui.dataview.DataViewScreen
 import com.bonsai.sciencetodo.ui.home.HomeScreen
 
 sealed interface AppScreens {
@@ -31,15 +31,26 @@ sealed interface AppScreens {
 
     data object DataFlowProfile : AppScreens {
         override val name = "dataFlowProfile"
-        const val dataFlowIdArg = "dataFlowId"
         val routeWithArgs = "$name/{$dataFlowIdArg}"
 
-        fun getRoute(dataFlow: DataFlow) = "$name/${dataFlow.id}"
+        fun getRoute(dataFlowId: Int) = "$name/${dataFlowId}"
+        fun getNavArg() = getIntNavArg(dataFlowIdArg)
+    }
+
+    data object DataView : AppScreens {
+        override val name = "dataView"
+        val routeWithArgs = "$name/{$dataFlowIdArg}"
+
+        fun getRoute(dataFlowId: Int) = "$name/${dataFlowId}"
         fun getNavArg() = getIntNavArg(dataFlowIdArg)
     }
 
     fun getIntNavArg(argName: String): NamedNavArgument {
         return navArgument(argName) { type = NavType.IntType }
+    }
+
+    companion object {
+        const val dataFlowIdArg = "dataFlowId"
     }
 }
 
@@ -62,6 +73,12 @@ fun AppNavHost(
             arguments = listOf(AppScreens.DataFlowProfile.getNavArg())
         ) {
             DataFlowProfileScreen(navController = navController)
+        }
+        composable(
+            route = AppScreens.DataView.routeWithArgs,
+            arguments = listOf(AppScreens.DataView.getNavArg())
+        ) {
+            DataViewScreen(navController = navController)
         }
     }
 }

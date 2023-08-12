@@ -22,7 +22,7 @@ class DataFlowProfileViewModel(
     private val observationRepository: ObservationRepository,
 ) : ViewModel() {
     private val dataFlowId: Int =
-        checkNotNull(savedStateHandle[AppScreens.DataFlowProfile.dataFlowIdArg])
+        checkNotNull(savedStateHandle[AppScreens.dataFlowIdArg])
 
     private val _uiState = MutableStateFlow(DataFlowProfileUiState())
     val uiState: StateFlow<DataFlowProfileUiState> = _uiState

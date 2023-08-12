@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -50,8 +51,12 @@ fun HomeScreen(
     viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val onClickCard: (DataFlow) -> Unit = { dataFlow ->
-        val route = AppScreens.DataFlowProfile.getRoute(dataFlow)
+    val onClickCard: (dataFlowId: Int) -> Unit = { dataFlowId ->
+        val route = AppScreens.DataFlowProfile.getRoute(dataFlowId)
+        navController?.navigate(route)
+    }
+    val onOpenDataView: (dataFlowId: Int) -> Unit = { dataFlowId ->
+        val route = AppScreens.DataView.getRoute(dataFlowId)
         navController?.navigate(route)
     }
 
@@ -102,7 +107,12 @@ fun HomeScreen(
                 .padding(paddingValues)
         ) {
             items(uiState.dataFlows) { dataFlow ->
-                DataFlowCard(dataFlow, onClickCard, viewModel::openDataDialog)
+                DataFlowCard(
+                    dataFlow,
+                    onClickCard,
+                    onOpenDataView,
+                    viewModel::openDataDialog
+                )
             }
         }
     }
@@ -117,7 +127,8 @@ fun HomeScreen(
 @Composable
 fun DataFlowCard(
     dataFlow: DataFlow,
-    onOpenFlow: (DataFlow) -> Unit,
+    onOpenFlow: (dataFlowId: Int) -> Unit,
+    onOpenDataView: (dataFlowId: Int) -> Unit,
     onOpenDataDialog: (dataFlowId: Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -137,7 +148,10 @@ fun DataFlowCard(
             IconButton(onClick = { onOpenDataDialog(dataFlow.id) }) {
                 Icon(imageVector = Icons.Filled.Add, contentDescription = "add data")
             }
-            IconButton(onClick = { onOpenFlow(dataFlow) }) {
+            IconButton(onClick = { onOpenDataView(dataFlow.id)}) {
+                Icon(imageVector = Icons.Filled.Search, contentDescription = "view data")
+            }
+            IconButton(onClick = { onOpenFlow(dataFlow.id) }) {
                 Icon(imageVector = Icons.Filled.ArrowForward, contentDescription = "view flow")
             }
         }

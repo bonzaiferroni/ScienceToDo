@@ -263,7 +263,7 @@ fun AddDataControl(
 fun PreviewDataFlowProfileScreen() {
     val savedStateHandle = SavedStateHandle(
         mapOf(
-            AppScreens.DataFlowProfile.dataFlowIdArg to 1
+            AppScreens.dataFlowIdArg to 1
         )
     )
 
