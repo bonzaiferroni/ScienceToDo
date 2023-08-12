@@ -16,7 +16,11 @@ class FakeObservationDao : ObservationDao {
         TODO("Not yet implemented")
     }
 
-    override suspend fun insert(observation: Observation) {
+    override fun getCountByDataFlowId(id: Int): Flow<Int> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun insert(observation: Observation): Long {
         TODO("Not yet implemented")
     }
 

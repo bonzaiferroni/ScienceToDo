@@ -23,7 +23,7 @@ object AppViewModelProvider {
                 this.createSavedStateHandle(),
                 scienceToDoApplication().database.dataFlowDao(),
                 scienceToDoApplication().database.variableDao(),
-                scienceToDoApplication().dataDaoManager,
+                scienceToDoApplication().observationManager,
             )
         }
     }

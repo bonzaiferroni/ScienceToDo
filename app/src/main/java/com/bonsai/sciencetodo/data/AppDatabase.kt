@@ -14,7 +14,7 @@ import com.bonsai.sciencetodo.model.Variable
 @Database(
     entities = [
         DataFlow::class, Variable::class, Observation::class, StringValue::class, IntValue::class],
-    version = 3
+    version = 4
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {

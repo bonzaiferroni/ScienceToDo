@@ -3,8 +3,8 @@ package com.bonsai.sciencetodo.ui.dataflowprofile
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bonsai.sciencetodo.data.DataDaoManager
 import com.bonsai.sciencetodo.data.DataFlowDao
+import com.bonsai.sciencetodo.data.ObservationManager
 import com.bonsai.sciencetodo.data.VariableDao
 import com.bonsai.sciencetodo.data.VariableType
 import com.bonsai.sciencetodo.model.DataFlow
@@ -19,7 +19,7 @@ class DataFlowProfileViewModel(
     savedStateHandle: SavedStateHandle,
     private val dataFlowDao: DataFlowDao,
     private val variableDao: VariableDao,
-    private val dataDaoManager: DataDaoManager,
+    private val observationManager: ObservationManager,
 ) : ViewModel() {
     private val dataFlowId: Int =
         checkNotNull(savedStateHandle[AppScreens.DataFlowProfile.dataFlowIdArg])
@@ -37,6 +37,12 @@ class DataFlowProfileViewModel(
         viewModelScope.launch {
             variableDao.getByFlowId(dataFlowId).collect {
                 _uiState.value = _uiState.value.copy(variables = it)
+            }
+        }
+
+        viewModelScope.launch {
+            observationManager.getObservationCount(dataFlowId).collect {
+                _uiState.value = _uiState.value.copy(observationCount = it)
             }
         }
     }
@@ -89,11 +95,7 @@ class DataFlowProfileViewModel(
             ?: throw NullPointerException("newDataValues is null")
 
         viewModelScope.launch {
-            val observation = dataDaoManager.createObservation(dataFlowId)
-
-            newDataValues.forEach {
-                dataDaoManager.insertNewDataValue(observation, it)
-            }
+            observationManager.createObservation(dataFlowId, newDataValues)
         }
 
         _uiState.value = _uiState.value.copy(newDataValues = null)
@@ -109,5 +111,6 @@ data class DataFlowProfileUiState(
     val variables: List<Variable> = emptyList(),
     val newVariableName: String = "",
     val newVariableType: VariableType = VariableType.Undefined,
-    val newDataValues: List<NewDataValue>? = null
+    val newDataValues: List<NewDataValue>? = null,
+    val observationCount: Int = 0
 )

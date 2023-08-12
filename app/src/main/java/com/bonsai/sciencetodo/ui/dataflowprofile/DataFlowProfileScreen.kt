@@ -40,12 +40,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.bonsai.sciencetodo.R
-import com.bonsai.sciencetodo.data.DataDaoManager
 import com.bonsai.sciencetodo.data.FakeDataFlowDao
 import com.bonsai.sciencetodo.data.FakeIntValueDao
 import com.bonsai.sciencetodo.data.FakeObservationDao
 import com.bonsai.sciencetodo.data.FakeStringValueDao
 import com.bonsai.sciencetodo.data.FakeVariableDao
+import com.bonsai.sciencetodo.data.ObservationManager
 import com.bonsai.sciencetodo.data.VariableType
 import com.bonsai.sciencetodo.model.Variable
 import com.bonsai.sciencetodo.ui.AppScreens
@@ -76,7 +76,13 @@ fun DataFlowProfileScreen(
                 .padding(paddingValues)
                 .fillMaxWidth(),
         ) {
-            DataFlowDetails(uiState.dataFlow.name)
+            DataFlowDetails(uiState.dataFlow.name, uiState.observationCount)
+            AddDataControl(
+                viewModel::openDataDialog,
+                viewModel::saveDataDialog,
+                viewModel::cancelDataDialog,
+                uiState.newDataValues
+            )
             VariableList(uiState.variables, viewModel::removeVariable)
             AddVariableControl(
                 newVariableName = uiState.newVariableName,
@@ -85,18 +91,12 @@ fun DataFlowProfileScreen(
                 updateVariableType = viewModel::updateVariableType,
                 addVariable = viewModel::addVariable
             )
-            AddDataControl(
-                viewModel::openDataDialog,
-                viewModel::saveDataDialog,
-                viewModel::cancelDataDialog,
-                uiState.newDataValues
-            )
         }
     }
 }
 
 @Composable
-fun DataFlowDetails(dataFlowName: String, modifier: Modifier = Modifier) {
+fun DataFlowDetails(dataFlowName: String, observationCount: Int, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .background(MaterialTheme.colorScheme.primaryContainer)
@@ -109,6 +109,9 @@ fun DataFlowDetails(dataFlowName: String, modifier: Modifier = Modifier) {
             Text(
                 text = dataFlowName,
                 style = MaterialTheme.typography.titleMedium
+            )
+            Text(
+                text = "Observations: $observationCount"
             )
         }
     }
@@ -267,14 +270,18 @@ fun PreviewDataFlowProfileScreen() {
         )
     )
 
-    val dataDaoManager = DataDaoManager(FakeObservationDao(), FakeStringValueDao(), FakeIntValueDao())
+    val observationManager = ObservationManager(
+        FakeObservationDao(),
+        FakeStringValueDao(),
+        FakeIntValueDao()
+    )
 
     DataFlowProfileScreen(
         viewModel = DataFlowProfileViewModel(
             dataFlowDao = FakeDataFlowDao(),
             variableDao = FakeVariableDao(),
             savedStateHandle = savedStateHandle,
-            dataDaoManager = dataDaoManager
+            observationManager = observationManager
         )
     )
 }
