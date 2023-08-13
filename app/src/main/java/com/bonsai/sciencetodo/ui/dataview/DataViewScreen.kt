@@ -6,6 +6,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,12 +25,12 @@ fun DataViewScreen(
     navController: NavController? = null,
     viewModel: DataViewVm = viewModel(factory = AppVmProvider.Factory)
 ) {
-    val uiState = viewModel.uiState.collectAsState()
-    val tableContent = uiState.value.dataTableContent
+    val uiState by viewModel.uiState.collectAsState()
+    val tableContent = uiState.dataTableContent
 
     Scaffold(
         topBar = {
-            ScienceToDoTopAppBar(title = "Data: ")
+            ScienceToDoTopAppBar(title = "Data: ${uiState.dataFlow.name}")
         }
     ) { paddingValues ->
         Column(
