@@ -1,6 +1,7 @@
 package com.bonsai.sciencetodo.ui
 
 import android.app.Application
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
@@ -8,6 +9,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bonsai.sciencetodo.ScienceToDoApplication
 import com.bonsai.sciencetodo.ui.dataflowprofile.DataProfileVm
+import com.bonsai.sciencetodo.ui.dataview.DataTableVm
 import com.bonsai.sciencetodo.ui.dataview.DataViewVm
 import com.bonsai.sciencetodo.ui.home.HomeVm
 

@@ -1,8 +1,11 @@
 package com.bonsai.sciencetodo.model
 
-interface DataValue<T> {
+interface BaseDataValue {
     val id: Int
-    val value: T
     val variableId: Int
     val observationId: Int
+}
+
+interface DataValue<T> : BaseDataValue {
+    val value: T
 }

@@ -29,7 +29,8 @@ fun DataViewScreen(
         Column(
             modifier = Modifier.padding(paddingValues)
         ) {
-
+            val dataTableVm = DataTableVm(viewModel.dataFlowId)
+            DataTable(viewModel = dataTableVm)
         }
     }
 }

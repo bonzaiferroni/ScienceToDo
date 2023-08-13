@@ -15,7 +15,7 @@ class DataViewVm(
     private val dataFlowDao: DataFlowDao,
 ) : ViewModel() {
 
-    private val dataFlowId: Int =
+    val dataFlowId: Int =
         checkNotNull(savedStateHandle[AppScreens.dataFlowIdArg])
 
     private val _uiState = MutableStateFlow(DataViewState())
