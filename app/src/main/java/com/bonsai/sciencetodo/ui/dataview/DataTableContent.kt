@@ -23,7 +23,7 @@ class DataTableContent(
             return variables[column - 1].name
         }
         if (column == 0) {
-            val date = observations[row - 1].date
+            val date = observations[row - 1].instant
             return SimpleDateFormat("HH:mm", Locale.getDefault()).format(date)
         }
         return when (val dataValue = dataMatrix[column - 1][row - 1]) {

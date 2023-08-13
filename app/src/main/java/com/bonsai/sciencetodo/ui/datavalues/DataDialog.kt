@@ -31,7 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.bonsai.sciencetodo.R
-import com.bonsai.sciencetodo.data.FakeVariableDao
+import com.bonsai.sciencetodo.fakedata.FakeData
 import com.bonsai.sciencetodo.model.VariableType
 import java.util.Locale
 
@@ -139,7 +139,7 @@ fun IntegerSetter(onValueChange: (Int) -> Unit) {
 @Preview
 @Composable
 fun PreviewAddDataForm() {
-    val updaters = FakeVariableDao.variables.map { variable ->
+    val updaters = FakeData.fakeVariables.filter {it.dataFlowId == 1}.map { variable ->
         NewDataValue(variable)
     }
 

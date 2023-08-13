@@ -1,12 +1,14 @@
 package com.bonsai.sciencetodo.data
 
+import com.bonsai.sciencetodo.fakedata.FakeIntValueDao
+import com.bonsai.sciencetodo.fakedata.FakeObservationDao
+import com.bonsai.sciencetodo.fakedata.FakeStringValueDao
 import com.bonsai.sciencetodo.model.IntValue
 import com.bonsai.sciencetodo.model.Observation
 import com.bonsai.sciencetodo.model.StringValue
 import com.bonsai.sciencetodo.ui.datavalues.NewDataValue
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
-import java.util.Date
 
 class ObservationRepository(
     private val observationDao: ObservationDao,
@@ -26,8 +28,7 @@ class ObservationRepository(
     }
 
     private suspend fun createObservation(dataFlowId: Int): Observation {
-        val date = Date.from(Instant.now())
-        val observation = Observation(0, date, dataFlowId)
+        val observation = Observation(0, dataFlowId, Instant.now())
         val id = observationDao.insert(observation)
         return observation.copy(id = id.toInt())
     }
@@ -38,12 +39,12 @@ class ObservationRepository(
 
         when (value) {
             is Int -> {
-                val dataValue = IntValue(0, value, variable.id, observationId)
+                val dataValue = IntValue(0, variable.id, observationId, value)
                 intValueDao.insert(dataValue)
             }
 
             is String -> {
-                val dataValue = StringValue(0, value, variable.id, observationId)
+                val dataValue = StringValue(0, variable.id, observationId, value)
                 stringValueDao.insert(dataValue)
             }
         }

@@ -1,22 +1,23 @@
-package com.bonsai.sciencetodo.data
+package com.bonsai.sciencetodo.fakedata
 
+import com.bonsai.sciencetodo.data.VariableDao
+import com.bonsai.sciencetodo.fakedata.FakeData.fakeVariables
 import com.bonsai.sciencetodo.model.Variable
-import com.bonsai.sciencetodo.model.VariableType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 class FakeVariableDao : VariableDao {
 
     override fun getAll(): Flow<List<Variable>> {
-        TODO("Not yet implemented")
+        return flowOf(fakeVariables)
     }
 
     override fun getById(id: Int): Flow<Variable> {
-        TODO("Not yet implemented")
+        return flowOf(fakeVariables.first { it.id == id})
     }
 
     override fun getByFlowId(id: Int): Flow<List<Variable>> {
-        return flowOf(variables)
+        return flowOf(fakeVariables.filter { it.dataFlowId == id })
     }
 
     override fun getByName(name: String): Flow<Variable> {
@@ -41,13 +42,5 @@ class FakeVariableDao : VariableDao {
 
     override suspend fun deleteAll() {
         TODO("Not yet implemented")
-    }
-
-    companion object {
-        val variables = listOf(
-            Variable(1, "Calories", 1, VariableType.Integer),
-            Variable(2, "Meal", 1, VariableType.String),
-            Variable(3, "Rating", 1, VariableType.Integer)
-        )
     }
 }

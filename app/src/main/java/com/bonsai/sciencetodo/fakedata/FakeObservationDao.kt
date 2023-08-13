@@ -1,19 +1,22 @@
-package com.bonsai.sciencetodo.data
+package com.bonsai.sciencetodo.fakedata
 
+import com.bonsai.sciencetodo.data.ObservationDao
+import com.bonsai.sciencetodo.fakedata.FakeData.fakeObservations
 import com.bonsai.sciencetodo.model.Observation
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 class FakeObservationDao : ObservationDao {
     override fun getAll(): Flow<List<Observation>> {
-        TODO("Not yet implemented")
+        return flowOf(fakeObservations)
     }
 
     override fun getById(id: Int): Flow<Observation> {
-        TODO("Not yet implemented")
+        return flowOf(fakeObservations.first { it.id == id })
     }
 
     override fun getByFlowId(id: Int): Flow<List<Observation>> {
-        TODO("Not yet implemented")
+        return flowOf(fakeObservations.filter { it.dataFlowId == id })
     }
 
     override fun getCountByDataFlowId(id: Int): Flow<Int> {

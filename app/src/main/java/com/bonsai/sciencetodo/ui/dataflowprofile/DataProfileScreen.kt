@@ -40,8 +40,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.bonsai.sciencetodo.R
-import com.bonsai.sciencetodo.data.FakeDataFlowDao
-import com.bonsai.sciencetodo.data.FakeVariableDao
+import com.bonsai.sciencetodo.fakedata.FakeDataFlowDao
+import com.bonsai.sciencetodo.fakedata.FakeVariableDao
 import com.bonsai.sciencetodo.data.ObservationRepository
 import com.bonsai.sciencetodo.model.Variable
 import com.bonsai.sciencetodo.model.VariableType

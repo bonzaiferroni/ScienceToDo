@@ -2,14 +2,15 @@ package com.bonsai.sciencetodo.data
 
 import androidx.room.TypeConverter
 import com.bonsai.sciencetodo.model.VariableType
-import java.util.Date
+import java.time.Instant
 
 class Converters {
     @TypeConverter
-    fun fromTimestamp(value: Long?): Date? = value?.let { Date(it) }
+    fun fromTimestamp(value: Long?): Instant? =
+        if (value != null) Instant.ofEpochMilli(value) else { null }
 
     @TypeConverter
-    fun dateToTimestamp(date: Date?): Long? = date?.time
+    fun dateToTimestamp(instant: Instant?): Long? = instant?.toEpochMilli()
 
     @TypeConverter
     fun toVariableType(value: Int): VariableType = VariableType.fromInt(value)

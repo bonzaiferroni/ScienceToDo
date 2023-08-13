@@ -1,5 +1,10 @@
 package com.bonsai.sciencetodo.data
 
+import com.bonsai.sciencetodo.fakedata.FakeDataFlowDao
+import com.bonsai.sciencetodo.fakedata.FakeIntValueDao
+import com.bonsai.sciencetodo.fakedata.FakeObservationDao
+import com.bonsai.sciencetodo.fakedata.FakeStringValueDao
+import com.bonsai.sciencetodo.fakedata.FakeVariableDao
 import com.bonsai.sciencetodo.model.BaseDataValue
 import com.bonsai.sciencetodo.model.Variable
 import com.bonsai.sciencetodo.model.VariableType

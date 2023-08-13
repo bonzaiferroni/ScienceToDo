@@ -1,27 +1,30 @@
-package com.bonsai.sciencetodo.data
+package com.bonsai.sciencetodo.fakedata
 
+import com.bonsai.sciencetodo.data.IntValueDao
+import com.bonsai.sciencetodo.fakedata.FakeData.fakeIntValues
 import com.bonsai.sciencetodo.model.IntValue
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 class FakeIntValueDao : IntValueDao {
     override fun getAll(): Flow<List<IntValue>> {
-        TODO("Not yet implemented")
+        return flowOf(fakeIntValues)
     }
 
     override fun getById(id: Int): Flow<IntValue> {
-        TODO("Not yet implemented")
+        return flowOf(fakeIntValues.first { it.id == id })
     }
 
     override fun getByObservationId(id: Int): Flow<List<IntValue>> {
-        TODO("Not yet implemented")
+        return flowOf(fakeIntValues.filter { it.observationId == id })
     }
 
     override fun getByVariableId(id: Int): Flow<List<IntValue>> {
-        TODO("Not yet implemented")
+        return flowOf(fakeIntValues.filter { it.id == id })
     }
 
     override fun getCountByVariableId(id: Int): Flow<Int> {
-        TODO("Not yet implemented")
+        return flowOf(fakeIntValues.filter { it.id == id }.size)
     }
 
     override suspend fun insert(intValue: IntValue) {

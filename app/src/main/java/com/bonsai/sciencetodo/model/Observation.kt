@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import java.util.Date
+import java.time.Instant
 
 @Entity(
     tableName = "observation",
@@ -22,7 +22,7 @@ import java.util.Date
 data class Observation (
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val date: Date,
     @ColumnInfo(name = "data_flow_id")
     val dataFlowId: Int,
-)
+    val instant: Instant,
+    )

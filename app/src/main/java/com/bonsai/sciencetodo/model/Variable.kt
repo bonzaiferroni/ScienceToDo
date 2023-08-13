@@ -21,9 +21,9 @@ import androidx.room.PrimaryKey
 data class Variable(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val name: String,
     @ColumnInfo(name = "data_flow_id")
     val dataFlowId: Int,
+    val name: String,
     @ColumnInfo(name = "type")
     val type: VariableType,
 )

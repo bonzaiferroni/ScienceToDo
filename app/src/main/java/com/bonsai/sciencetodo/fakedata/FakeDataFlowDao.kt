@@ -1,5 +1,7 @@
-package com.bonsai.sciencetodo.data
+package com.bonsai.sciencetodo.fakedata
 
+import com.bonsai.sciencetodo.data.DataFlowDao
+import com.bonsai.sciencetodo.fakedata.FakeData.fakeDataFlows
 import com.bonsai.sciencetodo.model.DataFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -7,11 +9,11 @@ import kotlinx.coroutines.flow.flowOf
 class FakeDataFlowDao : DataFlowDao {
 
     override fun getAll(): Flow<List<DataFlow>> {
-        return flowOf(dataFlows)
+        return flowOf(fakeDataFlows)
     }
 
     override fun getById(id: Int): Flow<DataFlow> {
-        return flowOf(dataFlows[0])
+        return flowOf(fakeDataFlows[0])
     }
 
     override fun getByName(name: String): Flow<DataFlow> {
@@ -36,12 +38,5 @@ class FakeDataFlowDao : DataFlowDao {
 
     override suspend fun deleteAll() {
         TODO("Not yet implemented")
-    }
-
-    companion object {
-        val dataFlows = listOf(
-            DataFlow(id = 1, name = "Food"),
-            DataFlow(id = 2, name = "Sleep")
-        )
     }
 }
