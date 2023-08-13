@@ -20,11 +20,11 @@ class FakeIntValueDao : IntValueDao {
     }
 
     override fun getByVariableId(id: Int): Flow<List<IntValue>> {
-        return flowOf(fakeIntValues.filter { it.id == id })
+        return flowOf(fakeIntValues.filter { it.variableId == id })
     }
 
     override fun getCountByVariableId(id: Int): Flow<Int> {
-        return flowOf(fakeIntValues.filter { it.id == id }.size)
+        return flowOf(fakeIntValues.filter { it.variableId == id }.size)
     }
 
     override suspend fun insert(intValue: IntValue) {

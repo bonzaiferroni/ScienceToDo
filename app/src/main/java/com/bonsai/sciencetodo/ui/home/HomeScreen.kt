@@ -34,9 +34,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.bonsai.sciencetodo.R
+import com.bonsai.sciencetodo.data.ObservationRepository
 import com.bonsai.sciencetodo.fakedata.FakeDataFlowDao
 import com.bonsai.sciencetodo.fakedata.FakeVariableDao
-import com.bonsai.sciencetodo.data.ObservationRepository
 import com.bonsai.sciencetodo.model.DataFlow
 import com.bonsai.sciencetodo.ui.AppScreens
 import com.bonsai.sciencetodo.ui.AppVmProvider
@@ -60,33 +60,13 @@ fun HomeScreen(
         navController?.navigate(route)
     }
 
-    if (uiState.showDialog) {
-        AlertDialog(
-            onDismissRequest = { viewModel.hideDialog() },
-            title = { Text("Add a new DataFlow") },
-            text = {
-                OutlinedTextField(
-                    value = uiState.dataFlowName,
-                    onValueChange = { viewModel.onNameChange(it) },
-                    label = { Text("Name") }
-                )
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = { viewModel.addDataFlow() }
-                ) {
-                    Text("Add")
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = { viewModel.hideDialog() }
-                ) {
-                    Text("Cancel")
-                }
-            }
-        )
-    }
+    AddDataFlowDialog(
+        uiState.showDialog,
+        uiState.newDataFlowName,
+        viewModel::hideDialog,
+        viewModel::onNameChange,
+        viewModel::addDataFlow
+    )
 
     Scaffold(
         topBar = {
@@ -125,6 +105,43 @@ fun HomeScreen(
 }
 
 @Composable
+fun AddDataFlowDialog(
+    showDialog: Boolean,
+    newDataFlowName: String,
+    onHideDialog: () -> Unit,
+    onChangeName: (name: String) -> Unit,
+    onAddDataFlow: () -> Unit,
+) {
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = onHideDialog,
+            title = { Text("Add a new DataFlow") },
+            text = {
+                OutlinedTextField(
+                    value = newDataFlowName,
+                    onValueChange = onChangeName,
+                    label = { Text("Name") }
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = onAddDataFlow
+                ) {
+                    Text("Add")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = onHideDialog
+                ) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
+}
+
+@Composable
 fun DataFlowCard(
     dataFlow: DataFlow,
     onOpenFlow: (dataFlowId: Int) -> Unit,
@@ -136,7 +153,7 @@ fun DataFlowCard(
         modifier = modifier
             .fillMaxWidth()
     ) {
-        Row (
+        Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
         ) {
@@ -148,7 +165,7 @@ fun DataFlowCard(
             IconButton(onClick = { onOpenDataDialog(dataFlow.id) }) {
                 Icon(imageVector = Icons.Filled.Add, contentDescription = "add data")
             }
-            IconButton(onClick = { onOpenDataView(dataFlow.id)}) {
+            IconButton(onClick = { onOpenDataView(dataFlow.id) }) {
                 Icon(imageVector = Icons.Filled.Search, contentDescription = "view data")
             }
             IconButton(onClick = { onOpenFlow(dataFlow.id) }) {

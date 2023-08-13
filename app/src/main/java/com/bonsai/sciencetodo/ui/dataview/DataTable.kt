@@ -2,6 +2,7 @@ package com.bonsai.sciencetodo.ui.dataview
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import eu.wewox.lazytable.LazyTable
@@ -12,12 +13,14 @@ import eu.wewox.lazytable.lazyTableDimensions
 
 @Composable
 fun DataTable(
-    dataTableContent: DataTableContent
+    tableContent: DataTableContent,
+    modifier: Modifier = Modifier,
 ) {
-    val columns = dataTableContent.columnCount
-    val rows = dataTableContent.rowCount
+    val columns = tableContent.columnCount
+    val rows = tableContent.rowCount
     LazyTable(
-        dimensions = dimensions()
+        dimensions = dimensions(),
+        modifier = modifier
     ) {
         items(
             count = columns * rows,
@@ -31,7 +34,7 @@ fun DataTable(
             val column = index % columns
             val row = index / columns
 
-            val text = dataTableContent.getMatrixValue(column, row)
+            val text = tableContent.getMatrixValue(column, row)
             Text(text = text)
         }
     }

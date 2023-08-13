@@ -7,10 +7,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.bonsai.sciencetodo.R
 import com.bonsai.sciencetodo.data.DataRepository
 import com.bonsai.sciencetodo.ui.AppScreens
 import com.bonsai.sciencetodo.ui.AppVmProvider
@@ -34,7 +36,11 @@ fun DataViewScreen(
             modifier = Modifier.padding(paddingValues)
         ) {
             if (tableContent != null) {
-                DataTable(tableContent)
+                DataTable(
+                    tableContent = tableContent,
+                    modifier = Modifier
+                        .padding(horizontal = dimensionResource(id = R.dimen.padding_small))
+                )
             }
         }
     }

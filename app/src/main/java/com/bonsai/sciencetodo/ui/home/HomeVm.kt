@@ -34,17 +34,17 @@ class HomeVm(
     }
 
     fun hideDialog() {
-        _uiState.value = _uiState.value.copy(showDialog = false, dataFlowName = "")
+        _uiState.value = _uiState.value.copy(showDialog = false, newDataFlowName = "")
     }
 
     fun onNameChange(name: String) {
-        _uiState.value = _uiState.value.copy(dataFlowName = name)
+        _uiState.value = _uiState.value.copy(newDataFlowName = name)
     }
 
     fun addDataFlow() = viewModelScope.launch {
-        val newFlow = DataFlow(id = 0, name = _uiState.value.dataFlowName)
+        val newFlow = DataFlow(id = 0, name = _uiState.value.newDataFlowName)
         dataFlowDao.insert(newFlow)
-        _uiState.value = _uiState.value.copy(showDialog = false, dataFlowName = "")
+        _uiState.value = _uiState.value.copy(showDialog = false, newDataFlowName = "")
     }
 
     fun openDataDialog(dataFlowId: Int) {
@@ -90,7 +90,7 @@ class HomeVm(
 data class HomeUiState(
     val dataFlows: List<DataFlow> = emptyList(),
     val showDialog: Boolean = false,
-    val dataFlowName: String = "",
+    val newDataFlowName: String = "",
     val newDataValues: List<NewDataValue>? = null,
     val newDataTargetId: Int? = null
 )
