@@ -2,6 +2,7 @@ package com.bonsai.sciencetodo
 
 import android.app.Application
 import com.bonsai.sciencetodo.data.AppDatabase
+import com.bonsai.sciencetodo.data.DataRepository
 import com.bonsai.sciencetodo.data.ObservationRepository
 
 class ScienceToDoApplication : Application() {
@@ -9,6 +10,15 @@ class ScienceToDoApplication : Application() {
     val observationRepository: ObservationRepository by lazy {
         ObservationRepository(
             database.observationDao(),
+            database.stringValueDao(),
+            database.intValueDao()
+        )
+    }
+    val dataRepository: DataRepository by lazy {
+        DataRepository(
+            database.dataFlowDao(),
+            database.observationDao(),
+            database.variableDao(),
             database.stringValueDao(),
             database.intValueDao()
         )

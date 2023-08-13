@@ -17,6 +17,12 @@ interface StringValueDao {
     @Query("SELECT * FROM string_value WHERE id = :id")
     fun getById(id: Int): Flow<StringValue>
 
+    @Query("SELECT * FROM string_value WHERE observation_id = :id")
+    fun getByObservationId(id: Int): Flow<List<StringValue>>
+
+    @Query("SELECT * FROM string_value WHERE variable_id = :id")
+    fun getByVariableId(id: Int): Flow<List<StringValue>>
+
     @Query("SELECT COUNT(*) FROM string_value WHERE variable_id = :id")
     fun getCountByVariableId(id: Int): Flow<Int>
 

@@ -1,0 +1,59 @@
+package com.bonsai.sciencetodo.data
+
+import com.bonsai.sciencetodo.model.BaseDataValue
+import com.bonsai.sciencetodo.model.Variable
+import com.bonsai.sciencetodo.model.VariableType
+import com.bonsai.sciencetodo.ui.dataview.DataTableContent
+import kotlinx.coroutines.flow.first
+
+class DataRepository(
+    val dataFlowDao: DataFlowDao,
+    val observationDao: ObservationDao,
+    val variableDao: VariableDao,
+    val stringValueDao: StringValueDao,
+    val intValueDao: IntValueDao,
+) {
+    suspend fun getTableContent(dataFlowId: Int): DataTableContent {
+        val variables = variableDao.getByFlowId(dataFlowId).first()
+        val observations = observationDao.getByFlowId(dataFlowId).first()
+
+        val variableIds = variables.map { v -> v.id }
+        val observationIds = observations.map { o -> o.id }
+
+        val matrix: Array<Array<BaseDataValue?>> = Array(variables.size) {
+            Array(observations.size) { null }
+        }
+        for (variable in variables) {
+            val dataValues = getDataByVariable(variable)
+            for (dataValue in dataValues) {
+                val column = variableIds.indexOf(dataValue.variableId)
+                val row = observationIds.indexOf(dataValue.observationId)
+                matrix[column][row] = dataValue
+            }
+        }
+        return DataTableContent(variables, observations, matrix)
+    }
+
+    private suspend fun getDataByVariable(variable: Variable): List<BaseDataValue> {
+        return when (variable.type) {
+            VariableType.Undefined ->
+                throw IllegalArgumentException("variable type not initialized")
+            VariableType.Integer ->
+                intValueDao.getByVariableId(variable.id).first()
+            VariableType.String ->
+                stringValueDao.getByVariableId(variable.id).first()
+        }
+    }
+
+    companion object {
+        fun getFake(): DataRepository {
+            return DataRepository(
+                FakeDataFlowDao(),
+                FakeObservationDao(),
+                FakeVariableDao(),
+                FakeStringValueDao(),
+                FakeIntValueDao()
+            )
+        }
+    }
+}

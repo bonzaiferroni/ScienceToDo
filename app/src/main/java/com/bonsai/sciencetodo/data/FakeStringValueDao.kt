@@ -12,6 +12,14 @@ class FakeStringValueDao : StringValueDao {
         TODO("Not yet implemented")
     }
 
+    override fun getByObservationId(id: Int): Flow<List<StringValue>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getByVariableId(id: Int): Flow<List<StringValue>> {
+        TODO("Not yet implemented")
+    }
+
     override fun getCountByVariableId(id: Int): Flow<Int> {
         TODO("Not yet implemented")
     }

@@ -5,15 +5,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import eu.wewox.lazytable.LazyTable
+import eu.wewox.lazytable.LazyTableDefaults.dimensions
 import eu.wewox.lazytable.LazyTableDimensions
 import eu.wewox.lazytable.LazyTableItem
 import eu.wewox.lazytable.lazyTableDimensions
 
 @Composable
 fun DataTable(
+    dataTableContent: DataTableContent
 ) {
-    val columns = 10
-    val rows = 10
+    val columns = dataTableContent.columnCount
+    val rows = dataTableContent.rowCount
     LazyTable(
         dimensions = dimensions()
     ) {
@@ -26,17 +28,16 @@ fun DataTable(
                 )
             }
         ) { index ->
-            val text = if (index % columns == 0) {
-                "#$index"
-            } else {
-                "#$index"
-            }
+            val column = index % columns
+            val row = index / columns
+
+            val text = dataTableContent.getMatrixValue(column, row)
             Text(text = text)
         }
     }
 }
 
-private fun dimensions(): LazyTableDimensions =
+private fun customDimensions(): LazyTableDimensions =
     lazyTableDimensions(
         columnSize = {
             when (it) {
