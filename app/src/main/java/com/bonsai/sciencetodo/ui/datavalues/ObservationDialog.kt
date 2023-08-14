@@ -27,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.bonsai.sciencetodo.R
 import com.bonsai.sciencetodo.fakedata.FakeData
 import com.bonsai.sciencetodo.model.VariableType
+import com.bonsai.sciencetodo.ui.common.IntegerPicker
 import com.bonsai.sciencetodo.ui.common.StdDialog
 import java.util.Locale
 
@@ -48,6 +49,7 @@ fun ObservationDialog(
 
             Card {
                 Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .padding(dimensionResource(R.dimen.padding_medium))
                 ) {
@@ -58,7 +60,7 @@ fun ObservationDialog(
                         style = MaterialTheme.typography.labelSmall
                     )
                     if (variable.type == VariableType.Integer) {
-                        IntegerSetter(onValueChange = { updater.value = it })
+                        New_IntegerSetter(onValueChange = { updater.value = it })
                     } else if (variable.type == VariableType.String) {
                         StringSetter(onValueChange = { updater.value = it })
                     }
@@ -95,7 +97,9 @@ fun StringSetter(
 }
 
 @Composable
-fun IntegerSetter(onValueChange: (Int) -> Unit) {
+fun IntegerSetter(
+    onValueChange: (Int) -> Unit
+) {
     var value by remember { mutableStateOf(0) }
     val updateValue: (Int) -> Unit = {
         value = it
@@ -117,13 +121,22 @@ fun IntegerSetter(onValueChange: (Int) -> Unit) {
 }
 
 @Composable
-fun New_IntegerSetter() {
+fun New_IntegerSetter(
+    onValueChange: (Int) -> Unit
+) {
+    var value by remember { mutableStateOf(0) }
+    val updateValue: (Int) -> Unit = {
+        value = it
+        onValueChange(it)
+    }
+
+    IntegerPicker(value, updateValue)
 }
 
 @Preview
 @Composable
 fun PreviewAddDataForm() {
-    val updaters = FakeData.fakeVariables.filter {it.dataFlowId == 1}.map { variable ->
+    val updaters = FakeData.fakeVariables.filter { it.dataFlowId == 1 }.map { variable ->
         NewDataValue(variable)
     }
 
