@@ -57,8 +57,9 @@ fun IntegerPicker(
             range = incrementValues,
             onValueChange = updateIncrementValue,
             textStyle = TextStyle(
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.outline,
             ),
+            dividersColor = MaterialTheme.colorScheme.secondary,
             modifier = Modifier.width(72.dp)
         )
 
