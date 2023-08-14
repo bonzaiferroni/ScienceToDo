@@ -15,14 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -31,9 +24,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -53,6 +43,11 @@ import com.bonsai.sciencetodo.model.VariableType
 import com.bonsai.sciencetodo.ui.AppScreens
 import com.bonsai.sciencetodo.ui.AppVmProvider
 import com.bonsai.sciencetodo.ui.ScienceToDoTopAppBar
+import com.bonsai.sciencetodo.ui.common.EnumDropdown
+import com.bonsai.sciencetodo.ui.common.RowIconButton
+import com.bonsai.sciencetodo.ui.common.RowTextButton
+import com.bonsai.sciencetodo.ui.common.StdCard
+import com.bonsai.sciencetodo.ui.common.StdIconButton
 import com.bonsai.sciencetodo.ui.datavalues.ObservationDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -153,29 +148,15 @@ fun VariableCard(
     onRemoveVariable: (variable: Variable) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(dimensionResource(R.dimen.padding_small))
-        ) {
-            Text(text = variable.name)
-            Spacer(modifier = Modifier.weight(1f))
-            Text(
-                text = variable.type.name,
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.outline
-            )
-            IconButton(onClick = { onRemoveVariable(variable) }) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "remove variable"
-                )
-            }
-        }
+    StdCard() {
+        Text(text = variable.name)
+        Spacer(modifier = Modifier.weight(1f))
+        Text(
+            text = variable.type.name,
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.outline
+        )
+        StdIconButton({ onRemoveVariable(variable) }, Icons.Filled.Delete)
     }
 }
 
@@ -222,67 +203,18 @@ fun AddVariableControl(
                         Text(text = "add variable")
                     }
                 )
-                VariableTypeDropdown(
-                    newVariableType = newVariableType,
-                    updateVariableType = updateVariableType
+                EnumDropdown<VariableType>(
+                    selectedValue = newVariableType,
+                    onSelectValue = updateVariableType
                 )
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement
                         .spacedBy(dimensionResource(R.dimen.gap_medium))
                 ) {
-                    Button(
-                        onClick = addVariable,
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = "close dialog"
-                        )
-                    }
-                    Button(
-                        onClick = addVariable,
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = "add variable"
-                        )
-                    }
+                    RowTextButton(Icons.Default.Close, "close dialog", onCloseDialog)
+                    RowTextButton(Icons.Default.Check, "add variable", addVariable)
                 }
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun VariableTypeDropdown(
-    newVariableType: VariableType,
-    updateVariableType: (variableType: VariableType) -> Unit,
-) {
-    var expanded by remember { mutableStateOf(false) }
-
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = !expanded },
-    ) {
-        TextField(
-            value = newVariableType.name,
-            onValueChange = {},
-            readOnly = true,
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-            modifier = Modifier.menuAnchor()
-        )
-        ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            VariableType.values().forEach { variableType ->
-                DropdownMenuItem(
-                    text = {
-                        Text(text = variableType.name)
-                    }, onClick = {
-                        updateVariableType(variableType)
-                        expanded = false
-                    })
             }
         }
     }
@@ -299,10 +231,9 @@ fun DataButtons(
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small)),
         modifier = modifier.padding(dimensionResource(R.dimen.padding_small))
     ) {
-        val buttonModifier = Modifier.weight(1f)
-        Button(onClick = onAddData, modifier = buttonModifier) { Text(text = "+ data") }
-        Button(onClick = onAddVariable, modifier = buttonModifier) { Text(text = "+ variable") }
-        Button(onClick = onViewData, modifier = buttonModifier) { Text(text = "view data") }
+        RowIconButton(text = "+ data", onClick = onAddData)
+        RowIconButton(text = "+ variable", onClick = onAddVariable)
+        RowIconButton(text = "view data", onClick = onViewData)
     }
 }
 

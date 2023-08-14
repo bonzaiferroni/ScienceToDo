@@ -2,10 +2,8 @@ package com.bonsai.sciencetodo.ui.home
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,11 +12,9 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -27,7 +23,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,6 +36,8 @@ import com.bonsai.sciencetodo.model.DataFlow
 import com.bonsai.sciencetodo.ui.AppScreens
 import com.bonsai.sciencetodo.ui.AppVmProvider
 import com.bonsai.sciencetodo.ui.ScienceToDoTopAppBar
+import com.bonsai.sciencetodo.ui.common.StdCard
+import com.bonsai.sciencetodo.ui.common.StdIconButton
 import com.bonsai.sciencetodo.ui.datavalues.ObservationDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -149,29 +146,15 @@ fun DataFlowCard(
     onOpenDataDialog: (dataFlowId: Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
-        ) {
-            Text(
-                text = dataFlow.name,
-                style = MaterialTheme.typography.titleLarge
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            IconButton(onClick = { onOpenDataDialog(dataFlow.id) }) {
-                Icon(imageVector = Icons.Filled.Add, contentDescription = "add data")
-            }
-            IconButton(onClick = { onOpenDataView(dataFlow.id) }) {
-                Icon(imageVector = Icons.Filled.Search, contentDescription = "view data")
-            }
-            IconButton(onClick = { onOpenFlow(dataFlow.id) }) {
-                Icon(imageVector = Icons.Filled.ArrowForward, contentDescription = "view flow")
-            }
-        }
+    StdCard(modifier = modifier) {
+        Text(
+            text = dataFlow.name,
+            style = MaterialTheme.typography.titleLarge
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        StdIconButton(Icons.Filled.Add, { onOpenDataDialog(dataFlow.id) })
+        StdIconButton(Icons.Filled.Search, { onOpenDataView(dataFlow.id) })
+        StdIconButton(Icons.Filled.ArrowForward, { onOpenFlow(dataFlow.id) })
     }
 }
 

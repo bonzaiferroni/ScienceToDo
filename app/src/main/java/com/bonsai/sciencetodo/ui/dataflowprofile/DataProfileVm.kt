@@ -65,7 +65,8 @@ class DataProfileVm(
         // reset values
         _uiState.value = _uiState.value.copy(
             newVariableName = "",
-            newVariableType = VariableType.Undefined
+            newVariableType = VariableType.Undefined,
+            showAddVariableDialog = false
         )
     }
 
@@ -125,5 +126,5 @@ data class DataProfileState(
     val newVariableName: String = "",
     val newVariableType: VariableType = VariableType.Undefined,
     val observationCount: Int = 0,
-    val showAddVariableDialog: Boolean = true,
+    val showAddVariableDialog: Boolean = false,
 )
