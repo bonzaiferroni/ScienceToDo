@@ -1,8 +1,6 @@
 package com.bonsai.sciencetodo.ui.datavalues
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
@@ -10,7 +8,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,7 +23,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.bonsai.sciencetodo.R
 import com.bonsai.sciencetodo.fakedata.FakeData
-import com.bonsai.sciencetodo.model.VariableType
 import com.bonsai.sciencetodo.ui.common.IntegerPicker
 import com.bonsai.sciencetodo.ui.common.StdDialog
 import java.util.Locale
@@ -35,17 +31,17 @@ import java.util.Locale
 fun ObservationDialog(
     onSaveDialog: () -> Unit,
     onCancelDialog: () -> Unit,
-    newDataValues: List<NewDataValue>?,
+    newDataBoxes: List<NewDataBox>?,
 ) {
-    if (newDataValues == null) return
+    if (newDataBoxes == null) return
 
     StdDialog(
         showDialog = true,
         onDismiss = onCancelDialog,
         onAccept = onSaveDialog
     ) {
-        newDataValues.forEach { updater ->
-            val variable = updater.variable
+        newDataBoxes.forEach { newDataBox ->
+            val variable = newDataBox.variable
 
             Card {
                 Column(
@@ -59,10 +55,13 @@ fun ObservationDialog(
                         modifier = Modifier.fillMaxWidth(),
                         style = MaterialTheme.typography.labelSmall
                     )
-                    if (variable.type == VariableType.Integer) {
-                        New_IntegerSetter(onValueChange = { updater.value = it })
-                    } else if (variable.type == VariableType.String) {
-                        StringSetter(onValueChange = { updater.value = it })
+                    when (newDataBox) {
+                        is NewInteger -> {
+                            IntegerSetter(onValueChange = { newDataBox.value = it })
+                        }
+                        is NewString -> {
+                            StringSetter(onValueChange = { newDataBox.value = it })
+                        }
                     }
                 }
             }
@@ -105,30 +104,6 @@ fun IntegerSetter(
         value = it
         onValueChange(it)
     }
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        TextButton(onClick = { if (value > 0) updateValue(value - 1) }) {
-            Text("-")
-        }
-        Text(text = value.toString())
-        TextButton(onClick = { updateValue(value + 1) }) {
-            Text("+")
-        }
-    }
-}
-
-@Composable
-fun New_IntegerSetter(
-    onValueChange: (Int) -> Unit
-) {
-    var value by remember { mutableStateOf(0) }
-    val updateValue: (Int) -> Unit = {
-        value = it
-        onValueChange(it)
-    }
 
     IntegerPicker(value, updateValue)
 }
@@ -136,9 +111,9 @@ fun New_IntegerSetter(
 @Preview
 @Composable
 fun PreviewAddDataForm() {
-    val updaters = FakeData.fakeVariables.filter { it.dataFlowId == 1 }.map { variable ->
-        NewDataValue(variable)
+    val newDataBox = FakeData.fakeVariables.filter { it.dataFlowId == 1 }.map { variable ->
+        NewDataBox.getBox(variable)
     }
 
-    ObservationDialog({}, {}, updaters)
+    ObservationDialog({}, {}, newDataBox)
 }

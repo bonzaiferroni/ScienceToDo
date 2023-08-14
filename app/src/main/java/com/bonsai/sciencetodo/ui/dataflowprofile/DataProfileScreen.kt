@@ -59,7 +59,7 @@ fun DataProfileScreen(
     ObservationDialog(
         viewModel::saveDataDialog,
         viewModel::cancelDataDialog,
-        uiState.newDataValues
+        uiState.newDataBoxes
     )
 
     Scaffold(

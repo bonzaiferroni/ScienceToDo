@@ -6,7 +6,9 @@ import com.bonsai.sciencetodo.fakedata.FakeStringValueDao
 import com.bonsai.sciencetodo.model.IntValue
 import com.bonsai.sciencetodo.model.Observation
 import com.bonsai.sciencetodo.model.StringValue
-import com.bonsai.sciencetodo.ui.datavalues.NewDataValue
+import com.bonsai.sciencetodo.ui.datavalues.NewDataBox
+import com.bonsai.sciencetodo.ui.datavalues.NewInteger
+import com.bonsai.sciencetodo.ui.datavalues.NewString
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 
@@ -15,10 +17,10 @@ class ObservationRepository(
     private val stringValueDao: StringValueDao,
     private val intValueDao: IntValueDao,
 ) {
-    suspend fun createObservation(dataFlowId: Int, newDataValues: List<NewDataValue>) {
+    suspend fun createObservation(dataFlowId: Int, newDataBoxes: List<NewDataBox>) {
         val observation = createObservation(dataFlowId)
 
-        newDataValues.forEach {
+        newDataBoxes.forEach {
             insertNewDataValue(observation.id, it)
         }
     }
@@ -33,17 +35,19 @@ class ObservationRepository(
         return observation.copy(id = id.toInt())
     }
 
-    private suspend fun insertNewDataValue(observationId: Int, newDataValue: NewDataValue) {
-        val variable = newDataValue.variable
-        val value = newDataValue.value ?: throw NullPointerException("new value is null")
+    private suspend fun insertNewDataValue(observationId: Int, newDataBox: NewDataBox) {
+        if (!newDataBox.isValid()) throw IllegalArgumentException("Invalid data")
+        val variable = newDataBox.variable
 
-        when (value) {
-            is Int -> {
+        when (newDataBox) {
+            is NewInteger -> {
+                val value = checkNotNull(newDataBox.value)
                 val dataValue = IntValue(0, variable.id, observationId, value)
                 intValueDao.insert(dataValue)
             }
 
-            is String -> {
+            is NewString -> {
+                val value = checkNotNull(newDataBox.value)
                 val dataValue = StringValue(0, variable.id, observationId, value)
                 stringValueDao.insert(dataValue)
             }

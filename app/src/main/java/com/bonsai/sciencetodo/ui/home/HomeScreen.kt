@@ -97,7 +97,7 @@ fun HomeScreen(
     ObservationDialog(
         viewModel::saveDataDialog,
         viewModel::cancelDataDialog,
-        uiState.newDataValues
+        uiState.newDataBoxes
     )
 }
 

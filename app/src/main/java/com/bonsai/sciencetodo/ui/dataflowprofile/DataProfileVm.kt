@@ -10,7 +10,7 @@ import com.bonsai.sciencetodo.model.DataFlow
 import com.bonsai.sciencetodo.model.Variable
 import com.bonsai.sciencetodo.model.VariableType
 import com.bonsai.sciencetodo.ui.AppScreens
-import com.bonsai.sciencetodo.ui.datavalues.NewDataValue
+import com.bonsai.sciencetodo.ui.datavalues.NewDataBox
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -85,25 +85,25 @@ class DataProfileVm(
     }
 
     fun openDataDialog() {
-        val newDataValues = _uiState.value.variables.map { variable ->
-            NewDataValue(variable)
+        val newDataBoxes = _uiState.value.variables.map { variable ->
+            NewDataBox.getBox(variable)
         }
-        _uiState.value = _uiState.value.copy(newDataValues = newDataValues)
+        _uiState.value = _uiState.value.copy(newDataBoxes = newDataBoxes)
     }
 
     fun saveDataDialog() {
-        val newDataValues = _uiState.value.newDataValues
+        val newDataValues = _uiState.value.newDataBoxes
             ?: throw NullPointerException("newDataValues is null")
 
         viewModelScope.launch {
             observationRepository.createObservation(dataFlowId, newDataValues)
         }
 
-        _uiState.value = _uiState.value.copy(newDataValues = null)
+        _uiState.value = _uiState.value.copy(newDataBoxes = null)
     }
 
     fun cancelDataDialog() {
-        _uiState.value = _uiState.value.copy(newDataValues = null)
+        _uiState.value = _uiState.value.copy(newDataBoxes = null)
     }
 
     fun openAddVariableDialog() {
@@ -122,7 +122,7 @@ class DataProfileVm(
 data class DataProfileState(
     val dataFlow: DataFlow = DataFlow(0, "404"),
     val variables: List<Variable> = emptyList(),
-    val newDataValues: List<NewDataValue>? = null,
+    val newDataBoxes: List<NewDataBox>? = null,
     val newVariableName: String = "",
     val newVariableType: VariableType = VariableType.Undefined,
     val observationCount: Int = 0,
