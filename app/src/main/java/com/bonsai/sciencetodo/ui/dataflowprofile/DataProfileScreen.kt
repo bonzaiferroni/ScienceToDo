@@ -36,7 +36,7 @@ import com.bonsai.sciencetodo.model.VariableType
 import com.bonsai.sciencetodo.ui.AppScreens
 import com.bonsai.sciencetodo.ui.AppVmProvider
 import com.bonsai.sciencetodo.ui.ScienceToDoTopAppBar
-import com.bonsai.sciencetodo.ui.common.EnumPicker
+import com.bonsai.sciencetodo.ui.common.EnumDropdown
 import com.bonsai.sciencetodo.ui.common.RowTextButton
 import com.bonsai.sciencetodo.ui.common.StdCard
 import com.bonsai.sciencetodo.ui.common.StdDialog
@@ -175,9 +175,9 @@ fun AddVariableControl(
             modifier = Modifier.fillMaxWidth(),
             label = { Text(text = "add variable") }
         )
-        EnumPicker<VariableType>(
+        EnumDropdown<VariableType>(
             selectedValue = newVariableType,
-            onSelectValue = updateVariableType
+            onSelectValue = updateVariableType,
         )
     }
 }

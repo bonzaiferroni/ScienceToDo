@@ -3,9 +3,11 @@ package com.bonsai.sciencetodo.ui.common
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -80,17 +82,20 @@ inline fun <reified T : Enum<T>> EnumPicker(
     noinline onSelectValue: (enumValue: T) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    ListItemPicker(
-        modifier = modifier
-            .fillMaxWidth(),
-        value = selectedValue,
-        onValueChange = onSelectValue,
-        list = enumValues<T>().toList(),
-        textStyle = TextStyle(
-            color = MaterialTheme.colorScheme.onSurface,
-            fontSize = 14.sp
-        ),
-    )
+    Card(modifier = modifier) {
+        ListItemPicker(
+            modifier = Modifier
+                .padding(dimensionResource(R.dimen.padding_medium))
+                .fillMaxWidth(),
+            value = selectedValue,
+            onValueChange = onSelectValue,
+            list = enumValues<T>().toList(),
+            textStyle = TextStyle(
+                color = MaterialTheme.colorScheme.onSurface,
+                fontSize = 18.sp
+            ),
+        )
+    }
 }
 
 @Composable
