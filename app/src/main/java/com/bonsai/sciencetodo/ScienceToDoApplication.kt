@@ -11,7 +11,8 @@ class ScienceToDoApplication : Application() {
         ObservationRepository(
             database.observationDao(),
             database.stringValueDao(),
-            database.intValueDao()
+            database.intValueDao(),
+            database.floatValueDao()
         )
     }
     val dataRepository: DataRepository by lazy {
@@ -20,7 +21,8 @@ class ScienceToDoApplication : Application() {
             database.observationDao(),
             database.variableDao(),
             database.stringValueDao(),
-            database.intValueDao()
+            database.intValueDao(),
+            database.floatValueDao()
         )
     }
 }

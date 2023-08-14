@@ -13,6 +13,7 @@ abstract class NewValueBox (
             VariableType.Undefined -> throw IllegalArgumentException("undefined variableType")
             VariableType.Integer -> NewInteger(variable)
             VariableType.String -> NewString(variable)
+            VariableType.Float -> NewFloat(variable)
         }
     }
 }
@@ -22,14 +23,14 @@ abstract class NewValue<T>(
     var value: T
 ) : NewValueBox(variable)
 
-class NewInteger(
-    variable: Variable
-) : NewValue<Int?>(variable, null) {
+class NewInteger(variable: Variable) : NewValue<Int?>(variable, null) {
     override fun isValid() = value != null
 }
 
-class NewString(
-    variable: Variable
-) : NewValue<String?>(variable, null) {
+class NewString(variable: Variable) : NewValue<String?>(variable, null) {
+    override fun isValid() = value != null
+}
+
+class NewFloat(variable: Variable) : NewValue<Float?>(variable, null) {
     override fun isValid() = value != null
 }

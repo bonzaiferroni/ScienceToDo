@@ -1,6 +1,7 @@
 package com.bonsai.sciencetodo.data
 
 import com.bonsai.sciencetodo.fakedata.FakeDataFlowDao
+import com.bonsai.sciencetodo.fakedata.FakeFloatValueDao
 import com.bonsai.sciencetodo.fakedata.FakeIntValueDao
 import com.bonsai.sciencetodo.fakedata.FakeObservationDao
 import com.bonsai.sciencetodo.fakedata.FakeStringValueDao
@@ -17,6 +18,7 @@ class DataRepository(
     val variableDao: VariableDao,
     val stringValueDao: StringValueDao,
     val intValueDao: IntValueDao,
+    val floatValueDao: FloatValueDao,
 ) {
     suspend fun getTableContent(dataFlowId: Int): DataTableContent {
         val variables = variableDao.getByFlowId(dataFlowId).first()
@@ -47,6 +49,8 @@ class DataRepository(
                 intValueDao.getByVariableId(variable.id).first()
             VariableType.String ->
                 stringValueDao.getByVariableId(variable.id).first()
+            VariableType.Float ->
+                floatValueDao.getByVariableId(variable.id).first()
         }
     }
 
@@ -57,7 +61,8 @@ class DataRepository(
                 FakeObservationDao(),
                 FakeVariableDao(),
                 FakeStringValueDao(),
-                FakeIntValueDao()
+                FakeIntValueDao(),
+                FakeFloatValueDao()
             )
         }
     }

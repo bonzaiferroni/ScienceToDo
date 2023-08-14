@@ -1,6 +1,7 @@
 package com.bonsai.sciencetodo.fakedata
 
 import com.bonsai.sciencetodo.model.DataFlow
+import com.bonsai.sciencetodo.model.FloatValue
 import com.bonsai.sciencetodo.model.IntValue
 import com.bonsai.sciencetodo.model.Observation
 import com.bonsai.sciencetodo.model.StringValue
@@ -17,7 +18,7 @@ object FakeData {
     val fakeVariables = listOf(
         Variable(1, fakeDataFlows[0].id, "description", VariableType.String),
         Variable(2, fakeDataFlows[0].id, "calories", VariableType.Integer),
-        Variable(3, fakeDataFlows[0].id, "rating", VariableType.Integer),
+        Variable(3, fakeDataFlows[0].id, "rating", VariableType.Float),
         Variable(4, fakeDataFlows[1].id, "hours", VariableType.Integer),
         Variable(5, fakeDataFlows[1].id, "location", VariableType.String),
         Variable(6, fakeDataFlows[1].id, "comfy_rating", VariableType.Integer),
@@ -36,9 +37,6 @@ object FakeData {
         IntValue(1, fakeVariables[1].id, fakeObservations[0].id, value = 100),
         IntValue(2, fakeVariables[1].id, fakeObservations[1].id, value = 500),
         IntValue(3, fakeVariables[1].id, fakeObservations[2].id, value = 400),
-        IntValue(4, fakeVariables[2].id, fakeObservations[0].id, value = 5),
-        IntValue(5, fakeVariables[2].id, fakeObservations[1].id, value = 7),
-        IntValue(6, fakeVariables[2].id, fakeObservations[2].id, value = 3),
         IntValue(7, fakeVariables[3].id, fakeObservations[3].id, value = 7),
         IntValue(8, fakeVariables[3].id, fakeObservations[4].id, value = 9),
         IntValue(9, fakeVariables[3].id, fakeObservations[5].id, value = 5),
@@ -54,5 +52,11 @@ object FakeData {
         StringValue(4, fakeVariables[4].id, fakeObservations[3].id, "Couch"),
         StringValue(5, fakeVariables[4].id, fakeObservations[4].id, "Bed"),
         StringValue(6, fakeVariables[4].id, fakeObservations[5].id, "Couch"),
+    )
+
+    val fakeFloatValues = listOf(
+        FloatValue(1, fakeVariables[2].id, fakeObservations[0].id, 5.5f),
+        FloatValue(2, fakeVariables[2].id, fakeObservations[1].id, 6.5f),
+        FloatValue(3, fakeVariables[2].id, fakeObservations[2].id, 7.5f),
     )
 }

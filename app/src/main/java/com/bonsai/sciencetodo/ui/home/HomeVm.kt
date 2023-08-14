@@ -63,13 +63,13 @@ class HomeVm(
     }
 
     fun saveDataDialog() {
-        val newDataValues = _uiState.value.newValueBoxes
+        val newValueBoxes = _uiState.value.newValueBoxes
             ?: throw NullPointerException("newDataValues is null")
         val dataFlowId = _uiState.value.newDataTargetId
             ?: throw NullPointerException("newDataTargetId is null")
 
         viewModelScope.launch {
-            observationRepository.createObservation(dataFlowId, newDataValues)
+            observationRepository.createObservation(dataFlowId, newValueBoxes)
         }
 
         clearNewDataState()

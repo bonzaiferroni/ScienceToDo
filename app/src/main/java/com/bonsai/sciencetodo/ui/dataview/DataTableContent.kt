@@ -1,6 +1,7 @@
 package com.bonsai.sciencetodo.ui.dataview
 
 import com.bonsai.sciencetodo.model.BaseValue
+import com.bonsai.sciencetodo.model.FloatValue
 import com.bonsai.sciencetodo.model.IntValue
 import com.bonsai.sciencetodo.model.Observation
 import com.bonsai.sciencetodo.model.StringValue
@@ -32,6 +33,7 @@ class DataTableContent(
         return when (val dataValue = dataMatrix[column - 1][row - 1]) {
             is IntValue -> dataValue.value.toString()
             is StringValue -> dataValue.value
+            is FloatValue -> dataValue.value.toString()
             else -> ""
         }
     }

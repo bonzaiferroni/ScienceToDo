@@ -3,12 +3,9 @@ package com.bonsai.sciencetodo.ui.datavalues
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,14 +14,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.bonsai.sciencetodo.R
 import com.bonsai.sciencetodo.fakedata.FakeData
+import com.bonsai.sciencetodo.ui.common.FloatField
 import com.bonsai.sciencetodo.ui.common.IntegerPicker
 import com.bonsai.sciencetodo.ui.common.StdDialog
+import com.bonsai.sciencetodo.ui.common.StringField
 import java.util.Locale
 
 @Composable
@@ -62,6 +59,9 @@ fun ObservationDialog(
                         is NewString -> {
                             StringSetter(onValueChange = { newDataBox.value = it })
                         }
+                        is NewFloat -> {
+                            FloatSetter(onValueChange = { newDataBox.value = it })
+                        }
                     }
                 }
             }
@@ -73,25 +73,15 @@ fun ObservationDialog(
 fun StringSetter(
     onValueChange: (String) -> Unit
 ) {
-    var text by remember { mutableStateOf("") }
+    var value by remember { mutableStateOf("") }
+    val onUpdateValue: (String) -> Unit = {
+        value = it
+        onValueChange(it)
+    }
 
-    TextField(
-        value = text,
-        onValueChange = {
-            text = it
-            onValueChange(text)
-        },
-        label = { Text("Enter text") },
-        singleLine = true,
-        keyboardOptions = KeyboardOptions.Default.copy(
-            keyboardType = KeyboardType.Text,
-            imeAction = ImeAction.Done
-        ),
-        keyboardActions = KeyboardActions(
-            onDone = {
-                // Handle onDone action if needed
-            }
-        )
+    StringField(
+        value = value,
+        onValueChange = onUpdateValue
     )
 }
 
@@ -106,6 +96,26 @@ fun IntegerSetter(
     }
 
     IntegerPicker(value, updateValue)
+}
+
+@Composable
+fun FloatSetter(
+    onValueChange: (Float) -> Unit
+) {
+    var value by remember { mutableStateOf("") }
+    val onUpdateValue: (String) -> Unit = {
+        value = it
+        val convertedValue = it.toFloatOrNull()
+        if (convertedValue != null) {
+            onValueChange(convertedValue)
+        }
+
+    }
+
+    FloatField(
+        value = value,
+        onValueChange = onUpdateValue
+    )
 }
 
 @Preview
