@@ -27,6 +27,7 @@ fun StdDialog(
     showDialog: Boolean,
     onDismiss: () -> Unit,
     onAccept: () -> Unit,
+    enableAccept: Boolean,
     modifier: Modifier = Modifier,
     headerText: String? = null,
     content: @Composable ColumnScope.() -> Unit
@@ -63,8 +64,17 @@ fun StdDialog(
                         horizontalArrangement = Arrangement
                             .spacedBy(dimensionResource(R.dimen.gap_medium)),
                     ) {
-                        RowIconButton(Icons.Default.Close, "close dialog", onDismiss)
-                        RowIconButton(Icons.Default.Check, "add variable", onAccept)
+                        RowIconButton(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "close dialog",
+                            onClick = onDismiss
+                        )
+                        RowIconButton(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = "add variable",
+                            onClick = onAccept,
+                            enabled = enableAccept
+                        )
                     }
                 }
             }
@@ -79,7 +89,8 @@ fun PreviewStdDialog() {
         showDialog = true,
         onAccept = { },
         onDismiss = { },
-        headerText = "Preview Dialog"
+        headerText = "Preview Dialog",
+        enableAccept = false,
     ) {
         Text(text = "this will be different")
     }

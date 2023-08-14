@@ -34,3 +34,5 @@ class NewString(variable: Variable) : NewValue<String?>(variable, null) {
 class NewFloat(variable: Variable) : NewValue<Float?>(variable, null) {
     override fun isValid() = value != null
 }
+
+fun List<NewValueBox>.isValid(): Boolean = this.all { it.isValid() }

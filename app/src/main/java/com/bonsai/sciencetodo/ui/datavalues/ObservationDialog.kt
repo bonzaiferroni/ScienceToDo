@@ -32,10 +32,13 @@ fun ObservationDialog(
 ) {
     if (newValueBoxes == null) return
 
+    var enableAccept by remember { mutableStateOf(false) }
+
     StdDialog(
         showDialog = true,
         onDismiss = onCancelDialog,
-        onAccept = onSaveDialog
+        onAccept = onSaveDialog,
+        enableAccept = enableAccept
     ) {
         newValueBoxes.forEach { newDataBox ->
             val variable = newDataBox.variable
@@ -54,13 +57,24 @@ fun ObservationDialog(
                     )
                     when (newDataBox) {
                         is NewInteger -> {
-                            IntegerSetter(onValueChange = { newDataBox.value = it })
+                            IntegerSetter(onValueChange = {
+                                newDataBox.value = it
+                                enableAccept = newValueBoxes.isValid()
+                            })
                         }
+
                         is NewString -> {
-                            StringSetter(onValueChange = { newDataBox.value = it })
+                            StringSetter(onValueChange = {
+                                newDataBox.value = it
+                                enableAccept = newValueBoxes.isValid()
+                            })
                         }
+
                         is NewFloat -> {
-                            FloatSetter(onValueChange = { newDataBox.value = it })
+                            FloatSetter(onValueChange = {
+                                newDataBox.value = it
+                                enableAccept = newValueBoxes.isValid()
+                            })
                         }
                     }
                 }
@@ -109,7 +123,6 @@ fun FloatSetter(
         if (convertedValue != null) {
             onValueChange(convertedValue)
         }
-
     }
 
     FloatField(

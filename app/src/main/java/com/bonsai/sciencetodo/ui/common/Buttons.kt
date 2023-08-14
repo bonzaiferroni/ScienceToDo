@@ -17,11 +17,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
 fun RowScope.RowIconButton(
     imageVector: ImageVector,
     contentDescription: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true
 ) {
     Button(
         onClick = onClick,
-        modifier = Modifier.weight(1f)
+        modifier = modifier.weight(1f),
+        enabled = enabled,
     ) {
         Icon(
             imageVector = imageVector,
@@ -34,12 +37,14 @@ fun RowScope.RowIconButton(
 fun RowScope.RowTextButton(
     text: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true
 ) {
     Button(
         onClick = onClick,
         modifier = modifier
-            .weight(1f)
+            .weight(1f),
+        enabled = enabled,
     ) { Text(text = text) }
 }
 
@@ -47,13 +52,16 @@ fun RowScope.RowTextButton(
 fun StdIconButton(
     imageVector: ImageVector,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     contentDescription: String? = null,
     backgroundColor: Color = MaterialTheme.colorScheme.secondary
 ) {
     IconButton(
         onClick = onClick,
-        modifier = Modifier
-            .background(backgroundColor, MaterialTheme.shapes.extraLarge)
+        modifier = modifier
+            .background(backgroundColor, MaterialTheme.shapes.extraLarge),
+        enabled = enabled,
     ) {
         Icon(
             imageVector = imageVector,

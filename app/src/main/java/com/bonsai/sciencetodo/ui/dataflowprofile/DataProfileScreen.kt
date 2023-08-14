@@ -163,11 +163,14 @@ fun AddVariableControl(
     onCloseDialog: () -> Unit,
     onAccept: () -> Unit,
 ) {
+    val enableAccept = newVariableType != VariableType.Undefined && newVariableName.isNotBlank()
+
     StdDialog(
         showDialog = showDialog,
         onDismiss = onCloseDialog,
         onAccept = onAccept,
-        headerText = "add variable"
+        headerText = "add variable",
+        enableAccept = enableAccept
     ) {
         TextField(
             value = newVariableName,
