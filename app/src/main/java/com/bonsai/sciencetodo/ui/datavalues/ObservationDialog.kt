@@ -3,16 +3,12 @@ package com.bonsai.sciencetodo.ui.datavalues
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -28,11 +24,10 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import com.bonsai.sciencetodo.R
 import com.bonsai.sciencetodo.fakedata.FakeData
 import com.bonsai.sciencetodo.model.VariableType
+import com.bonsai.sciencetodo.ui.common.StdDialog
 import java.util.Locale
 
 @Composable
@@ -43,45 +38,30 @@ fun ObservationDialog(
 ) {
     if (newDataValues == null) return
 
-    Dialog(
-        onDismissRequest = onCancelDialog,
-        properties = DialogProperties(
-            dismissOnClickOutside = false
-        )
+    StdDialog(
+        showDialog = true,
+        onDismiss = onCancelDialog,
+        onAccept = onSaveDialog
     ) {
-        Surface(
-            shape = MaterialTheme.shapes.medium,
-            modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))
-        ) {
-            Column(modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))) {
-                newDataValues.forEach { updater ->
-                    val variable = updater.variable
+        newDataValues.forEach { updater ->
+            val variable = updater.variable
 
-                    Card {
-                        Column(
-                            modifier = Modifier
-                                .padding(dimensionResource(R.dimen.padding_medium))
-                        ) {
-                            Text(
-                                text = variable.name.uppercase(Locale.getDefault()),
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.fillMaxWidth(),
-                                style = MaterialTheme.typography.labelSmall
-                            )
-                            if (variable.type == VariableType.Integer) {
-                                IntegerSetter(onValueChange = { updater.value = it })
-                            } else if (variable.type == VariableType.String) {
-                                StringSetter(onValueChange = { updater.value = it })
-                            }
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
-                }
-                Button(
-                    onClick = onSaveDialog,
-                    modifier = Modifier.fillMaxWidth()
+            Card {
+                Column(
+                    modifier = Modifier
+                        .padding(dimensionResource(R.dimen.padding_medium))
                 ) {
-                    Text(text = "save")
+                    Text(
+                        text = variable.name.uppercase(Locale.getDefault()),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth(),
+                        style = MaterialTheme.typography.labelSmall
+                    )
+                    if (variable.type == VariableType.Integer) {
+                        IntegerSetter(onValueChange = { updater.value = it })
+                    } else if (variable.type == VariableType.String) {
+                        StringSetter(onValueChange = { updater.value = it })
+                    }
                 }
             }
         }
@@ -134,6 +114,10 @@ fun IntegerSetter(onValueChange: (Int) -> Unit) {
             Text("+")
         }
     }
+}
+
+@Composable
+fun New_IntegerSetter() {
 }
 
 @Preview

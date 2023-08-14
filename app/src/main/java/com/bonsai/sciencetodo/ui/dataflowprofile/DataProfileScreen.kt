@@ -12,25 +12,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -44,9 +37,9 @@ import com.bonsai.sciencetodo.ui.AppScreens
 import com.bonsai.sciencetodo.ui.AppVmProvider
 import com.bonsai.sciencetodo.ui.ScienceToDoTopAppBar
 import com.bonsai.sciencetodo.ui.common.EnumDropdown
-import com.bonsai.sciencetodo.ui.common.RowIconButton
 import com.bonsai.sciencetodo.ui.common.RowTextButton
 import com.bonsai.sciencetodo.ui.common.StdCard
+import com.bonsai.sciencetodo.ui.common.StdDialog
 import com.bonsai.sciencetodo.ui.common.StdIconButton
 import com.bonsai.sciencetodo.ui.datavalues.ObservationDialog
 
@@ -96,7 +89,7 @@ fun DataProfileScreen(
                 updateVariableName = viewModel::updateVariableName,
                 updateVariableType = viewModel::updateVariableType,
                 onCloseDialog = viewModel::cancelAddVariableDialog,
-                addVariable = viewModel::addVariable
+                onAccept = viewModel::addVariable
             )
         }
     }
@@ -148,7 +141,7 @@ fun VariableCard(
     onRemoveVariable: (variable: Variable) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    StdCard() {
+    StdCard(modifier = modifier) {
         Text(text = variable.name)
         Spacer(modifier = Modifier.weight(1f))
         Text(
@@ -156,7 +149,7 @@ fun VariableCard(
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.outline
         )
-        StdIconButton({ onRemoveVariable(variable) }, Icons.Filled.Delete)
+        StdIconButton(Icons.Filled.Delete, { onRemoveVariable(variable) })
     }
 }
 
@@ -168,55 +161,24 @@ fun AddVariableControl(
     updateVariableType: (variableType: VariableType) -> Unit,
     updateVariableName: (variableName: String) -> Unit,
     onCloseDialog: () -> Unit,
-    addVariable: () -> Unit,
-    modifier: Modifier = Modifier
+    onAccept: () -> Unit,
 ) {
-    if (!showDialog) return
-
-    Dialog(
-        onDismissRequest = onCloseDialog,
-        properties = DialogProperties(
-            dismissOnClickOutside = false
-        )
+    StdDialog(
+        showDialog = showDialog,
+        onDismiss = onCloseDialog,
+        onAccept = onAccept,
+        headerText = "add variable"
     ) {
-        Surface(
-            shape = MaterialTheme.shapes.medium,
-            modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))
-        ) {
-            Column(
-                verticalArrangement = Arrangement
-                    .spacedBy(dimensionResource(R.dimen.gap_medium)),
-                modifier = modifier
-                    .padding(dimensionResource(R.dimen.padding_small))
-            ) {
-                Text(
-                    text = "Add Variable".uppercase(),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                TextField(
-                    value = newVariableName,
-                    onValueChange = updateVariableName,
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    label = {
-                        Text(text = "add variable")
-                    }
-                )
-                EnumDropdown<VariableType>(
-                    selectedValue = newVariableType,
-                    onSelectValue = updateVariableType
-                )
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement
-                        .spacedBy(dimensionResource(R.dimen.gap_medium))
-                ) {
-                    RowTextButton(Icons.Default.Close, "close dialog", onCloseDialog)
-                    RowTextButton(Icons.Default.Check, "add variable", addVariable)
-                }
-            }
-        }
+        TextField(
+            value = newVariableName,
+            onValueChange = updateVariableName,
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text(text = "add variable") }
+        )
+        EnumDropdown<VariableType>(
+            selectedValue = newVariableType,
+            onSelectValue = updateVariableType
+        )
     }
 }
 
@@ -231,9 +193,9 @@ fun DataButtons(
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small)),
         modifier = modifier.padding(dimensionResource(R.dimen.padding_small))
     ) {
-        RowIconButton(text = "+ data", onClick = onAddData)
-        RowIconButton(text = "+ variable", onClick = onAddVariable)
-        RowIconButton(text = "view data", onClick = onViewData)
+        RowTextButton(text = "+ data", onClick = onAddData)
+        RowTextButton(text = "+ variable", onClick = onAddVariable)
+        RowTextButton(text = "view data", onClick = onViewData)
     }
 }
 

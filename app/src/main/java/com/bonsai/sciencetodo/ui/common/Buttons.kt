@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 
 @Composable
-fun RowScope.RowTextButton(
+fun RowScope.RowIconButton(
     imageVector: ImageVector,
     contentDescription: String,
     onClick: () -> Unit
@@ -31,7 +31,7 @@ fun RowScope.RowTextButton(
 }
 
 @Composable
-fun RowScope.RowIconButton(
+fun RowScope.RowTextButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier

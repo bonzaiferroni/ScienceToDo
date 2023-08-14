@@ -15,7 +15,7 @@ import com.bonsai.sciencetodo.R
 @Composable
 fun StdCard(
     modifier: Modifier = Modifier,
-    action: @Composable RowScope.() -> Unit,
+    content: @Composable RowScope.() -> Unit,
 ) {
     Card(
         modifier = modifier
@@ -27,7 +27,7 @@ fun StdCard(
             modifier = Modifier
                 .padding(dimensionResource(R.dimen.padding_small))
         ) {
-            action()
+            content()
         }
     }
 }
