@@ -6,7 +6,7 @@ import com.bonsai.sciencetodo.data.DataFlowDao
 import com.bonsai.sciencetodo.data.ObservationRepository
 import com.bonsai.sciencetodo.data.VariableDao
 import com.bonsai.sciencetodo.model.DataFlow
-import com.bonsai.sciencetodo.ui.datavalues.NewDataBox
+import com.bonsai.sciencetodo.ui.datavalues.NewValueBox
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -51,11 +51,11 @@ class HomeVm(
         viewModelScope.launch {
             variableDao.getByFlowId(dataFlowId)
                 .map { variables ->
-                    variables.map { NewDataBox.getBox(it) }
+                    variables.map { NewValueBox.getBox(it) }
                 }
                 .collect {
                     _uiState.value = _uiState.value.copy(
-                        newDataBoxes = it,
+                        newValueBoxes = it,
                         newDataTargetId = dataFlowId
                     )
                 }
@@ -63,7 +63,7 @@ class HomeVm(
     }
 
     fun saveDataDialog() {
-        val newDataValues = _uiState.value.newDataBoxes
+        val newDataValues = _uiState.value.newValueBoxes
             ?: throw NullPointerException("newDataValues is null")
         val dataFlowId = _uiState.value.newDataTargetId
             ?: throw NullPointerException("newDataTargetId is null")
@@ -81,7 +81,7 @@ class HomeVm(
 
     private fun clearNewDataState() {
         _uiState.value = _uiState.value.copy(
-            newDataBoxes = null,
+            newValueBoxes = null,
             newDataTargetId = null
         )
     }
@@ -91,6 +91,6 @@ data class HomeUiState(
     val dataFlows: List<DataFlow> = emptyList(),
     val showDialog: Boolean = false,
     val newDataFlowName: String = "",
-    val newDataBoxes: List<NewDataBox>? = null,
+    val newValueBoxes: List<NewValueBox>? = null,
     val newDataTargetId: Int? = null
 )

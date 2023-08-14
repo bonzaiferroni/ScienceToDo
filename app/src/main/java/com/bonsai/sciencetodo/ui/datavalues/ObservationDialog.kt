@@ -31,16 +31,16 @@ import java.util.Locale
 fun ObservationDialog(
     onSaveDialog: () -> Unit,
     onCancelDialog: () -> Unit,
-    newDataBoxes: List<NewDataBox>?,
+    newValueBoxes: List<NewValueBox>?,
 ) {
-    if (newDataBoxes == null) return
+    if (newValueBoxes == null) return
 
     StdDialog(
         showDialog = true,
         onDismiss = onCancelDialog,
         onAccept = onSaveDialog
     ) {
-        newDataBoxes.forEach { newDataBox ->
+        newValueBoxes.forEach { newDataBox ->
             val variable = newDataBox.variable
 
             Card {
@@ -111,9 +111,9 @@ fun IntegerSetter(
 @Preview
 @Composable
 fun PreviewAddDataForm() {
-    val newDataBox = FakeData.fakeVariables.filter { it.dataFlowId == 1 }.map { variable ->
-        NewDataBox.getBox(variable)
+    val newValueBoxes = FakeData.fakeVariables.filter { it.dataFlowId == 1 }.map { variable ->
+        NewValueBox.getBox(variable)
     }
 
-    ObservationDialog({}, {}, newDataBox)
+    ObservationDialog({}, {}, newValueBoxes)
 }

@@ -6,7 +6,7 @@ import com.bonsai.sciencetodo.fakedata.FakeStringValueDao
 import com.bonsai.sciencetodo.model.IntValue
 import com.bonsai.sciencetodo.model.Observation
 import com.bonsai.sciencetodo.model.StringValue
-import com.bonsai.sciencetodo.ui.datavalues.NewDataBox
+import com.bonsai.sciencetodo.ui.datavalues.NewValueBox
 import com.bonsai.sciencetodo.ui.datavalues.NewInteger
 import com.bonsai.sciencetodo.ui.datavalues.NewString
 import kotlinx.coroutines.flow.Flow
@@ -17,10 +17,10 @@ class ObservationRepository(
     private val stringValueDao: StringValueDao,
     private val intValueDao: IntValueDao,
 ) {
-    suspend fun createObservation(dataFlowId: Int, newDataBoxes: List<NewDataBox>) {
+    suspend fun createObservation(dataFlowId: Int, newValueBoxes: List<NewValueBox>) {
         val observation = createObservation(dataFlowId)
 
-        newDataBoxes.forEach {
+        newValueBoxes.forEach {
             insertNewDataValue(observation.id, it)
         }
     }
@@ -35,19 +35,19 @@ class ObservationRepository(
         return observation.copy(id = id.toInt())
     }
 
-    private suspend fun insertNewDataValue(observationId: Int, newDataBox: NewDataBox) {
-        if (!newDataBox.isValid()) throw IllegalArgumentException("Invalid data")
-        val variable = newDataBox.variable
+    private suspend fun insertNewDataValue(observationId: Int, newValueBox: NewValueBox) {
+        if (!newValueBox.isValid()) throw IllegalArgumentException("Invalid data")
+        val variable = newValueBox.variable
 
-        when (newDataBox) {
+        when (newValueBox) {
             is NewInteger -> {
-                val value = checkNotNull(newDataBox.value)
+                val value = checkNotNull(newValueBox.value)
                 val dataValue = IntValue(0, variable.id, observationId, value)
                 intValueDao.insert(dataValue)
             }
 
             is NewString -> {
-                val value = checkNotNull(newDataBox.value)
+                val value = checkNotNull(newValueBox.value)
                 val dataValue = StringValue(0, variable.id, observationId, value)
                 stringValueDao.insert(dataValue)
             }
