@@ -5,7 +5,7 @@ import com.bonsai.sciencetodo.fakedata.FakeIntValueDao
 import com.bonsai.sciencetodo.fakedata.FakeObservationDao
 import com.bonsai.sciencetodo.fakedata.FakeStringValueDao
 import com.bonsai.sciencetodo.fakedata.FakeVariableDao
-import com.bonsai.sciencetodo.model.BaseDataValue
+import com.bonsai.sciencetodo.model.BaseValue
 import com.bonsai.sciencetodo.model.Variable
 import com.bonsai.sciencetodo.model.VariableType
 import com.bonsai.sciencetodo.ui.dataview.DataTableContent
@@ -25,7 +25,7 @@ class DataRepository(
         val variableIds = variables.map { v -> v.id }
         val observationIds = observations.map { o -> o.id }
 
-        val matrix: Array<Array<BaseDataValue?>> = Array(variables.size) {
+        val matrix: Array<Array<BaseValue?>> = Array(variables.size) {
             Array(observations.size) { null }
         }
         for (variable in variables) {
@@ -39,7 +39,7 @@ class DataRepository(
         return DataTableContent(variables, observations, matrix)
     }
 
-    private suspend fun getDataByVariable(variable: Variable): List<BaseDataValue> {
+    private suspend fun getDataByVariable(variable: Variable): List<BaseValue> {
         return when (variable.type) {
             VariableType.Undefined ->
                 throw IllegalArgumentException("variable type not initialized")

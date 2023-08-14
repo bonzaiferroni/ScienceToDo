@@ -36,7 +36,7 @@ import com.bonsai.sciencetodo.model.VariableType
 import java.util.Locale
 
 @Composable
-fun DataDialog(
+fun ObservationDialog(
     onSaveDialog: () -> Unit,
     onCancelDialog: () -> Unit,
     newDataValues: List<NewDataValue>?,
@@ -143,5 +143,5 @@ fun PreviewAddDataForm() {
         NewDataValue(variable)
     }
 
-    DataDialog({}, {}, updaters)
+    ObservationDialog({}, {}, updaters)
 }

@@ -28,10 +28,15 @@ fun DataViewScreen(
     val uiState by viewModel.uiState.collectAsState()
     val tableContent = uiState.dataTableContent
 
+    ValueEditDialog()
+
     Scaffold(
         topBar = {
-            ScienceToDoTopAppBar(title = "Data: ${uiState.dataFlow.name}")
-        }
+            ScienceToDoTopAppBar(
+                title = "Data: ${uiState.dataFlow.name}",
+                navigateUp = { navController?.navigateUp() }
+            )
+        },
     ) { paddingValues ->
         Column(
             modifier = Modifier.padding(paddingValues)
@@ -39,12 +44,18 @@ fun DataViewScreen(
             if (tableContent != null) {
                 DataTable(
                     tableContent = tableContent,
+                    viewModel::editCell,
                     modifier = Modifier
                         .padding(horizontal = dimensionResource(id = R.dimen.padding_small))
                 )
             }
         }
     }
+}
+
+@Composable
+fun ValueEditDialog() {
+
 }
 
 @Preview(showBackground = true)

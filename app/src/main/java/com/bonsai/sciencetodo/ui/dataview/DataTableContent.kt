@@ -1,6 +1,6 @@
 package com.bonsai.sciencetodo.ui.dataview
 
-import com.bonsai.sciencetodo.model.BaseDataValue
+import com.bonsai.sciencetodo.model.BaseValue
 import com.bonsai.sciencetodo.model.IntValue
 import com.bonsai.sciencetodo.model.Observation
 import com.bonsai.sciencetodo.model.StringValue
@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter
 class DataTableContent(
     val variables: List<Variable>,
     val observations: List<Observation>,
-    val dataMatrix: Array<Array<BaseDataValue?>>
+    val dataMatrix: Array<Array<BaseValue?>>
 ) {
     val columnCount = variables.count() + 1 // additional column for observation date
     val rowCount = observations.count() + 1 // additional row for variable names
@@ -34,5 +34,11 @@ class DataTableContent(
             is StringValue -> dataValue.value
             else -> ""
         }
+    }
+
+    fun getBaseValue(column: Int, row: Int): BaseValue? {
+        if (column == 0) throw IllegalArgumentException("column 0 is outside of dataMatrix")
+        if (row == 0) throw IllegalArgumentException("row 0 is outside of dataMatrix")
+        return dataMatrix[column - 1][row - 1]
     }
 }

@@ -12,7 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -24,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -35,21 +37,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.bonsai.sciencetodo.R
+import com.bonsai.sciencetodo.data.ObservationRepository
 import com.bonsai.sciencetodo.fakedata.FakeDataFlowDao
 import com.bonsai.sciencetodo.fakedata.FakeVariableDao
-import com.bonsai.sciencetodo.data.ObservationRepository
 import com.bonsai.sciencetodo.model.Variable
 import com.bonsai.sciencetodo.model.VariableType
 import com.bonsai.sciencetodo.ui.AppScreens
 import com.bonsai.sciencetodo.ui.AppVmProvider
 import com.bonsai.sciencetodo.ui.ScienceToDoTopAppBar
-import com.bonsai.sciencetodo.ui.datavalues.DataDialog
-import com.bonsai.sciencetodo.ui.datavalues.NewDataValue
+import com.bonsai.sciencetodo.ui.datavalues.ObservationDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,6 +63,16 @@ fun DataProfileScreen(
     viewModel: DataProfileVm = viewModel(factory = AppVmProvider.Factory)
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val onOpenDataView: (dataFlowId: Int) -> Unit = { dataFlowId ->
+        val route = AppScreens.DataView.getRoute(dataFlowId)
+        navController?.navigate(route)
+    }
+
+    ObservationDialog(
+        viewModel::saveDataDialog,
+        viewModel::cancelDataDialog,
+        uiState.newDataValues
+    )
 
     Scaffold(
         topBar = {
@@ -74,18 +88,19 @@ fun DataProfileScreen(
                 .fillMaxWidth(),
         ) {
             DataFlowDetails(uiState.dataFlow.name, uiState.observationCount)
-            AddDataControl(
+            DataButtons(
                 viewModel::openDataDialog,
-                viewModel::saveDataDialog,
-                viewModel::cancelDataDialog,
-                uiState.newDataValues
+                { onOpenDataView(uiState.dataFlow.id) },
+                viewModel::openAddVariableDialog
             )
             VariableList(uiState.variables, viewModel::removeVariable)
             AddVariableControl(
+                showDialog = uiState.showAddVariableDialog,
                 newVariableName = uiState.newVariableName,
                 newVariableType = uiState.newVariableType,
                 updateVariableName = viewModel::updateVariableName,
                 updateVariableType = viewModel::updateVariableType,
+                onCloseDialog = viewModel::cancelAddVariableDialog,
                 addVariable = viewModel::addVariable
             )
         }
@@ -164,97 +179,130 @@ fun VariableCard(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddVariableControl(
+    showDialog: Boolean,
     newVariableName: String,
     newVariableType: VariableType,
-    updateVariableName: (variableName: String) -> Unit,
     updateVariableType: (variableType: VariableType) -> Unit,
+    updateVariableName: (variableName: String) -> Unit,
+    onCloseDialog: () -> Unit,
     addVariable: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var expanded by remember { mutableStateOf(false) }
+    if (!showDialog) return
 
-    Column(
-        modifier = modifier
-            .padding(dimensionResource(R.dimen.padding_small))
-    ) {
-        TextField(
-            value = newVariableName,
-            onValueChange = updateVariableName,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = dimensionResource(R.dimen.gap_medium)),
-            label = {
-                Text(text = "add variable")
-            }
+    Dialog(
+        onDismissRequest = onCloseDialog,
+        properties = DialogProperties(
+            dismissOnClickOutside = false
         )
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Surface(
+            shape = MaterialTheme.shapes.medium,
+            modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))
         ) {
-
-            ExposedDropdownMenuBox(
-                expanded = expanded,
-                onExpandedChange = { expanded = !expanded },
-                modifier = Modifier
-                    .weight(1f)
+            Column(
+                verticalArrangement = Arrangement
+                    .spacedBy(dimensionResource(R.dimen.gap_medium)),
+                modifier = modifier
+                    .padding(dimensionResource(R.dimen.padding_small))
             ) {
-                TextField(
-                    value = newVariableType.name,
-                    onValueChange = {},
-                    readOnly = true,
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                    modifier = Modifier.menuAnchor()
+                Text(
+                    text = "Add Variable".uppercase(),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
                 )
-
-                ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-                    VariableType.values().forEach { variableType ->
-                        DropdownMenuItem(
-                            text = {
-                                Text(text = variableType.name)
-                            }, onClick = {
-                                updateVariableType(variableType)
-                                expanded = false
-                            })
+                TextField(
+                    value = newVariableName,
+                    onValueChange = updateVariableName,
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    label = {
+                        Text(text = "add variable")
+                    }
+                )
+                VariableTypeDropdown(
+                    newVariableType = newVariableType,
+                    updateVariableType = updateVariableType
+                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement
+                        .spacedBy(dimensionResource(R.dimen.gap_medium))
+                ) {
+                    Button(
+                        onClick = addVariable,
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "close dialog"
+                        )
+                    }
+                    Button(
+                        onClick = addVariable,
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = "add variable"
+                        )
                     }
                 }
             }
-            Button(onClick = addVariable) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "add variable"
-                )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun VariableTypeDropdown(
+    newVariableType: VariableType,
+    updateVariableType: (variableType: VariableType) -> Unit,
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = !expanded },
+    ) {
+        TextField(
+            value = newVariableType.name,
+            onValueChange = {},
+            readOnly = true,
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+            modifier = Modifier.menuAnchor()
+        )
+        ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+            VariableType.values().forEach { variableType ->
+                DropdownMenuItem(
+                    text = {
+                        Text(text = variableType.name)
+                    }, onClick = {
+                        updateVariableType(variableType)
+                        expanded = false
+                    })
             }
         }
-
     }
 }
 
 @Composable
-fun AddDataControl(
-    onOpenDialog: () -> Unit,
-    onSaveDialog: () -> Unit,
-    onCancelDialog: () -> Unit,
-    newDataValues: List<NewDataValue>?,
+fun DataButtons(
+    onAddData: () -> Unit,
+    onViewData: () -> Unit,
+    onAddVariable: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(
-        modifier = modifier
-            .padding(dimensionResource(R.dimen.padding_small))
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small)),
+        modifier = modifier.padding(dimensionResource(R.dimen.padding_small))
     ) {
-        Button(
-            onClick = onOpenDialog,
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Text(text = "add data")
-        }
-        DataDialog(
-            onSaveDialog,
-            onCancelDialog,
-            newDataValues
-        )
+        val buttonModifier = Modifier.weight(1f)
+        Button(onClick = onAddData, modifier = buttonModifier) { Text(text = "+ data") }
+        Button(onClick = onAddVariable, modifier = buttonModifier) { Text(text = "+ variable") }
+        Button(onClick = onViewData, modifier = buttonModifier) { Text(text = "view data") }
     }
 }
 

@@ -2,7 +2,9 @@ package com.bonsai.sciencetodo.ui.dataview
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,6 +22,7 @@ import eu.wewox.lazytable.lazyTableDimensions
 @Composable
 fun DataTable(
     tableContent: DataTableContent,
+    onClickCell: (column: Int, row: Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val columns = tableContent.columnCount
@@ -41,10 +44,16 @@ fun DataTable(
             val row = index / columns
 
             val text = tableContent.getMatrixValue(column, row)
-            if (row == 0) {
-                HeaderCell(text)
-            } else {
-                Cell(text)
+            Box(
+                modifier = Modifier.clickable {
+                    onClickCell(column, row)
+                }
+            ) {
+                if (row == 0) {
+                    HeaderCell(text)
+                } else {
+                    Cell(text)
+                }
             }
         }
     }
@@ -75,10 +84,14 @@ private fun Cell(
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.surface)
-            .border(Dp.Hairline, MaterialTheme.colorScheme.onSurface)
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.secondary)
+            .border(Dp.Hairline, MaterialTheme.colorScheme.onSecondary)
     ) {
-        Text(text = content)
+        Text(
+            text = content,
+            color = MaterialTheme.colorScheme.onSecondary
+        )
     }
 }
 
@@ -87,10 +100,15 @@ private fun HeaderCell(content: String) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
+            .fillMaxSize()
             .background(MaterialTheme.colorScheme.primary)
             .border(Dp.Hairline, MaterialTheme.colorScheme.onPrimary)
     ) {
-        Text(text = content)
+        Text(
+            text = content.uppercase(),
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
     }
 }
 

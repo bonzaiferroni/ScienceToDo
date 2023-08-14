@@ -41,7 +41,7 @@ import com.bonsai.sciencetodo.model.DataFlow
 import com.bonsai.sciencetodo.ui.AppScreens
 import com.bonsai.sciencetodo.ui.AppVmProvider
 import com.bonsai.sciencetodo.ui.ScienceToDoTopAppBar
-import com.bonsai.sciencetodo.ui.datavalues.DataDialog
+import com.bonsai.sciencetodo.ui.datavalues.ObservationDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -97,7 +97,7 @@ fun HomeScreen(
         }
     }
 
-    DataDialog(
+    ObservationDialog(
         viewModel::saveDataDialog,
         viewModel::cancelDataDialog,
         uiState.newDataValues

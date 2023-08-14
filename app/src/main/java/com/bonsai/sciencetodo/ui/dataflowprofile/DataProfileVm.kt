@@ -24,8 +24,8 @@ class DataProfileVm(
     private val dataFlowId: Int =
         checkNotNull(savedStateHandle[AppScreens.dataFlowIdArg])
 
-    private val _uiState = MutableStateFlow(DataFlowProfileUiState())
-    val uiState: StateFlow<DataFlowProfileUiState> = _uiState
+    private val _uiState = MutableStateFlow(DataProfileState())
+    val uiState: StateFlow<DataProfileState> = _uiState
 
     init {
         viewModelScope.launch {
@@ -104,13 +104,26 @@ class DataProfileVm(
     fun cancelDataDialog() {
         _uiState.value = _uiState.value.copy(newDataValues = null)
     }
+
+    fun openAddVariableDialog() {
+        _uiState.value = _uiState.value.copy(showAddVariableDialog = true)
+    }
+
+    fun cancelAddVariableDialog() {
+        _uiState.value = _uiState.value.copy(
+            showAddVariableDialog = false,
+            newVariableName = "",
+            newVariableType = VariableType.Undefined
+        )
+    }
 }
 
-data class DataFlowProfileUiState(
+data class DataProfileState(
     val dataFlow: DataFlow = DataFlow(0, "404"),
     val variables: List<Variable> = emptyList(),
     val newDataValues: List<NewDataValue>? = null,
     val newVariableName: String = "",
     val newVariableType: VariableType = VariableType.Undefined,
-    val observationCount: Int = 0
+    val observationCount: Int = 0,
+    val showAddVariableDialog: Boolean = true,
 )

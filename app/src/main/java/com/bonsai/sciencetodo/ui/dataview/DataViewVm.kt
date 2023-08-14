@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bonsai.sciencetodo.data.DataRepository
+import com.bonsai.sciencetodo.model.BaseValue
 import com.bonsai.sciencetodo.model.DataFlow
 import com.bonsai.sciencetodo.ui.AppScreens
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,9 +35,20 @@ class DataViewVm(
             )
         }
     }
+
+    fun editCell(column: Int, row: Int) {
+        val tableContent = uiState.value.dataTableContent
+        if (column == 0 || row == 0 || tableContent == null) return
+
+        val baseValue = tableContent.getBaseValue(column, row)
+        _uiState.value = _uiState.value.copy(
+            editingBaseValue = baseValue
+        )
+    }
 }
 
 data class DataViewState(
     val dataFlow: DataFlow = DataFlow(0, "404"),
-    val dataTableContent: DataTableContent? = null
+    val dataTableContent: DataTableContent? = null,
+    val editingBaseValue: BaseValue? = null
 )
