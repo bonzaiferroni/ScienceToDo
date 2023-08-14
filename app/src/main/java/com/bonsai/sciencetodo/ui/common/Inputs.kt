@@ -2,6 +2,7 @@ package com.bonsai.sciencetodo.ui.common
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -23,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bonsai.sciencetodo.R
+import com.chargemap.compose.numberpicker.ListItemPicker
 import com.chargemap.compose.numberpicker.NumberPicker
 
 @Composable
@@ -70,6 +72,25 @@ fun IntegerPicker(
 
         Text(text = "Factor".uppercase(), fontSize = 10.sp)
     }
+}
+
+@Composable
+inline fun <reified T : Enum<T>> EnumPicker(
+    selectedValue: T,
+    noinline onSelectValue: (enumValue: T) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    ListItemPicker(
+        modifier = modifier
+            .fillMaxWidth(),
+        value = selectedValue,
+        onValueChange = onSelectValue,
+        list = enumValues<T>().toList(),
+        textStyle = TextStyle(
+            color = MaterialTheme.colorScheme.onSurface,
+            fontSize = 14.sp
+        ),
+    )
 }
 
 @Composable

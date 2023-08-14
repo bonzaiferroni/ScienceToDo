@@ -85,12 +85,12 @@ private fun Cell(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.secondary)
-            .border(Dp.Hairline, MaterialTheme.colorScheme.onSecondary)
+            .background(MaterialTheme.colorScheme.tertiary)
+            .border(Dp.Hairline, MaterialTheme.colorScheme.onTertiary)
     ) {
         Text(
             text = content,
-            color = MaterialTheme.colorScheme.onSecondary
+            color = MaterialTheme.colorScheme.onTertiary
         )
     }
 }
@@ -101,13 +101,13 @@ private fun HeaderCell(content: String) {
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.primary)
-            .border(Dp.Hairline, MaterialTheme.colorScheme.onPrimary)
+            .background(MaterialTheme.colorScheme.primaryContainer)
+            .border(Dp.Hairline, MaterialTheme.colorScheme.onPrimaryContainer)
     ) {
         Text(
             text = content.uppercase(),
             style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.onPrimary
+            color = MaterialTheme.colorScheme.onPrimaryContainer
         )
     }
 }
