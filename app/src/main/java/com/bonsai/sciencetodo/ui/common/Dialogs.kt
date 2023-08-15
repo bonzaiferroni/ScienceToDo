@@ -41,41 +41,40 @@ fun StdDialog(
         )
     ) {
         Surface(
-            shape = MaterialTheme.shapes.medium,
-            modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))
+            shape = MaterialTheme.shapes.extraLarge,
+            modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium)),
+            color = MaterialTheme.colorScheme.primaryContainer
         ) {
-            Column {
-                Column(
-                    verticalArrangement = Arrangement
+            Column(
+                verticalArrangement = Arrangement
+                    .spacedBy(dimensionResource(R.dimen.gap_large)),
+                modifier = modifier
+                    .padding(dimensionResource(R.dimen.padding_medium))
+            ) {
+                if (headerText != null) {
+                    Text(
+                        text = headerText.uppercase(),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+                content()
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement
                         .spacedBy(dimensionResource(R.dimen.gap_medium)),
-                    modifier = modifier
-                        .padding(dimensionResource(R.dimen.padding_small))
                 ) {
-                    if (headerText != null) {
-                        Text(
-                            text = headerText.uppercase(),
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
-                    content()
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement
-                            .spacedBy(dimensionResource(R.dimen.gap_medium)),
-                    ) {
-                        RowIconButton(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = "close dialog",
-                            onClick = onDismiss
-                        )
-                        RowIconButton(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = "add variable",
-                            onClick = onAccept,
-                            enabled = enableAccept
-                        )
-                    }
+                    RowIconButton(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "close dialog",
+                        onClick = onDismiss
+                    )
+                    RowIconButton(
+                        imageVector = Icons.Default.Check,
+                        contentDescription = "add variable",
+                        onClick = onAccept,
+                        enabled = enableAccept,
+                    )
                 }
             }
         }
@@ -92,6 +91,6 @@ fun PreviewStdDialog() {
         headerText = "Preview Dialog",
         enableAccept = false,
     ) {
-        Text(text = "this will be different")
+        Text(text = "hello world")
     }
 }

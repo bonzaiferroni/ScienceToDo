@@ -1,5 +1,7 @@
 package com.bonsai.sciencetodo.ui.common
 
+import android.util.Log
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,8 +11,8 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,6 +20,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -56,8 +60,9 @@ fun IntegerPicker(
             range = possibleValues,
             onValueChange = onValueChange,
             textStyle = TextStyle(
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onBackground
             ),
+            dividersColor = MaterialTheme.colorScheme.primary,
             modifier = Modifier.width(72.dp)
         )
 
@@ -101,44 +106,81 @@ inline fun <reified T : Enum<T>> EnumPicker(
 @Composable
 fun StringField(
     value: String,
-    onValueChange: (String) -> Unit
+    onValueChange: (String) -> Unit,
+    focusRequester: FocusRequester,
+    nextFocusRequester: FocusRequester?,
+    imeAction: ImeAction
 ) {
-    TextField(
+    OutlinedTextField (
         value = value,
         onValueChange = onValueChange,
         label = { Text("Enter text") },
         singleLine = true,
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Text,
-            imeAction = ImeAction.Done
+            imeAction = imeAction
         ),
         keyboardActions = KeyboardActions(
-            onDone = {
-                // Handle onDone action if needed
+            onNext = {
+                nextFocusRequester?.requestFocus()
             }
-        )
+        ),
+        modifier = Modifier.focusRequester(focusRequester).focusable()
     )
 }
 
 @Composable
 fun FloatField(
     value: String,
-    onValueChange: (String) -> Unit
+    onValueChange: (String) -> Unit,
+    focusRequester: FocusRequester,
+    nextFocusRequester: FocusRequester?,
+    imeAction: ImeAction
 ) {
-    TextField(
+    OutlinedTextField (
         value = value,
         onValueChange = onValueChange,
         label = { Text("Enter number") },
         singleLine = true,
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Decimal,
-            imeAction = ImeAction.Done
+            imeAction = imeAction
         ),
         keyboardActions = KeyboardActions(
-            onDone = {
-                // Handle onDone action if needed
+            onNext = {
+                nextFocusRequester?.requestFocus()
+                Log.d("debug", imeAction.toString())
             }
-        )
+        ),
+        modifier = Modifier.focusRequester(focusRequester).focusable()
+    )
+}
+
+@Composable
+fun IntegerField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    focusRequester: FocusRequester,
+    nextFocusRequester: FocusRequester?,
+    imeAction: ImeAction
+) {
+
+    OutlinedTextField (
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text("Enter integer") },
+        singleLine = true,
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Number,
+            imeAction = imeAction
+        ),
+        keyboardActions = KeyboardActions(
+            onNext = {
+                nextFocusRequester?.requestFocus()
+                Log.d("debug", imeAction.toString())
+            }
+        ),
+        modifier = Modifier.focusRequester(focusRequester).focusable()
     )
 }
 
