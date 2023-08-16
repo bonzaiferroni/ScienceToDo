@@ -1,7 +1,5 @@
 package com.bonsai.sciencetodo.ui.common
 
-import android.util.Log
-import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,13 +37,13 @@ fun IntegerPicker(
     onValueChange: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var possibleValues: Iterable<Int> by remember {mutableStateOf((-10..10).map { it * 10})}
+    var possibleValues: Iterable<Int> by remember { mutableStateOf((-10..10).map { it * 10 }) }
     val incrementValues = listOf(1, 10, 100, 1000)
-    var incrementValue by remember {mutableStateOf(incrementValues[1])}
+    var incrementValue by remember { mutableStateOf(incrementValues[1]) }
 
     val updateIncrementValue: (Int) -> Unit = { newIncrementValue ->
         incrementValue = newIncrementValue
-        possibleValues = (-10..10).map { it * incrementValue + value}
+        possibleValues = (-10..10).map { it * incrementValue + value }
     }
 
     Row(
@@ -55,7 +53,7 @@ fun IntegerPicker(
     ) {
         Text(text = "Value".uppercase(), fontSize = 10.sp)
 
-        NumberPicker (
+        NumberPicker(
             value = value,
             range = possibleValues,
             onValueChange = onValueChange,
@@ -66,7 +64,7 @@ fun IntegerPicker(
             modifier = Modifier.width(72.dp)
         )
 
-        NumberPicker (
+        NumberPicker(
             value = incrementValue,
             range = incrementValues,
             onValueChange = updateIncrementValue,
@@ -105,82 +103,94 @@ inline fun <reified T : Enum<T>> EnumPicker(
 
 @Composable
 fun StringField(
-    value: String,
     onValueChange: (String) -> Unit,
-    focusRequester: FocusRequester,
-    nextFocusRequester: FocusRequester?,
-    imeAction: ImeAction
 ) {
-    OutlinedTextField (
-        value = value,
+    ValueField(
+        label = "Text",
+        keyboardType = KeyboardType.Decimal,
         onValueChange = onValueChange,
-        label = { Text("Enter text") },
-        singleLine = true,
-        keyboardOptions = KeyboardOptions.Default.copy(
-            keyboardType = KeyboardType.Text,
-            imeAction = imeAction
-        ),
-        keyboardActions = KeyboardActions(
-            onNext = {
-                nextFocusRequester?.requestFocus()
-            }
-        ),
-        modifier = Modifier.focusRequester(focusRequester).focusable()
     )
 }
 
 @Composable
 fun FloatField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    focusRequester: FocusRequester,
-    nextFocusRequester: FocusRequester?,
-    imeAction: ImeAction
+    onValueChange: (Float?) -> Unit,
 ) {
-    OutlinedTextField (
-        value = value,
-        onValueChange = onValueChange,
-        label = { Text("Enter number") },
-        singleLine = true,
-        keyboardOptions = KeyboardOptions.Default.copy(
-            keyboardType = KeyboardType.Decimal,
-            imeAction = imeAction
-        ),
-        keyboardActions = KeyboardActions(
-            onNext = {
-                nextFocusRequester?.requestFocus()
-                Log.d("debug", imeAction.toString())
-            }
-        ),
-        modifier = Modifier.focusRequester(focusRequester).focusable()
+    val parseValue: (String) -> Unit = {
+        onValueChange(it.toFloatOrNull())
+    }
+
+    ValueField(
+        label = "Decimal",
+        keyboardType = KeyboardType.Decimal,
+        onValueChange = parseValue
     )
 }
 
 @Composable
 fun IntegerField(
+    onValueChange: (Int?) -> Unit,
+) {
+    val parseValue: (String) -> Unit = {
+        onValueChange(it.toIntOrNull())
+    }
+
+    ValueField(
+        label = "Integer",
+        keyboardType = KeyboardType.Number,
+        onValueChange = parseValue
+    )
+}
+
+@Composable
+fun ValueField(
+    label: String,
+    keyboardType: KeyboardType,
+    onValueChange: (String) -> Unit,
+) {
+    var value by remember { mutableStateOf("") }
+
+    OutlinedTextField(
+        value = value,
+        onValueChange = {
+            value = it
+            onValueChange(value)
+        },
+        label = { Text(label) },
+        singleLine = true,
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = keyboardType,
+            imeAction = ImeAction.Next
+        ),
+    )
+}
+
+// unable to get focusRequester working
+@Composable
+fun ValueField_Alpha(
     value: String,
+    label: String,
+    keyboardType: KeyboardType,
     onValueChange: (String) -> Unit,
     focusRequester: FocusRequester,
     nextFocusRequester: FocusRequester?,
     imeAction: ImeAction
 ) {
-
-    OutlinedTextField (
+    OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        label = { Text("Enter integer") },
+        label = { Text(label) },
         singleLine = true,
         keyboardOptions = KeyboardOptions.Default.copy(
-            keyboardType = KeyboardType.Number,
+            keyboardType = keyboardType,
             imeAction = imeAction
         ),
         keyboardActions = KeyboardActions(
             onNext = {
                 nextFocusRequester?.requestFocus()
-                Log.d("debug", imeAction.toString())
             }
         ),
-        modifier = Modifier.focusRequester(focusRequester).focusable()
+        modifier = Modifier.focusRequester(focusRequester)
     )
 }
 

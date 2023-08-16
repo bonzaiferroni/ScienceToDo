@@ -110,6 +110,7 @@ fun AddDataFlowDialog(
     onAddDataFlow: () -> Unit,
 ) {
     if (showDialog) {
+
         AlertDialog(
             onDismissRequest = onHideDialog,
             title = { Text("Add a new DataFlow") },
@@ -117,7 +118,7 @@ fun AddDataFlowDialog(
                 OutlinedTextField(
                     value = newDataFlowName,
                     onValueChange = onChangeName,
-                    label = { Text("Name") }
+                    label = { Text("Name") },
                 )
             },
             confirmButton = {
