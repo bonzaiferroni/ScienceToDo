@@ -4,7 +4,8 @@ enum class VariableType(val intValue: Int) {
     Undefined(0),
     Integer(1),
     String(2),
-    Float(3);
+    Float(3),
+    Boolean(4);
 
     companion object {
         fun fromInt(value: Int): VariableType = when (value) {

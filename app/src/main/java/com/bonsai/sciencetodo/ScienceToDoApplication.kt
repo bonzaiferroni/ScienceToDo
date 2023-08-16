@@ -12,7 +12,8 @@ class ScienceToDoApplication : Application() {
             database.observationDao(),
             database.stringValueDao(),
             database.intValueDao(),
-            database.floatValueDao()
+            database.floatValueDao(),
+            database.booleanValueDao(),
         )
     }
     val dataRepository: DataRepository by lazy {
@@ -22,7 +23,8 @@ class ScienceToDoApplication : Application() {
             database.variableDao(),
             database.stringValueDao(),
             database.intValueDao(),
-            database.floatValueDao()
+            database.floatValueDao(),
+            database.booleanValueDao()
         )
     }
 }

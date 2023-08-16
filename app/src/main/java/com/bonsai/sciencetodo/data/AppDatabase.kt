@@ -5,6 +5,14 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.bonsai.sciencetodo.dao.BooleanValueDao
+import com.bonsai.sciencetodo.dao.DataFlowDao
+import com.bonsai.sciencetodo.dao.FloatValueDao
+import com.bonsai.sciencetodo.dao.IntValueDao
+import com.bonsai.sciencetodo.dao.ObservationDao
+import com.bonsai.sciencetodo.dao.StringValueDao
+import com.bonsai.sciencetodo.dao.VariableDao
+import com.bonsai.sciencetodo.model.BooleanValue
 import com.bonsai.sciencetodo.model.DataFlow
 import com.bonsai.sciencetodo.model.FloatValue
 import com.bonsai.sciencetodo.model.IntValue
@@ -15,8 +23,8 @@ import com.bonsai.sciencetodo.model.Variable
 @Database(
     entities = [
         DataFlow::class, Variable::class, Observation::class,
-        StringValue::class, IntValue::class, FloatValue::class],
-    version = 6
+        StringValue::class, IntValue::class, FloatValue::class, BooleanValue::class],
+    version = 7
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -26,6 +34,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun stringValueDao(): StringValueDao
     abstract fun intValueDao(): IntValueDao
     abstract fun floatValueDao(): FloatValueDao
+    abstract fun booleanValueDao(): BooleanValueDao
 
     companion object {
         @Volatile

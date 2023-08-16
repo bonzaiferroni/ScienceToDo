@@ -1,5 +1,13 @@
 package com.bonsai.sciencetodo.data
 
+import com.bonsai.sciencetodo.dao.BooleanValueDao
+import com.bonsai.sciencetodo.dao.DataFlowDao
+import com.bonsai.sciencetodo.dao.FloatValueDao
+import com.bonsai.sciencetodo.dao.IntValueDao
+import com.bonsai.sciencetodo.dao.ObservationDao
+import com.bonsai.sciencetodo.dao.StringValueDao
+import com.bonsai.sciencetodo.dao.VariableDao
+import com.bonsai.sciencetodo.fakedata.FakeBooleanValueDao
 import com.bonsai.sciencetodo.fakedata.FakeDataFlowDao
 import com.bonsai.sciencetodo.fakedata.FakeFloatValueDao
 import com.bonsai.sciencetodo.fakedata.FakeIntValueDao
@@ -19,6 +27,7 @@ class DataRepository(
     val stringValueDao: StringValueDao,
     val intValueDao: IntValueDao,
     val floatValueDao: FloatValueDao,
+    val booleanValueDao: BooleanValueDao,
 ) {
     suspend fun getTableContent(dataFlowId: Int): DataTableContent {
         val variables = variableDao.getByFlowId(dataFlowId).first()
@@ -51,6 +60,8 @@ class DataRepository(
                 stringValueDao.getByVariableId(variable.id).first()
             VariableType.Float ->
                 floatValueDao.getByVariableId(variable.id).first()
+            VariableType.Boolean ->
+                booleanValueDao.getByVariableId(variable.id).first()
         }
     }
 
@@ -62,7 +73,8 @@ class DataRepository(
                 FakeVariableDao(),
                 FakeStringValueDao(),
                 FakeIntValueDao(),
-                FakeFloatValueDao()
+                FakeFloatValueDao(),
+                FakeBooleanValueDao()
             )
         }
     }

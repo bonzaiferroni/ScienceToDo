@@ -1,5 +1,11 @@
 package com.bonsai.sciencetodo.data
 
+import com.bonsai.sciencetodo.dao.BooleanValueDao
+import com.bonsai.sciencetodo.dao.FloatValueDao
+import com.bonsai.sciencetodo.dao.IntValueDao
+import com.bonsai.sciencetodo.dao.ObservationDao
+import com.bonsai.sciencetodo.dao.StringValueDao
+import com.bonsai.sciencetodo.fakedata.FakeBooleanValueDao
 import com.bonsai.sciencetodo.fakedata.FakeFloatValueDao
 import com.bonsai.sciencetodo.fakedata.FakeIntValueDao
 import com.bonsai.sciencetodo.fakedata.FakeObservationDao
@@ -8,6 +14,7 @@ import com.bonsai.sciencetodo.model.FloatValue
 import com.bonsai.sciencetodo.model.IntValue
 import com.bonsai.sciencetodo.model.Observation
 import com.bonsai.sciencetodo.model.StringValue
+import com.bonsai.sciencetodo.ui.datavalues.NewBoolean
 import com.bonsai.sciencetodo.ui.datavalues.NewFloat
 import com.bonsai.sciencetodo.ui.datavalues.NewInteger
 import com.bonsai.sciencetodo.ui.datavalues.NewString
@@ -19,7 +26,8 @@ class ObservationRepository(
     private val observationDao: ObservationDao,
     private val stringValueDao: StringValueDao,
     private val intValueDao: IntValueDao,
-    private val floatValueDao: FloatValueDao
+    private val floatValueDao: FloatValueDao,
+    private val booleanValueDao: BooleanValueDao,
 ) {
     suspend fun createObservation(dataFlowId: Int, newValueBoxes: List<NewValueBox>) {
         val observation = createObservation(dataFlowId)
@@ -59,6 +67,9 @@ class ObservationRepository(
                 val dataValue = FloatValue(0, variable.id, observationId, value)
                 floatValueDao.insert(dataValue)
             }
+            is NewBoolean -> {
+
+            }
 
             else -> throw IllegalArgumentException("unhandled type")
         }
@@ -71,6 +82,7 @@ class ObservationRepository(
                 FakeStringValueDao(),
                 FakeIntValueDao(),
                 FakeFloatValueDao(),
+                FakeBooleanValueDao()
             )
         }
     }

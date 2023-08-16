@@ -14,6 +14,7 @@ abstract class NewValueBox (
             VariableType.Integer -> NewInteger(variable)
             VariableType.String -> NewString(variable)
             VariableType.Float -> NewFloat(variable)
+            VariableType.Boolean -> NewBoolean(variable)
         }
     }
 }
@@ -32,6 +33,10 @@ class NewString(variable: Variable) : NewValue<String?>(variable, null) {
 }
 
 class NewFloat(variable: Variable) : NewValue<Float?>(variable, null) {
+    override fun isValid() = value != null
+}
+
+class NewBoolean(variable: Variable) : NewValue<Boolean?>(variable, null) {
     override fun isValid() = value != null
 }
 

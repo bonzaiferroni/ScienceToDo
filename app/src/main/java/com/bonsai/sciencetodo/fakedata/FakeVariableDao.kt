@@ -1,6 +1,6 @@
 package com.bonsai.sciencetodo.fakedata
 
-import com.bonsai.sciencetodo.data.VariableDao
+import com.bonsai.sciencetodo.dao.VariableDao
 import com.bonsai.sciencetodo.fakedata.FakeData.fakeVariables
 import com.bonsai.sciencetodo.model.Variable
 import kotlinx.coroutines.flow.Flow
