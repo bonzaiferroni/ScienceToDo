@@ -7,6 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.bonsai.sciencetodo.data.dao.BooleanValueDao
 import com.bonsai.sciencetodo.data.dao.DataFlowDao
+import com.bonsai.sciencetodo.data.dao.EnumValueDao
 import com.bonsai.sciencetodo.data.dao.FloatValueDao
 import com.bonsai.sciencetodo.data.dao.IntValueDao
 import com.bonsai.sciencetodo.data.dao.ObservationDao
@@ -14,6 +15,9 @@ import com.bonsai.sciencetodo.data.dao.StringValueDao
 import com.bonsai.sciencetodo.data.dao.VariableDao
 import com.bonsai.sciencetodo.model.BooleanValue
 import com.bonsai.sciencetodo.model.DataFlow
+import com.bonsai.sciencetodo.model.EnumValue
+import com.bonsai.sciencetodo.model.Enumeration
+import com.bonsai.sciencetodo.model.Enumerator
 import com.bonsai.sciencetodo.model.FloatValue
 import com.bonsai.sciencetodo.model.IntValue
 import com.bonsai.sciencetodo.model.Observation
@@ -23,8 +27,9 @@ import com.bonsai.sciencetodo.model.Variable
 @Database(
     entities = [
         DataFlow::class, Variable::class, Observation::class,
+        Enumeration::class, Enumerator::class, EnumValue:: class,
         StringValue::class, IntValue::class, FloatValue::class, BooleanValue::class],
-    version = 7
+    version = 8
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -35,6 +40,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun intValueDao(): IntValueDao
     abstract fun floatValueDao(): FloatValueDao
     abstract fun booleanValueDao(): BooleanValueDao
+    abstract fun enumValueDao(): EnumValueDao
 
     companion object {
         @Volatile

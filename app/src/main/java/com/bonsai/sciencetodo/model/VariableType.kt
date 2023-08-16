@@ -5,7 +5,8 @@ enum class VariableType(val dbValue: Int) {
     Integer(1),
     String(2),
     Float(3),
-    Boolean(4);
+    Boolean(4),
+    Enum(5);
 
     companion object {
         fun fromInt(value: Int): VariableType = VariableType.values()

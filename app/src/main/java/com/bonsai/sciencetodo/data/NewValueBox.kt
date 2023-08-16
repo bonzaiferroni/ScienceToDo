@@ -15,6 +15,7 @@ sealed interface NewValueBox {
             VariableType.String -> NewString(variable)
             VariableType.Float -> NewFloat(variable)
             VariableType.Boolean -> NewBoolean(variable)
+            VariableType.Enum -> NewEnum(variable)
         }
     }
 }
@@ -48,6 +49,13 @@ class NewBoolean(
     override val variable: Variable,
     override var value: Boolean? = null
 ) : NewValue<Boolean?> {
+    override fun isValid() = value != null
+}
+
+class NewEnum(
+    override val variable: Variable,
+    override var value: Int? = null
+) : NewValue<Int?> {
     override fun isValid() = value != null
 }
 

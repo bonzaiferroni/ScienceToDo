@@ -1,16 +1,19 @@
 package com.bonsai.sciencetodo.data
 
 import com.bonsai.sciencetodo.data.dao.BooleanValueDao
+import com.bonsai.sciencetodo.data.dao.EnumValueDao
 import com.bonsai.sciencetodo.data.dao.FloatValueDao
 import com.bonsai.sciencetodo.data.dao.IntValueDao
 import com.bonsai.sciencetodo.data.dao.ObservationDao
 import com.bonsai.sciencetodo.data.dao.StringValueDao
 import com.bonsai.sciencetodo.data.fake.FakeBooleanValueDao
+import com.bonsai.sciencetodo.data.fake.FakeEnumValueDao
 import com.bonsai.sciencetodo.data.fake.FakeFloatValueDao
 import com.bonsai.sciencetodo.data.fake.FakeIntValueDao
 import com.bonsai.sciencetodo.data.fake.FakeObservationDao
 import com.bonsai.sciencetodo.data.fake.FakeStringValueDao
 import com.bonsai.sciencetodo.model.BooleanValue
+import com.bonsai.sciencetodo.model.EnumValue
 import com.bonsai.sciencetodo.model.FloatValue
 import com.bonsai.sciencetodo.model.IntValue
 import com.bonsai.sciencetodo.model.Observation
@@ -24,6 +27,7 @@ class ObservationRepository(
     private val intValueDao: IntValueDao,
     private val floatValueDao: FloatValueDao,
     private val booleanValueDao: BooleanValueDao,
+    private val enumValueDao: EnumValueDao,
 ) {
     suspend fun createObservation(dataFlowId: Int, newValueBoxes: List<NewValueBox>) {
         val observation = createObservation(dataFlowId)
@@ -68,6 +72,11 @@ class ObservationRepository(
                 val dataValue = BooleanValue(0, variable.id, observationId, value)
                 booleanValueDao.insert(dataValue)
             }
+            is NewEnum -> {
+                val value = checkNotNull(newValueBox.value)
+                val dataValue = EnumValue(0, variable.id, observationId, value)
+                enumValueDao.insert(dataValue)
+            }
         }
     }
 
@@ -78,7 +87,8 @@ class ObservationRepository(
                 FakeStringValueDao(),
                 FakeIntValueDao(),
                 FakeFloatValueDao(),
-                FakeBooleanValueDao()
+                FakeBooleanValueDao(),
+                FakeEnumValueDao()
             )
         }
     }

@@ -116,7 +116,7 @@ fun StringField(
         value = value,
         label = "Text",
         keyboardType = KeyboardType.Decimal,
-        onValueChange = onValueChange,
+        onValueChange = parseValue,
     )
 }
 
@@ -176,6 +176,26 @@ fun BooleanField(
         value = value,
         label = "Boolean",
         keyboardType = KeyboardType.Text,
+        onValueChange = parseValue
+    )
+}
+
+@Composable
+fun EnumField(
+    onValueChange: (Int?) -> Unit,
+) {
+    // TODO: implement enum support
+    var value by remember { mutableStateOf("") }
+
+    val parseValue: (String) -> Unit = {
+        value = it
+        onValueChange(it.toIntOrNull())
+    }
+
+    ValueField(
+        value = value,
+        label = "Integer",
+        keyboardType = KeyboardType.Number,
         onValueChange = parseValue
     )
 }

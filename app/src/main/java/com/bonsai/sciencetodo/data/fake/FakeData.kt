@@ -2,6 +2,9 @@ package com.bonsai.sciencetodo.data.fake
 
 import com.bonsai.sciencetodo.model.BooleanValue
 import com.bonsai.sciencetodo.model.DataFlow
+import com.bonsai.sciencetodo.model.EnumValue
+import com.bonsai.sciencetodo.model.Enumeration
+import com.bonsai.sciencetodo.model.Enumerator
 import com.bonsai.sciencetodo.model.FloatValue
 import com.bonsai.sciencetodo.model.IntValue
 import com.bonsai.sciencetodo.model.Observation
@@ -22,65 +25,94 @@ object FakeData {
     val fakeVariables by lazy {
         val foodData = fakeDataFlows.first { it.name == "Food" }
         val restData = fakeDataFlows.first { it.name == "Rest" }
-        var i = 0
+        var id = 0
         listOf(
-            Variable(++i, foodData.id, "description", VariableType.String),
-            Variable(++i, foodData.id, "calories", VariableType.Integer),
-            Variable(++i, foodData.id, "rating", VariableType.Float),
-            Variable(++i, foodData.id, "hot", VariableType.Boolean),
-            Variable(++i, restData.id, "hours", VariableType.Integer),
-            Variable(++i, restData.id, "location", VariableType.String),
+            Variable(++id, foodData.id, "description", VariableType.String),
+            Variable(++id, foodData.id, "calories", VariableType.Integer),
+            Variable(++id, foodData.id, "rating", VariableType.Float),
+            Variable(++id, foodData.id, "hot", VariableType.Boolean),
+            Variable(++id, foodData.id, "meal", VariableType.Enum),
+            Variable(++id, restData.id, "hours", VariableType.Integer),
+            Variable(++id, restData.id, "location", VariableType.String),
+        )
+    }
+
+    val fakeEnumerations by lazy {
+        listOf(
+            Enumeration(id = 1, name = "Meal")
+        )
+    }
+
+    val fakeEnumerators by lazy {
+        val enumeration = fakeEnumerations.first { it.name == "Meal"}
+        var id = 0
+        listOf(
+            Enumerator(++id, enumeration.id, "Breakfast"),
+            Enumerator(++id, enumeration.id, "Lunch"),
+            Enumerator(++id, enumeration.id, "Dinner"),
         )
     }
 
     val fakeObservations by lazy {
         val foodData = fakeDataFlows.first { it.name == "Food" }
-        var i = 0
+        var id = 0
         var minusSeconds = 100L
         listOf(
-            Observation(++i, foodData.id, Instant.now().minusSeconds(--minusSeconds)),
-            Observation(++i, foodData.id, Instant.now().minusSeconds(--minusSeconds)),
-            Observation(++i, foodData.id, Instant.now().minusSeconds(--minusSeconds)),
+            Observation(++id, foodData.id, Instant.now().minusSeconds(--minusSeconds)),
+            Observation(++id, foodData.id, Instant.now().minusSeconds(--minusSeconds)),
+            Observation(++id, foodData.id, Instant.now().minusSeconds(--minusSeconds)),
         )
     }
 
     val fakeIntValues by lazy {
         val variable = fakeVariables.first { it.name == "calories"}
-        var i = 0
+        var id = 0
         listOf(
-            IntValue(++i, variable.id, fakeObservations[0].id, value = 150),
-            IntValue(++i, variable.id, fakeObservations[1].id, value = 500),
-            IntValue(++i, variable.id, fakeObservations[2].id, value = 400),
+            IntValue(++id, variable.id, fakeObservations[0].id, value = 150),
+            IntValue(++id, variable.id, fakeObservations[1].id, value = 500),
+            IntValue(++id, variable.id, fakeObservations[2].id, value = 400),
         )
     }
 
     val fakeStringValues by lazy {
         val variable = fakeVariables.first { it.name == "description"}
-        var i = 0
+        var id = 0
         listOf(
-            StringValue(++i, variable.id, fakeObservations[0].id, "Salad"),
-            StringValue(++i, variable.id, fakeObservations[1].id, "Pizza"),
-            StringValue(++i, variable.id, fakeObservations[2].id, "Chicken"),
+            StringValue(++id, variable.id, fakeObservations[0].id, "Salad"),
+            StringValue(++id, variable.id, fakeObservations[1].id, "Pizza"),
+            StringValue(++id, variable.id, fakeObservations[2].id, "Chicken"),
         )
     }
 
     val fakeFloatValues by lazy {
         val variable = fakeVariables.first { it.name == "rating"}
-        var i = 0
+        var id = 0
         listOf(
-            FloatValue(++i, variable.id, fakeObservations[0].id, 5.5f),
-            FloatValue(++i, variable.id, fakeObservations[1].id, 6.5f),
-            FloatValue(++i, variable.id, fakeObservations[2].id, 7.5f),
+            FloatValue(++id, variable.id, fakeObservations[0].id, 5.5f),
+            FloatValue(++id, variable.id, fakeObservations[1].id, 6.5f),
+            FloatValue(++id, variable.id, fakeObservations[2].id, 7.5f),
         )
     }
 
     val fakeBooleanValues by lazy {
         val variable = fakeVariables.first { it.name == "hot"}
-        var i = 0
+        var id = 0
         listOf(
-            BooleanValue(++i, variable.id, fakeObservations[0].id, false),
-            BooleanValue(++i, variable.id, fakeObservations[1].id, true),
-            BooleanValue(++i, variable.id, fakeObservations[2].id, true),
+            BooleanValue(++id, variable.id, fakeObservations[0].id, false),
+            BooleanValue(++id, variable.id, fakeObservations[1].id, true),
+            BooleanValue(++id, variable.id, fakeObservations[2].id, true),
+        )
+    }
+
+    val fakeEnumValues by lazy {
+        val variable = fakeVariables.first { it.name == "meal"}
+        val lunch = fakeEnumerators.first { it.name == "Lunch"}
+        val dinner = fakeEnumerators.first { it.name == "Dinner"}
+        var id = 0
+        listOf(
+            EnumValue(++id, variable.id, fakeObservations[0].id, lunch.id),
+            EnumValue(++id, variable.id, fakeObservations[1].id, dinner.id),
+            EnumValue(++id, variable.id, fakeObservations[2].id, dinner.id)
         )
     }
 }
