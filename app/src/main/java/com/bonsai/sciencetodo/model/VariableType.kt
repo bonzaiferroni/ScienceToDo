@@ -1,6 +1,6 @@
 package com.bonsai.sciencetodo.model
 
-enum class VariableType(val intValue: Int) {
+enum class VariableType(val dbValue: Int) {
     Undefined(0),
     Integer(1),
     String(2),
@@ -8,11 +8,8 @@ enum class VariableType(val intValue: Int) {
     Boolean(4);
 
     companion object {
-        fun fromInt(value: Int): VariableType = when (value) {
-            1 -> Integer
-            2 -> String
-            3 -> Float
-            else -> Undefined
-        }
+        fun fromInt(value: Int): VariableType = VariableType.values()
+            .firstOrNull { value == it.dbValue } ?:
+            throw IllegalArgumentException("no VariableType with intValue: $value")
     }
 }

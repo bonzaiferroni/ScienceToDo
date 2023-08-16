@@ -1,4 +1,4 @@
-package com.bonsai.sciencetodo.dao
+package com.bonsai.sciencetodo.data.dao
 
 import androidx.room.Dao
 import androidx.room.Delete

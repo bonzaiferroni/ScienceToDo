@@ -22,8 +22,8 @@ import com.bonsai.sciencetodo.data.NewFloat
 import com.bonsai.sciencetodo.data.NewInteger
 import com.bonsai.sciencetodo.data.NewString
 import com.bonsai.sciencetodo.data.NewValueBox
+import com.bonsai.sciencetodo.data.fake.FakeData
 import com.bonsai.sciencetodo.data.isValid
-import com.bonsai.sciencetodo.fakedata.FakeData
 import com.bonsai.sciencetodo.ui.common.BooleanField
 import com.bonsai.sciencetodo.ui.common.FloatField
 import com.bonsai.sciencetodo.ui.common.IntegerField

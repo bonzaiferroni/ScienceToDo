@@ -2,9 +2,9 @@ package com.bonsai.sciencetodo.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bonsai.sciencetodo.dao.DataFlowDao
+import com.bonsai.sciencetodo.data.dao.DataFlowDao
 import com.bonsai.sciencetodo.data.ObservationRepository
-import com.bonsai.sciencetodo.dao.VariableDao
+import com.bonsai.sciencetodo.data.dao.VariableDao
 import com.bonsai.sciencetodo.model.DataFlow
 import com.bonsai.sciencetodo.data.NewValueBox
 import kotlinx.coroutines.flow.MutableStateFlow

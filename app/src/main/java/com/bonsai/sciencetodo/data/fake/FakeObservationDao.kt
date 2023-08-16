@@ -1,7 +1,7 @@
-package com.bonsai.sciencetodo.fakedata
+package com.bonsai.sciencetodo.data.fake
 
-import com.bonsai.sciencetodo.dao.ObservationDao
-import com.bonsai.sciencetodo.fakedata.FakeData.fakeObservations
+import com.bonsai.sciencetodo.data.dao.ObservationDao
+import com.bonsai.sciencetodo.data.fake.FakeData.fakeObservations
 import com.bonsai.sciencetodo.model.Observation
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf

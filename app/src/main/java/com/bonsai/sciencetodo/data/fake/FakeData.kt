@@ -1,4 +1,4 @@
-package com.bonsai.sciencetodo.fakedata
+package com.bonsai.sciencetodo.data.fake
 
 import com.bonsai.sciencetodo.model.BooleanValue
 import com.bonsai.sciencetodo.model.DataFlow

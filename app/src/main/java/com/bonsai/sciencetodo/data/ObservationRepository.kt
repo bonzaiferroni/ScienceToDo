@@ -1,15 +1,16 @@
 package com.bonsai.sciencetodo.data
 
-import com.bonsai.sciencetodo.dao.BooleanValueDao
-import com.bonsai.sciencetodo.dao.FloatValueDao
-import com.bonsai.sciencetodo.dao.IntValueDao
-import com.bonsai.sciencetodo.dao.ObservationDao
-import com.bonsai.sciencetodo.dao.StringValueDao
-import com.bonsai.sciencetodo.fakedata.FakeBooleanValueDao
-import com.bonsai.sciencetodo.fakedata.FakeFloatValueDao
-import com.bonsai.sciencetodo.fakedata.FakeIntValueDao
-import com.bonsai.sciencetodo.fakedata.FakeObservationDao
-import com.bonsai.sciencetodo.fakedata.FakeStringValueDao
+import com.bonsai.sciencetodo.data.dao.BooleanValueDao
+import com.bonsai.sciencetodo.data.dao.FloatValueDao
+import com.bonsai.sciencetodo.data.dao.IntValueDao
+import com.bonsai.sciencetodo.data.dao.ObservationDao
+import com.bonsai.sciencetodo.data.dao.StringValueDao
+import com.bonsai.sciencetodo.data.fake.FakeBooleanValueDao
+import com.bonsai.sciencetodo.data.fake.FakeFloatValueDao
+import com.bonsai.sciencetodo.data.fake.FakeIntValueDao
+import com.bonsai.sciencetodo.data.fake.FakeObservationDao
+import com.bonsai.sciencetodo.data.fake.FakeStringValueDao
+import com.bonsai.sciencetodo.model.BooleanValue
 import com.bonsai.sciencetodo.model.FloatValue
 import com.bonsai.sciencetodo.model.IntValue
 import com.bonsai.sciencetodo.model.Observation
@@ -63,10 +64,10 @@ class ObservationRepository(
                 floatValueDao.insert(dataValue)
             }
             is NewBoolean -> {
-
+                val value = checkNotNull(newValueBox.value)
+                val dataValue = BooleanValue(0, variable.id, observationId, value)
+                booleanValueDao.insert(dataValue)
             }
-
-            else -> throw IllegalArgumentException("unhandled type")
         }
     }
 

@@ -16,5 +16,5 @@ class Converters {
     fun toVariableType(value: Int): VariableType = VariableType.fromInt(value)
 
     @TypeConverter
-    fun toInteger(value: VariableType): Int = value.intValue
+    fun toInteger(value: VariableType): Int = value.dbValue
 }
