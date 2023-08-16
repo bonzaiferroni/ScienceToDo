@@ -6,7 +6,7 @@ import com.bonsai.sciencetodo.dao.DataFlowDao
 import com.bonsai.sciencetodo.data.ObservationRepository
 import com.bonsai.sciencetodo.dao.VariableDao
 import com.bonsai.sciencetodo.model.DataFlow
-import com.bonsai.sciencetodo.ui.datavalues.NewValueBox
+import com.bonsai.sciencetodo.data.NewValueBox
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map

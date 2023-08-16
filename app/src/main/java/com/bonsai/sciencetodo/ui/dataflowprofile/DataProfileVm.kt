@@ -10,7 +10,7 @@ import com.bonsai.sciencetodo.model.DataFlow
 import com.bonsai.sciencetodo.model.Variable
 import com.bonsai.sciencetodo.model.VariableType
 import com.bonsai.sciencetodo.ui.AppScreens
-import com.bonsai.sciencetodo.ui.datavalues.NewValueBox
+import com.bonsai.sciencetodo.data.NewValueBox
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

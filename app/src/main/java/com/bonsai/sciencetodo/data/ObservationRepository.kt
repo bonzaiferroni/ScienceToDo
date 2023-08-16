@@ -14,11 +14,6 @@ import com.bonsai.sciencetodo.model.FloatValue
 import com.bonsai.sciencetodo.model.IntValue
 import com.bonsai.sciencetodo.model.Observation
 import com.bonsai.sciencetodo.model.StringValue
-import com.bonsai.sciencetodo.ui.datavalues.NewBoolean
-import com.bonsai.sciencetodo.ui.datavalues.NewFloat
-import com.bonsai.sciencetodo.ui.datavalues.NewInteger
-import com.bonsai.sciencetodo.ui.datavalues.NewString
-import com.bonsai.sciencetodo.ui.datavalues.NewValueBox
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 

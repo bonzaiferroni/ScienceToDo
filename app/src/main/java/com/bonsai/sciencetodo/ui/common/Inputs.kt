@@ -105,7 +105,15 @@ inline fun <reified T : Enum<T>> EnumPicker(
 fun StringField(
     onValueChange: (String) -> Unit,
 ) {
+    var value by remember { mutableStateOf("") }
+
+    val parseValue: (String) -> Unit = {
+        value = it
+        onValueChange(it)
+    }
+
     ValueField(
+        value = value,
         label = "Text",
         keyboardType = KeyboardType.Decimal,
         onValueChange = onValueChange,
@@ -116,11 +124,15 @@ fun StringField(
 fun FloatField(
     onValueChange: (Float?) -> Unit,
 ) {
+    var value by remember { mutableStateOf("") }
+
     val parseValue: (String) -> Unit = {
+        value = it
         onValueChange(it.toFloatOrNull())
     }
 
     ValueField(
+        value = value,
         label = "Decimal",
         keyboardType = KeyboardType.Decimal,
         onValueChange = parseValue
@@ -131,11 +143,15 @@ fun FloatField(
 fun IntegerField(
     onValueChange: (Int?) -> Unit,
 ) {
+    var value by remember { mutableStateOf("") }
+
     val parseValue: (String) -> Unit = {
+        value = it
         onValueChange(it.toIntOrNull())
     }
 
     ValueField(
+        value = value,
         label = "Integer",
         keyboardType = KeyboardType.Number,
         onValueChange = parseValue
@@ -143,19 +159,37 @@ fun IntegerField(
 }
 
 @Composable
+fun BooleanField(
+    onValueChange: (Boolean?) -> Unit,
+) {
+    var value by remember { mutableStateOf("") }
+
+    val parseValue: (String) -> Unit = {
+        val parsedValue = if (it.startsWith('t')) "true"
+        else if (it.startsWith('f')) "false"
+        else it
+        value = parsedValue
+        onValueChange(parsedValue.toBooleanStrictOrNull())
+    }
+
+    ValueField(
+        value = value,
+        label = "Boolean",
+        keyboardType = KeyboardType.Text,
+        onValueChange = parseValue
+    )
+}
+
+@Composable
 fun ValueField(
+    value: String,
     label: String,
     keyboardType: KeyboardType,
     onValueChange: (String) -> Unit,
 ) {
-    var value by remember { mutableStateOf("") }
-
     OutlinedTextField(
         value = value,
-        onValueChange = {
-            value = it
-            onValueChange(value)
-        },
+        onValueChange = onValueChange,
         label = { Text(label) },
         singleLine = true,
         keyboardOptions = KeyboardOptions.Default.copy(

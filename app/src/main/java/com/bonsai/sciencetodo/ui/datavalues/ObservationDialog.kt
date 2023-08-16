@@ -17,7 +17,14 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.bonsai.sciencetodo.R
+import com.bonsai.sciencetodo.data.NewBoolean
+import com.bonsai.sciencetodo.data.NewFloat
+import com.bonsai.sciencetodo.data.NewInteger
+import com.bonsai.sciencetodo.data.NewString
+import com.bonsai.sciencetodo.data.NewValueBox
+import com.bonsai.sciencetodo.data.isValid
 import com.bonsai.sciencetodo.fakedata.FakeData
+import com.bonsai.sciencetodo.ui.common.BooleanField
 import com.bonsai.sciencetodo.ui.common.FloatField
 import com.bonsai.sciencetodo.ui.common.IntegerField
 import com.bonsai.sciencetodo.ui.common.StdDialog
@@ -79,6 +86,15 @@ fun ObservationDialog(
 
                         is NewFloat -> {
                             FloatField(
+                                onValueChange = {
+                                    newValueBox.value = it
+                                    enableAccept = newValueBoxes.isValid()
+                                },
+                            )
+                        }
+
+                        is NewBoolean -> {
+                            BooleanField(
                                 onValueChange = {
                                     newValueBox.value = it
                                     enableAccept = newValueBoxes.isValid()
