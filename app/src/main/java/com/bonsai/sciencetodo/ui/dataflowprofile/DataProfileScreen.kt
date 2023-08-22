@@ -35,7 +35,7 @@ import com.bonsai.sciencetodo.model.Variable
 import com.bonsai.sciencetodo.model.VariableType
 import com.bonsai.sciencetodo.ui.AppScreens
 import com.bonsai.sciencetodo.ui.AppVmProvider
-import com.bonsai.sciencetodo.ui.ScienceToDoTopAppBar
+import com.bonsai.sciencetodo.ui.StdTopAppBar
 import com.bonsai.sciencetodo.ui.common.EnumDropdown
 import com.bonsai.sciencetodo.ui.common.RowTextButton
 import com.bonsai.sciencetodo.ui.common.StdCard
@@ -64,7 +64,7 @@ fun DataProfileScreen(
 
     Scaffold(
         topBar = {
-            ScienceToDoTopAppBar(
+            StdTopAppBar(
                 title = "${uiState.dataFlow.name} Data",
                 navigateUp = { navController?.navigateUp() }
             )

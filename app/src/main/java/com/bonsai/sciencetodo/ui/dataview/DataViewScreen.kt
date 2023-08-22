@@ -17,7 +17,7 @@ import com.bonsai.sciencetodo.R
 import com.bonsai.sciencetodo.data.DataRepository
 import com.bonsai.sciencetodo.ui.AppScreens
 import com.bonsai.sciencetodo.ui.AppVmProvider
-import com.bonsai.sciencetodo.ui.ScienceToDoTopAppBar
+import com.bonsai.sciencetodo.ui.StdTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,7 +32,7 @@ fun DataViewScreen(
 
     Scaffold(
         topBar = {
-            ScienceToDoTopAppBar(
+            StdTopAppBar(
                 title = "Data: ${uiState.dataFlow.name}",
                 navigateUp = { navController?.navigateUp() }
             )

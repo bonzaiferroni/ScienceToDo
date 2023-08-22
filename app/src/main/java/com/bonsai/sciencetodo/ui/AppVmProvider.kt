@@ -9,6 +9,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bonsai.sciencetodo.ScienceToDoApplication
 import com.bonsai.sciencetodo.ui.dataflowprofile.DataProfileVm
 import com.bonsai.sciencetodo.ui.dataview.DataViewVm
+import com.bonsai.sciencetodo.ui.enums.EnumVm
 import com.bonsai.sciencetodo.ui.home.HomeVm
 
 object AppVmProvider {
@@ -33,6 +34,11 @@ object AppVmProvider {
             DataViewVm(
                 this.createSavedStateHandle(),
                 scienceToDoApplication().dataRepository,
+            )
+        }
+        initializer {
+            EnumVm(
+                scienceToDoApplication().enumRepository,
             )
         }
     }

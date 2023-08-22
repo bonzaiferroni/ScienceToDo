@@ -1,6 +1,7 @@
 package com.bonsai.sciencetodo.ui.home
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +13,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -35,7 +37,7 @@ import com.bonsai.sciencetodo.data.fake.FakeVariableDao
 import com.bonsai.sciencetodo.model.DataFlow
 import com.bonsai.sciencetodo.ui.AppScreens
 import com.bonsai.sciencetodo.ui.AppVmProvider
-import com.bonsai.sciencetodo.ui.ScienceToDoTopAppBar
+import com.bonsai.sciencetodo.ui.StdTopAppBar
 import com.bonsai.sciencetodo.ui.common.StdCard
 import com.bonsai.sciencetodo.ui.common.StdIconButton
 import com.bonsai.sciencetodo.ui.datavalues.ObservationDialog
@@ -67,7 +69,12 @@ fun HomeScreen(
 
     Scaffold(
         topBar = {
-            ScienceToDoTopAppBar(title = "Science ToDo")
+            StdTopAppBar(title = "Science ToDo") {
+                DropdownMenuItem(
+                    text = { Text("Create Enum") },
+                    onClick = {  }
+                )
+            }
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { viewModel.showDialog() }) {
@@ -76,21 +83,13 @@ fun HomeScreen(
         },
         modifier = modifier
     ) { paddingValues ->
-        LazyColumn(
-            contentPadding = PaddingValues(dimensionResource(R.dimen.padding_small)),
-            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.gap_medium)),
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            items(uiState.dataFlows) { dataFlow ->
-                DataFlowCard(
-                    dataFlow,
-                    onClickCard,
-                    onOpenDataView,
-                    viewModel::openDataDialog
-                )
-            }
+        Column(modifier = Modifier.padding(paddingValues)) {
+            DataFlowList(
+                uiState.dataFlows,
+                onClickCard,
+                onOpenDataView,
+                viewModel::openDataDialog
+            )
         }
     }
 
@@ -99,6 +98,35 @@ fun HomeScreen(
         viewModel::cancelDataDialog,
         uiState.newValueBoxes
     )
+}
+
+@Composable
+fun DataFlowList(
+    dataFlows: List<DataFlow>,
+    onOpenFlow: (dataFlowId: Int) -> Unit,
+    onOpenDataView: (dataFlowId: Int) -> Unit,
+    onOpenDataDialog: (dataFlowId: Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    LazyColumn(
+        contentPadding = PaddingValues(dimensionResource(R.dimen.padding_small)),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.gap_medium)),
+        modifier = modifier
+            .fillMaxSize()
+    ) {
+        items(dataFlows) { dataFlow ->
+            StdCard {
+                Text(
+                    text = dataFlow.name,
+                    style = MaterialTheme.typography.titleLarge
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                StdIconButton(Icons.Filled.Add, { onOpenDataDialog(dataFlow.id) })
+                StdIconButton(Icons.Filled.Search, { onOpenDataView(dataFlow.id) })
+                StdIconButton(Icons.Filled.ArrowForward, { onOpenFlow(dataFlow.id) })
+            }
+        }
+    }
 }
 
 @Composable
@@ -136,26 +164,6 @@ fun AddDataFlowDialog(
                 }
             }
         )
-    }
-}
-
-@Composable
-fun DataFlowCard(
-    dataFlow: DataFlow,
-    onOpenFlow: (dataFlowId: Int) -> Unit,
-    onOpenDataView: (dataFlowId: Int) -> Unit,
-    onOpenDataDialog: (dataFlowId: Int) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    StdCard(modifier = modifier) {
-        Text(
-            text = dataFlow.name,
-            style = MaterialTheme.typography.titleLarge
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        StdIconButton(Icons.Filled.Add, { onOpenDataDialog(dataFlow.id) })
-        StdIconButton(Icons.Filled.Search, { onOpenDataView(dataFlow.id) })
-        StdIconButton(Icons.Filled.ArrowForward, { onOpenFlow(dataFlow.id) })
     }
 }
 

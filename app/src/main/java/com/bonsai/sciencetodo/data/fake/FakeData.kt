@@ -3,6 +3,7 @@ package com.bonsai.sciencetodo.data.fake
 import com.bonsai.sciencetodo.model.BooleanValue
 import com.bonsai.sciencetodo.model.DataFlow
 import com.bonsai.sciencetodo.model.EnumValue
+import com.bonsai.sciencetodo.model.EnumVarJoin
 import com.bonsai.sciencetodo.model.Enumeration
 import com.bonsai.sciencetodo.model.Enumerator
 import com.bonsai.sciencetodo.model.FloatValue
@@ -113,6 +114,14 @@ object FakeData {
             EnumValue(++id, variable.id, fakeObservations[0].id, lunch.id),
             EnumValue(++id, variable.id, fakeObservations[1].id, dinner.id),
             EnumValue(++id, variable.id, fakeObservations[2].id, dinner.id)
+        )
+    }
+
+    val fakeEnumVarJoinValues by lazy {
+        val variable = fakeVariables.first { it.name == "meal"}
+        val enumeration = fakeEnumerations.first { it.name == "Meal"}
+        listOf(
+            EnumVarJoin(variable.id, enumeration.id)
         )
     }
 }

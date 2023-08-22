@@ -3,6 +3,7 @@ package com.bonsai.sciencetodo
 import android.app.Application
 import com.bonsai.sciencetodo.data.AppDatabase
 import com.bonsai.sciencetodo.data.DataRepository
+import com.bonsai.sciencetodo.data.EnumRepository
 import com.bonsai.sciencetodo.data.ObservationRepository
 
 class ScienceToDoApplication : Application() {
@@ -27,6 +28,14 @@ class ScienceToDoApplication : Application() {
             database.floatValueDao(),
             database.booleanValueDao(),
             database.enumValueDao()
+        )
+    }
+    val enumRepository: EnumRepository by lazy {
+        EnumRepository(
+            database.enumerationDao(),
+            database.enumeratorDao(),
+            database.enumValueDao(),
+            database.enumVarJoinDao()
         )
     }
 }
