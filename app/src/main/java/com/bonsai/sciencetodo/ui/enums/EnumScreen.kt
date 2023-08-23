@@ -2,7 +2,6 @@ package com.bonsai.sciencetodo.ui.enums
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -152,6 +151,7 @@ fun EnumList(
                     enumeration = enumeration,
                     enumerationNameEdit = enumerationNameEdit,
                     editFunctions = enumerationNameEditFunctions,
+                    onAddEnumerator = onAddEnumerator
                 )
                 EnumeratorList(
                     enumeration = enumeration,
@@ -160,10 +160,6 @@ fun EnumList(
                     editFunctions = enumeratorNameEditFunctions,
                     onMoveEnumerator = onMoveEnumerator,
                     onDeleteEnumerator = onDeleteEnumerator,
-                )
-                EnumControls(
-                    enumerationId = enumeration.id,
-                    onAddEnumerator = onAddEnumerator
                 )
             }
         }
@@ -174,7 +170,8 @@ fun EnumList(
 fun EnumerationCard(
     enumeration: Enumeration,
     enumerationNameEdit: EnumerationNameEdit?,
-    editFunctions: EditFunctions<Enumeration>
+    editFunctions: EditFunctions<Enumeration>,
+    onAddEnumerator: (Int) -> Unit,
 ) {
     StdRowCard {
         if (enumerationNameEdit != null && enumerationNameEdit.id == enumeration.id) {
@@ -195,7 +192,8 @@ fun EnumerationCard(
 
         MoreMenu(
             listOf(
-                MoreMenuItem("edit name") { editFunctions.start(enumeration) }
+                MoreMenuItem("edit name") { editFunctions.start(enumeration) },
+                MoreMenuItem("add enumerator") { onAddEnumerator(enumeration.id) }
             )
         )
     }
@@ -246,16 +244,6 @@ fun EnumeratorList(
                 moreMenuItems = menuItems
             )
         }
-    }
-}
-
-@Composable
-fun EnumControls(
-    enumerationId: Int,
-    onAddEnumerator: (Int) -> Unit,
-) {
-    Row() {
-        StdIconButton(Icons.Filled.Add, { onAddEnumerator(enumerationId)})
     }
 }
 
