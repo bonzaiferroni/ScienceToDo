@@ -197,7 +197,7 @@ fun EnumerationCard(
         MoreMenu(
             listOf(
                 MoreMenuItem("edit name") { editFunctions.start(enumeration) },
-                MoreMenuItem("add enumerator") { onAddEnumerator(enumeration.id) },
+                MoreMenuItem("add member") { onAddEnumerator(enumeration.id) },
                 MoreMenuItem("delete") { onDeleteEnumeration(enumeration) }
             )
         )
