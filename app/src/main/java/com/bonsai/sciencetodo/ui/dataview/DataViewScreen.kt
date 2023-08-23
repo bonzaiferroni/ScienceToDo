@@ -33,7 +33,7 @@ fun DataViewScreen(
     Scaffold(
         topBar = {
             StdTopAppBar(
-                title = "Data: ${uiState.dataFlow.name}",
+                title = "Data: ${uiState.dataset.name}",
                 navigateUp = { navController?.navigateUp() }
             )
         },
@@ -61,7 +61,7 @@ fun ValueEditDialog() {
 @Preview(showBackground = true)
 @Composable
 fun PreviewDataViewScreen() {
-    val savedStateHandle = SavedStateHandle(mapOf(AppScreens.dataFlowIdArg to 1))
+    val savedStateHandle = SavedStateHandle(mapOf(AppScreens.datasetIdArg to 1))
     DataViewScreen(
         viewModel = DataViewVm(
             savedStateHandle = savedStateHandle,

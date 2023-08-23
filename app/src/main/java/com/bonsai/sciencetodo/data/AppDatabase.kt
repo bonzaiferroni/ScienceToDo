@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.bonsai.sciencetodo.data.dao.BooleanValueDao
-import com.bonsai.sciencetodo.data.dao.DataFlowDao
+import com.bonsai.sciencetodo.data.dao.DatasetDao
 import com.bonsai.sciencetodo.data.dao.EnumValueDao
 import com.bonsai.sciencetodo.data.dao.EnumVarJoinDao
 import com.bonsai.sciencetodo.data.dao.EnumerationDao
@@ -17,7 +17,7 @@ import com.bonsai.sciencetodo.data.dao.ObservationDao
 import com.bonsai.sciencetodo.data.dao.StringValueDao
 import com.bonsai.sciencetodo.data.dao.VariableDao
 import com.bonsai.sciencetodo.model.BooleanValue
-import com.bonsai.sciencetodo.model.DataFlow
+import com.bonsai.sciencetodo.model.Dataset
 import com.bonsai.sciencetodo.model.EnumValue
 import com.bonsai.sciencetodo.model.EnumVarJoin
 import com.bonsai.sciencetodo.model.Enumeration
@@ -30,14 +30,14 @@ import com.bonsai.sciencetodo.model.Variable
 
 @Database(
     entities = [
-        DataFlow::class, Variable::class, Observation::class,
+        Dataset::class, Variable::class, Observation::class,
         Enumeration::class, Enumerator::class, EnumValue:: class, EnumVarJoin::class,
         StringValue::class, IntValue::class, FloatValue::class, BooleanValue::class],
-    version = 11
+    version = 12
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun dataFlowDao(): DataFlowDao
+    abstract fun datasetDao(): DatasetDao
     abstract fun variableDao(): VariableDao
     abstract fun observationDao(): ObservationDao
     abstract fun stringValueDao(): StringValueDao

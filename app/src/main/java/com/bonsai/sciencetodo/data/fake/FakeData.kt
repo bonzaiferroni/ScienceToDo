@@ -1,7 +1,7 @@
 package com.bonsai.sciencetodo.data.fake
 
 import com.bonsai.sciencetodo.model.BooleanValue
-import com.bonsai.sciencetodo.model.DataFlow
+import com.bonsai.sciencetodo.model.Dataset
 import com.bonsai.sciencetodo.model.EnumValue
 import com.bonsai.sciencetodo.model.EnumVarJoin
 import com.bonsai.sciencetodo.model.Enumeration
@@ -16,16 +16,16 @@ import java.time.Instant
 
 object FakeData {
 
-    val fakeDataFlows by lazy {
+    val fakeDatasets by lazy {
         listOf(
-            DataFlow(id = 1, name = "Food"),
-            DataFlow(id = 2, name = "Rest")
+            Dataset(id = 1, name = "Food"),
+            Dataset(id = 2, name = "Rest")
         )
     }
 
     val fakeVariables by lazy {
-        val foodData = fakeDataFlows.first { it.name == "Food" }
-        val restData = fakeDataFlows.first { it.name == "Rest" }
+        val foodData = fakeDatasets.first { it.name == "Food" }
+        val restData = fakeDatasets.first { it.name == "Rest" }
         var id = 0
         listOf(
             Variable(++id, foodData.id, "description", VariableType.String),
@@ -56,7 +56,7 @@ object FakeData {
     }
 
     val fakeObservations by lazy {
-        val foodData = fakeDataFlows.first { it.name == "Food" }
+        val foodData = fakeDatasets.first { it.name == "Food" }
         var id = 0
         var minusSeconds = 100L
         listOf(

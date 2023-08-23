@@ -13,7 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.bonsai.sciencetodo.ui.common.StdTopAppBar
-import com.bonsai.sciencetodo.ui.dataflowprofile.DataProfileScreen
+import com.bonsai.sciencetodo.ui.dataset.DatasetScreen
 import com.bonsai.sciencetodo.ui.dataview.DataViewScreen
 import com.bonsai.sciencetodo.ui.enums.EnumScreen
 import com.bonsai.sciencetodo.ui.home.HomeScreen
@@ -25,20 +25,20 @@ sealed interface AppScreens {
         override val name = "home"
     }
 
-    data object DataFlowProfile : AppScreens {
-        override val name = "dataFlowProfile"
-        val routeWithArgs = "$name/{$dataFlowIdArg}"
+    data object Dataset : AppScreens {
+        override val name = "dataset"
+        val routeWithArgs = "$name/{$datasetIdArg}"
 
-        fun getRoute(dataFlowId: Int) = "$name/${dataFlowId}"
-        fun getNavArg() = getIntNavArg(dataFlowIdArg)
+        fun getRoute(datasetId: Int) = "$name/${datasetId}"
+        fun getNavArg() = getIntNavArg(datasetIdArg)
     }
 
     data object DataView : AppScreens {
         override val name = "dataView"
-        val routeWithArgs = "$name/{$dataFlowIdArg}"
+        val routeWithArgs = "$name/{$datasetIdArg}"
 
-        fun getRoute(dataFlowId: Int) = "$name/${dataFlowId}"
-        fun getNavArg() = getIntNavArg(dataFlowIdArg)
+        fun getRoute(datasetId: Int) = "$name/${datasetId}"
+        fun getNavArg() = getIntNavArg(datasetIdArg)
     }
 
     data object Enum : AppScreens {
@@ -50,7 +50,7 @@ sealed interface AppScreens {
     }
 
     companion object {
-        const val dataFlowIdArg = "dataFlowId"
+        const val datasetIdArg = "datasetId"
     }
 }
 
@@ -69,10 +69,10 @@ fun AppNavHost(
             HomeScreen(navController = navController)
         }
         composable(
-            route = AppScreens.DataFlowProfile.routeWithArgs,
-            arguments = listOf(AppScreens.DataFlowProfile.getNavArg())
+            route = AppScreens.Dataset.routeWithArgs,
+            arguments = listOf(AppScreens.Dataset.getNavArg())
         ) {
-            DataProfileScreen(navController = navController)
+            DatasetScreen(navController = navController)
         }
         composable(
             route = AppScreens.DataView.routeWithArgs,

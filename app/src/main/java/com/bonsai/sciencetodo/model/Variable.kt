@@ -10,19 +10,19 @@ import androidx.room.PrimaryKey
     tableName = "variable",
     foreignKeys = [
         ForeignKey(
-            entity = DataFlow::class,
+            entity = Dataset::class,
             parentColumns = ["id"],
-            childColumns = ["data_flow_id"],
+            childColumns = ["dataset_id"],
             onDelete = ForeignKey.CASCADE
         )
     ],
-    indices = [Index("data_flow_id")]
+    indices = [Index("dataset_id")]
 )
 data class Variable(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    @ColumnInfo(name = "data_flow_id")
-    val dataFlowId: Int,
+    @ColumnInfo(name = "dataset_id")
+    val datasetId: Int,
     val name: String,
     @ColumnInfo(name = "type")
     val type: VariableType,

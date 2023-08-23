@@ -29,20 +29,20 @@ class ObservationRepository(
     private val booleanValueDao: BooleanValueDao,
     private val enumValueDao: EnumValueDao,
 ) {
-    suspend fun createObservation(dataFlowId: Int, newValueBoxes: List<NewValueBox>) {
-        val observation = createObservation(dataFlowId)
+    suspend fun createObservation(datasetId: Int, newValueBoxes: List<NewValueBox>) {
+        val observation = createObservation(datasetId)
 
         newValueBoxes.forEach {
             insertNewDataValue(observation.id, it)
         }
     }
 
-    fun getObservationCount(dataFlowId: Int): Flow<Int> {
-        return observationDao.getCountByDataFlowId(dataFlowId)
+    fun getObservationCount(datasetId: Int): Flow<Int> {
+        return observationDao.getCountByDatasetId(datasetId)
     }
 
-    private suspend fun createObservation(dataFlowId: Int): Observation {
-        val observation = Observation(0, dataFlowId, Instant.now())
+    private suspend fun createObservation(datasetId: Int): Observation {
+        val observation = Observation(0, datasetId, Instant.now())
         val id = observationDao.insert(observation)
         return observation.copy(id = id.toInt())
     }

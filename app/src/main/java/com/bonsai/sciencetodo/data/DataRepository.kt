@@ -1,7 +1,7 @@
 package com.bonsai.sciencetodo.data
 
 import com.bonsai.sciencetodo.data.dao.BooleanValueDao
-import com.bonsai.sciencetodo.data.dao.DataFlowDao
+import com.bonsai.sciencetodo.data.dao.DatasetDao
 import com.bonsai.sciencetodo.data.dao.EnumValueDao
 import com.bonsai.sciencetodo.data.dao.FloatValueDao
 import com.bonsai.sciencetodo.data.dao.IntValueDao
@@ -9,7 +9,7 @@ import com.bonsai.sciencetodo.data.dao.ObservationDao
 import com.bonsai.sciencetodo.data.dao.StringValueDao
 import com.bonsai.sciencetodo.data.dao.VariableDao
 import com.bonsai.sciencetodo.data.fake.FakeBooleanValueDao
-import com.bonsai.sciencetodo.data.fake.FakeDataFlowDao
+import com.bonsai.sciencetodo.data.fake.FakeDatasetDao
 import com.bonsai.sciencetodo.data.fake.FakeEnumValueDao
 import com.bonsai.sciencetodo.data.fake.FakeFloatValueDao
 import com.bonsai.sciencetodo.data.fake.FakeIntValueDao
@@ -23,7 +23,7 @@ import com.bonsai.sciencetodo.ui.dataview.DataTableContent
 import kotlinx.coroutines.flow.first
 
 class DataRepository(
-    val dataFlowDao: DataFlowDao,
+    val datasetDao: DatasetDao,
     val observationDao: ObservationDao,
     val variableDao: VariableDao,
     val stringValueDao: StringValueDao,
@@ -32,9 +32,9 @@ class DataRepository(
     val booleanValueDao: BooleanValueDao,
     val enumValueDao: EnumValueDao,
 ) {
-    suspend fun getTableContent(dataFlowId: Int): DataTableContent {
-        val variables = variableDao.getByFlowId(dataFlowId).first()
-        val observations = observationDao.getByFlowId(dataFlowId).first()
+    suspend fun getTableContent(datasetId: Int): DataTableContent {
+        val variables = variableDao.getByFlowId(datasetId).first()
+        val observations = observationDao.getByFlowId(datasetId).first()
 
         val variableIds = variables.map { v -> v.id }
         val observationIds = observations.map { o -> o.id }
@@ -73,7 +73,7 @@ class DataRepository(
     companion object {
         fun getFake(): DataRepository {
             return DataRepository(
-                FakeDataFlowDao(),
+                FakeDatasetDao(),
                 FakeObservationDao(),
                 FakeVariableDao(),
                 FakeStringValueDao(),

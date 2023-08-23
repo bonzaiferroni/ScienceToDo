@@ -1,4 +1,4 @@
-package com.bonsai.sciencetodo.ui.dataflowprofile
+package com.bonsai.sciencetodo.ui.dataset
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -29,7 +29,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.bonsai.sciencetodo.R
 import com.bonsai.sciencetodo.data.ObservationRepository
-import com.bonsai.sciencetodo.data.fake.FakeDataFlowDao
+import com.bonsai.sciencetodo.data.fake.FakeDatasetDao
 import com.bonsai.sciencetodo.data.fake.FakeVariableDao
 import com.bonsai.sciencetodo.model.Variable
 import com.bonsai.sciencetodo.model.VariableType
@@ -45,14 +45,14 @@ import com.bonsai.sciencetodo.ui.datavalues.ObservationDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DataProfileScreen(
+fun DatasetScreen(
     modifier: Modifier = Modifier,
     navController: NavController? = null,
-    viewModel: DataProfileVm = viewModel(factory = AppVmProvider.Factory)
+    viewModel: DatasetVm = viewModel(factory = AppVmProvider.Factory)
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val onOpenDataView: (dataFlowId: Int) -> Unit = { dataFlowId ->
-        val route = AppScreens.DataView.getRoute(dataFlowId)
+    val onOpenDataView: (datasetId: Int) -> Unit = { datasetId ->
+        val route = AppScreens.DataView.getRoute(datasetId)
         navController?.navigate(route)
     }
 
@@ -65,7 +65,7 @@ fun DataProfileScreen(
     Scaffold(
         topBar = {
             StdTopAppBar(
-                title = "${uiState.dataFlow.name} Data",
+                title = "${uiState.dataset.name} Data",
                 navigateUp = { navController?.navigateUp() }
             )
         },
@@ -75,10 +75,10 @@ fun DataProfileScreen(
                 .padding(paddingValues)
                 .fillMaxWidth(),
         ) {
-            DataFlowDetails(uiState.dataFlow.name, uiState.observationCount)
+            DatasetDetails(uiState.dataset.name, uiState.observationCount)
             DataButtons(
                 viewModel::openDataDialog,
-                { onOpenDataView(uiState.dataFlow.id) },
+                { onOpenDataView(uiState.dataset.id) },
                 viewModel::openAddVariableDialog
             )
             VariableList(uiState.variables, viewModel::removeVariable)
@@ -96,7 +96,7 @@ fun DataProfileScreen(
 }
 
 @Composable
-fun DataFlowDetails(dataFlowName: String, observationCount: Int, modifier: Modifier = Modifier) {
+fun DatasetDetails(datasetName: String, observationCount: Int, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .background(MaterialTheme.colorScheme.primaryContainer)
@@ -107,7 +107,7 @@ fun DataFlowDetails(dataFlowName: String, observationCount: Int, modifier: Modif
                 .fillMaxWidth(),
         ) {
             Text(
-                text = dataFlowName,
+                text = datasetName,
                 style = MaterialTheme.typography.titleMedium
             )
             Text(
@@ -204,12 +204,12 @@ fun DataButtons(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewDataFlowProfileScreen() {
-    val savedStateHandle = SavedStateHandle(mapOf(AppScreens.dataFlowIdArg to 1))
+fun PreviewDatasetScreen() {
+    val savedStateHandle = SavedStateHandle(mapOf(AppScreens.datasetIdArg to 1))
 
-    DataProfileScreen(
-        viewModel = DataProfileVm(
-            dataFlowDao = FakeDataFlowDao(),
+    DatasetScreen(
+        viewModel = DatasetVm(
+            datasetDao = FakeDatasetDao(),
             variableDao = FakeVariableDao(),
             savedStateHandle = savedStateHandle,
             observationRepository = ObservationRepository.getFake()

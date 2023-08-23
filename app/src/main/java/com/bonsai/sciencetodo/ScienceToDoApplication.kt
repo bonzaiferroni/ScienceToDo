@@ -20,7 +20,7 @@ class ScienceToDoApplication : Application() {
     }
     val dataRepository: DataRepository by lazy {
         DataRepository(
-            database.dataFlowDao(),
+            database.datasetDao(),
             database.observationDao(),
             database.variableDao(),
             database.stringValueDao(),

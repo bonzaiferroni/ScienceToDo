@@ -122,7 +122,7 @@ fun ObservationDialog(
 @Preview
 @Composable
 fun PreviewAddDataForm() {
-    val newValueBoxes = FakeData.fakeVariables.filter { it.dataFlowId == 1 }.map { variable ->
+    val newValueBoxes = FakeData.fakeVariables.filter { it.datasetId == 1 }.map { variable ->
         NewValueBox.getBox(variable)
     }
 

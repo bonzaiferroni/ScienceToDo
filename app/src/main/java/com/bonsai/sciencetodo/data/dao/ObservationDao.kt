@@ -17,11 +17,11 @@ interface ObservationDao {
     @Query("SELECT * FROM observation WHERE id = :id")
     fun getById(id: Int): Flow<Observation>
 
-    @Query("SELECT * FROM observation WHERE data_flow_id = :id")
+    @Query("SELECT * FROM observation WHERE dataset_id = :id")
     fun getByFlowId(id: Int): Flow<List<Observation>>
 
-    @Query("SELECT COUNT(*) FROM observation WHERE data_flow_id = :id")
-    fun getCountByDataFlowId(id: Int): Flow<Int>
+    @Query("SELECT COUNT(*) FROM observation WHERE dataset_id = :id")
+    fun getCountByDatasetId(id: Int): Flow<Int>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(observation: Observation): Long

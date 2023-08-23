@@ -32,9 +32,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.bonsai.sciencetodo.R
 import com.bonsai.sciencetodo.data.ObservationRepository
-import com.bonsai.sciencetodo.data.fake.FakeDataFlowDao
+import com.bonsai.sciencetodo.data.fake.FakeDatasetDao
 import com.bonsai.sciencetodo.data.fake.FakeVariableDao
-import com.bonsai.sciencetodo.model.DataFlow
+import com.bonsai.sciencetodo.model.Dataset
 import com.bonsai.sciencetodo.ui.AppScreens
 import com.bonsai.sciencetodo.ui.AppVmProvider
 import com.bonsai.sciencetodo.ui.common.StdIconButton
@@ -50,21 +50,21 @@ fun HomeScreen(
     viewModel: HomeVm = viewModel(factory = AppVmProvider.Factory)
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val onClickCard: (dataFlowId: Int) -> Unit = { dataFlowId ->
-        val route = AppScreens.DataFlowProfile.getRoute(dataFlowId)
+    val onClickCard: (datasetId: Int) -> Unit = { datasetId ->
+        val route = AppScreens.Dataset.getRoute(datasetId)
         navController?.navigate(route)
     }
-    val onOpenDataView: (dataFlowId: Int) -> Unit = { dataFlowId ->
-        val route = AppScreens.DataView.getRoute(dataFlowId)
+    val onOpenDataView: (datasetId: Int) -> Unit = { datasetId ->
+        val route = AppScreens.DataView.getRoute(datasetId)
         navController?.navigate(route)
     }
 
-    AddDataFlowDialog(
+    AddDatasetDialog(
         uiState.showDialog,
-        uiState.newDataFlowName,
+        uiState.newDatasetName,
         viewModel::hideDialog,
         viewModel::onNameChange,
-        viewModel::addDataFlow
+        viewModel::addDataset
     )
 
     Scaffold(
@@ -78,14 +78,14 @@ fun HomeScreen(
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { viewModel.showDialog() }) {
-                Icon(Icons.Default.Add, contentDescription = "Add DataFlow")
+                Icon(Icons.Default.Add, contentDescription = "Add Dataset")
             }
         },
         modifier = modifier
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
-            DataFlowList(
-                uiState.dataFlows,
+            DatasetList(
+                uiState.datasets,
                 onClickCard,
                 onOpenDataView,
                 viewModel::openDataDialog
@@ -101,11 +101,11 @@ fun HomeScreen(
 }
 
 @Composable
-fun DataFlowList(
-    dataFlows: List<DataFlow>,
-    onOpenFlow: (dataFlowId: Int) -> Unit,
-    onOpenDataView: (dataFlowId: Int) -> Unit,
-    onOpenDataDialog: (dataFlowId: Int) -> Unit,
+fun DatasetList(
+    datasets: List<Dataset>,
+    onOpenFlow: (datasetId: Int) -> Unit,
+    onOpenDataView: (datasetId: Int) -> Unit,
+    onOpenDataDialog: (datasetId: Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -114,44 +114,44 @@ fun DataFlowList(
         modifier = modifier
             .fillMaxSize()
     ) {
-        items(dataFlows) { dataFlow ->
+        items(datasets) { dataset ->
             StdRowCard {
                 Text(
-                    text = dataFlow.name,
+                    text = dataset.name,
                     style = MaterialTheme.typography.titleLarge
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                StdIconButton(Icons.Filled.Add, { onOpenDataDialog(dataFlow.id) })
-                StdIconButton(Icons.Filled.Search, { onOpenDataView(dataFlow.id) })
-                StdIconButton(Icons.Filled.ArrowForward, { onOpenFlow(dataFlow.id) })
+                StdIconButton(Icons.Filled.Add, { onOpenDataDialog(dataset.id) })
+                StdIconButton(Icons.Filled.Search, { onOpenDataView(dataset.id) })
+                StdIconButton(Icons.Filled.ArrowForward, { onOpenFlow(dataset.id) })
             }
         }
     }
 }
 
 @Composable
-fun AddDataFlowDialog(
+fun AddDatasetDialog(
     showDialog: Boolean,
-    newDataFlowName: String,
+    newDatasetName: String,
     onHideDialog: () -> Unit,
     onChangeName: (name: String) -> Unit,
-    onAddDataFlow: () -> Unit,
+    onAddDataset: () -> Unit,
 ) {
     if (showDialog) {
 
         AlertDialog(
             onDismissRequest = onHideDialog,
-            title = { Text("Add a new DataFlow") },
+            title = { Text("Add a new dataset") },
             text = {
                 OutlinedTextField(
-                    value = newDataFlowName,
+                    value = newDatasetName,
                     onValueChange = onChangeName,
                     label = { Text("Name") },
                 )
             },
             confirmButton = {
                 TextButton(
-                    onClick = onAddDataFlow
+                    onClick = onAddDataset
                 ) {
                     Text("Add")
                 }
@@ -172,7 +172,7 @@ fun AddDataFlowDialog(
 fun HomeScreenPreview() {
     HomeScreen(
         viewModel = HomeVm(
-            dataFlowDao = FakeDataFlowDao(),
+            datasetDao = FakeDatasetDao(),
             variableDao = FakeVariableDao(),
             ObservationRepository.getFake()
         )

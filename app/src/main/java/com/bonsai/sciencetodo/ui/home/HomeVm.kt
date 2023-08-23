@@ -4,16 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bonsai.sciencetodo.data.NewValueBox
 import com.bonsai.sciencetodo.data.ObservationRepository
-import com.bonsai.sciencetodo.data.dao.DataFlowDao
+import com.bonsai.sciencetodo.data.dao.DatasetDao
 import com.bonsai.sciencetodo.data.dao.VariableDao
-import com.bonsai.sciencetodo.model.DataFlow
+import com.bonsai.sciencetodo.model.Dataset
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class HomeVm(
-    private val dataFlowDao: DataFlowDao,
+    private val datasetDao: DatasetDao,
     private val variableDao: VariableDao,
     private val observationRepository: ObservationRepository,
 ) : ViewModel() {
@@ -23,8 +23,8 @@ class HomeVm(
 
     init {
         viewModelScope.launch {
-            dataFlowDao.getAll().collect {
-                _uiState.value = _uiState.value.copy(dataFlows = it)
+            datasetDao.getAll().collect {
+                _uiState.value = _uiState.value.copy(datasets = it)
             }
         }
     }
@@ -34,29 +34,29 @@ class HomeVm(
     }
 
     fun hideDialog() {
-        _uiState.value = _uiState.value.copy(showDialog = false, newDataFlowName = "")
+        _uiState.value = _uiState.value.copy(showDialog = false, newDatasetName = "")
     }
 
     fun onNameChange(name: String) {
-        _uiState.value = _uiState.value.copy(newDataFlowName = name)
+        _uiState.value = _uiState.value.copy(newDatasetName = name)
     }
 
-    fun addDataFlow() = viewModelScope.launch {
-        val newFlow = DataFlow(id = 0, name = _uiState.value.newDataFlowName)
-        dataFlowDao.insert(newFlow)
-        _uiState.value = _uiState.value.copy(showDialog = false, newDataFlowName = "")
+    fun addDataset() = viewModelScope.launch {
+        val newFlow = Dataset(id = 0, name = _uiState.value.newDatasetName)
+        datasetDao.insert(newFlow)
+        _uiState.value = _uiState.value.copy(showDialog = false, newDatasetName = "")
     }
 
-    fun openDataDialog(dataFlowId: Int) {
+    fun openDataDialog(datasetId: Int) {
         viewModelScope.launch {
-            variableDao.getByFlowId(dataFlowId)
+            variableDao.getByFlowId(datasetId)
                 .map { variables ->
                     variables.map { NewValueBox.getBox(it) }
                 }
                 .collect {
                     _uiState.value = _uiState.value.copy(
                         newValueBoxes = it,
-                        newDataTargetId = dataFlowId
+                        newDataTargetId = datasetId
                     )
                 }
         }
@@ -65,11 +65,11 @@ class HomeVm(
     fun saveDataDialog() {
         val newValueBoxes = _uiState.value.newValueBoxes
             ?: throw NullPointerException("newDataValues is null")
-        val dataFlowId = _uiState.value.newDataTargetId
+        val datasetId = _uiState.value.newDataTargetId
             ?: throw NullPointerException("newDataTargetId is null")
 
         viewModelScope.launch {
-            observationRepository.createObservation(dataFlowId, newValueBoxes)
+            observationRepository.createObservation(datasetId, newValueBoxes)
         }
 
         clearNewDataState()
@@ -88,9 +88,9 @@ class HomeVm(
 }
 
 data class HomeUiState(
-    val dataFlows: List<DataFlow> = emptyList(),
+    val datasets: List<Dataset> = emptyList(),
     val showDialog: Boolean = false,
-    val newDataFlowName: String = "",
+    val newDatasetName: String = "",
     val newValueBoxes: List<NewValueBox>? = null,
     val newDataTargetId: Int? = null,
     val showCreateEnum: Boolean = false,

@@ -16,10 +16,10 @@ class FakeObservationDao : ObservationDao {
     }
 
     override fun getByFlowId(id: Int): Flow<List<Observation>> {
-        return flowOf(fakeObservations.filter { it.dataFlowId == id })
+        return flowOf(fakeObservations.filter { it.datasetId == id })
     }
 
-    override fun getCountByDataFlowId(id: Int): Flow<Int> {
+    override fun getCountByDatasetId(id: Int): Flow<Int> {
         TODO("Not yet implemented")
     }
 

@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bonsai.sciencetodo.data.DataRepository
 import com.bonsai.sciencetodo.model.BaseValue
-import com.bonsai.sciencetodo.model.DataFlow
+import com.bonsai.sciencetodo.model.Dataset
 import com.bonsai.sciencetodo.ui.AppScreens
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,20 +16,20 @@ class DataViewVm(
     private val dataRepository: DataRepository,
 ) : ViewModel() {
 
-    val dataFlowId: Int =
-        checkNotNull(savedStateHandle[AppScreens.dataFlowIdArg])
+    val datasetId: Int =
+        checkNotNull(savedStateHandle[AppScreens.datasetIdArg])
 
     private val _uiState = MutableStateFlow(DataViewState())
     val uiState: StateFlow<DataViewState> = _uiState
 
     init {
         viewModelScope.launch {
-            dataRepository.dataFlowDao.getById(dataFlowId).collect {
-                _uiState.value = _uiState.value.copy(dataFlow = it)
+            dataRepository.datasetDao.getById(datasetId).collect {
+                _uiState.value = _uiState.value.copy(dataset = it)
             }
         }
         viewModelScope.launch {
-            val dataTableContent = dataRepository.getTableContent(dataFlowId)
+            val dataTableContent = dataRepository.getTableContent(datasetId)
             _uiState.value = _uiState.value.copy(
                 dataTableContent = dataTableContent
             )
@@ -48,7 +48,7 @@ class DataViewVm(
 }
 
 data class DataViewState(
-    val dataFlow: DataFlow = DataFlow(0, "404"),
+    val dataset: Dataset = Dataset(0, "404"),
     val dataTableContent: DataTableContent? = null,
     val editingBaseValue: BaseValue? = null
 )

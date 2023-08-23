@@ -1,13 +1,13 @@
-package com.bonsai.sciencetodo.ui.dataflowprofile
+package com.bonsai.sciencetodo.ui.dataset
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bonsai.sciencetodo.data.NewValueBox
 import com.bonsai.sciencetodo.data.ObservationRepository
-import com.bonsai.sciencetodo.data.dao.DataFlowDao
+import com.bonsai.sciencetodo.data.dao.DatasetDao
 import com.bonsai.sciencetodo.data.dao.VariableDao
-import com.bonsai.sciencetodo.model.DataFlow
+import com.bonsai.sciencetodo.model.Dataset
 import com.bonsai.sciencetodo.model.Variable
 import com.bonsai.sciencetodo.model.VariableType
 import com.bonsai.sciencetodo.ui.AppScreens
@@ -15,33 +15,33 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class DataProfileVm(
+class DatasetVm(
     savedStateHandle: SavedStateHandle,
-    private val dataFlowDao: DataFlowDao,
+    private val datasetDao: DatasetDao,
     private val variableDao: VariableDao,
     private val observationRepository: ObservationRepository,
 ) : ViewModel() {
-    private val dataFlowId: Int =
-        checkNotNull(savedStateHandle[AppScreens.dataFlowIdArg])
+    private val datasetId: Int =
+        checkNotNull(savedStateHandle[AppScreens.datasetIdArg])
 
     private val _uiState = MutableStateFlow(DataProfileState())
     val uiState: StateFlow<DataProfileState> = _uiState
 
     init {
         viewModelScope.launch {
-            dataFlowDao.getById(dataFlowId).collect {
-                _uiState.value = _uiState.value.copy(dataFlow = it)
+            datasetDao.getById(datasetId).collect {
+                _uiState.value = _uiState.value.copy(dataset = it)
             }
         }
 
         viewModelScope.launch {
-            variableDao.getByFlowId(dataFlowId).collect {
+            variableDao.getByFlowId(datasetId).collect {
                 _uiState.value = _uiState.value.copy(variables = it)
             }
         }
 
         viewModelScope.launch {
-            observationRepository.getObservationCount(dataFlowId).collect {
+            observationRepository.getObservationCount(datasetId).collect {
                 _uiState.value = _uiState.value.copy(observationCount = it)
             }
         }
@@ -54,7 +54,7 @@ class DataProfileVm(
 
         val variable = Variable(
             id = 0,
-            dataFlowId = dataFlowId,
+            datasetId = datasetId,
             name = uiState.value.newVariableName,
             type = uiState.value.newVariableType
         )
@@ -96,7 +96,7 @@ class DataProfileVm(
             ?: throw NullPointerException("newDataValues is null")
 
         viewModelScope.launch {
-            observationRepository.createObservation(dataFlowId, newDataValues)
+            observationRepository.createObservation(datasetId, newDataValues)
         }
 
         _uiState.value = _uiState.value.copy(newValueBoxes = null)
@@ -120,7 +120,7 @@ class DataProfileVm(
 }
 
 data class DataProfileState(
-    val dataFlow: DataFlow = DataFlow(0, "404"),
+    val dataset: Dataset = Dataset(0, "404"),
     val variables: List<Variable> = emptyList(),
     val newValueBoxes: List<NewValueBox>? = null,
     val newVariableName: String = "",
