@@ -71,7 +71,7 @@ fun HomeScreen(
         topBar = {
             StdTopAppBar(title = "Science ToDo") {
                 DropdownMenuItem(
-                    text = { Text("Create Enum") },
+                    text = { Text("Enumerations") },
                     onClick = { navController?.navigate(AppScreens.Enum.name) }
                 )
             }

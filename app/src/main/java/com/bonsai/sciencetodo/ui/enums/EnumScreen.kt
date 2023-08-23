@@ -75,6 +75,7 @@ fun EnumScreen(
                 enumeratorMap = uiState.enumeratorMap,
                 enumerationNameEdit = uiState.enumerationNameEdit,
                 enumerationNameEditFunctions = viewModel.enumerationNameEditFunctions,
+                onDeleteEnumeration = viewModel::deleteEnumeration,
                 enumeratorNameEdit = uiState.enumeratorNameEdit,
                 enumeratorNameEditFunctions = viewModel.enumeratorNameEditFunctions,
                 onMoveEnumerator = viewModel::moveEnumerator,
@@ -89,7 +90,7 @@ fun EnumScreen(
 fun NewEnumerationDialog(
     newEnumeration: NewEnumeration?,
     editFunctions: EditFunctions<Unit>
-    ) {
+) {
     if (newEnumeration == null) return
 
     StdDialog(
@@ -131,6 +132,7 @@ fun EnumList(
     enumeratorMap: Map<Int, List<Enumerator>>,
     enumerationNameEdit: EnumerationNameEdit?,
     enumerationNameEditFunctions: EditFunctions<Enumeration>,
+    onDeleteEnumeration: (Enumeration) -> Unit,
     enumeratorNameEdit: EnumeratorNameEdit?,
     enumeratorNameEditFunctions: EditFunctions<Enumerator>,
     onMoveEnumerator: (enumerator: Enumerator, newIndex: Int) -> Unit,
@@ -151,7 +153,8 @@ fun EnumList(
                     enumeration = enumeration,
                     enumerationNameEdit = enumerationNameEdit,
                     editFunctions = enumerationNameEditFunctions,
-                    onAddEnumerator = onAddEnumerator
+                    onAddEnumerator = onAddEnumerator,
+                    onDeleteEnumeration = onDeleteEnumeration
                 )
                 EnumeratorList(
                     enumeration = enumeration,
@@ -172,6 +175,7 @@ fun EnumerationCard(
     enumerationNameEdit: EnumerationNameEdit?,
     editFunctions: EditFunctions<Enumeration>,
     onAddEnumerator: (Int) -> Unit,
+    onDeleteEnumeration: (Enumeration) -> Unit,
 ) {
     StdRowCard {
         if (enumerationNameEdit != null && enumerationNameEdit.id == enumeration.id) {
@@ -179,7 +183,7 @@ fun EnumerationCard(
                 value = enumerationNameEdit.name,
                 onValueChange = editFunctions.update,
             )
-            StdIconButton(Icons.Filled.Clear, editFunctions.clear )
+            StdIconButton(Icons.Filled.Clear, editFunctions.clear)
             StdIconButton(Icons.Filled.Done, editFunctions.save)
 
         } else {
@@ -193,7 +197,8 @@ fun EnumerationCard(
         MoreMenu(
             listOf(
                 MoreMenuItem("edit name") { editFunctions.start(enumeration) },
-                MoreMenuItem("add enumerator") { onAddEnumerator(enumeration.id) }
+                MoreMenuItem("add enumerator") { onAddEnumerator(enumeration.id) },
+                MoreMenuItem("delete") { onDeleteEnumeration(enumeration) }
             )
         )
     }
@@ -221,8 +226,8 @@ fun EnumeratorList(
                     onValueChange = editFunctions.update,
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                StdIconButton(imageVector = Icons.Filled.Clear, onClick = editFunctions.clear )
-                StdIconButton(imageVector = Icons.Filled.Done, onClick = editFunctions.save )
+                StdIconButton(imageVector = Icons.Filled.Clear, onClick = editFunctions.clear)
+                StdIconButton(imageVector = Icons.Filled.Done, onClick = editFunctions.save)
             } else {
                 Text(
                     text = enumerator.name
@@ -234,10 +239,10 @@ fun EnumeratorList(
                 MoreMenuItem("delete") { onDeleteEnumerator(enumerator) },
             )
             if (index > 0) {
-                menuItems.add(MoreMenuItem("move up") {onMoveEnumerator(enumerator, index - 1)})
+                menuItems.add(MoreMenuItem("move up") { onMoveEnumerator(enumerator, index - 1) })
             }
             if (index < enumeratorList.size - 1) {
-                menuItems.add(MoreMenuItem("move down") {onMoveEnumerator(enumerator, index + 1)})
+                menuItems.add(MoreMenuItem("move down") { onMoveEnumerator(enumerator, index + 1) })
             }
 
             MoreMenu(

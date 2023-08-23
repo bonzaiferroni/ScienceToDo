@@ -32,6 +32,12 @@ class EnumVm(
         }
     }
 
+    fun deleteEnumeration(enumeration: Enumeration) {
+        viewModelScope.launch {
+            enumRepository.enumerationDao.delete(enumeration)
+        }
+    }
+
     // New Enum
     val newEnumerationFunctions = EditFunctions(
         start = this::startNewEnumeration,
@@ -172,6 +178,9 @@ class EnumVm(
     }
 
     fun deleteEnumerator(enumerator: Enumerator) {
+        viewModelScope.launch {
+            enumRepository.enumeratorDao.delete(enumerator)
+        }
     }
 
     // new enumerator functions

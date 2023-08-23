@@ -55,7 +55,7 @@ fun StdIconButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     contentDescription: String? = null,
-    backgroundColor: Color = MaterialTheme.colorScheme.secondary
+    backgroundColor: Color = MaterialTheme.colorScheme.background
 ) {
     IconButton(
         onClick = onClick,
@@ -65,7 +65,7 @@ fun StdIconButton(
     ) {
         Icon(
             imageVector = imageVector,
-            tint = MaterialTheme.colorScheme.onSecondary,
+            tint = MaterialTheme.colorScheme.onBackground,
             contentDescription = contentDescription,
         )
     }
