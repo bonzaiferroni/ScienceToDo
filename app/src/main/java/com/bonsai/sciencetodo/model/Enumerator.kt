@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey
     tableName = "enumerator",
     foreignKeys = [
         ForeignKey(
-            entity = Variable::class,
+            entity = Enumeration::class,
             parentColumns = ["id"],
             childColumns = ["enumeration_id"],
             onDelete = ForeignKey.CASCADE

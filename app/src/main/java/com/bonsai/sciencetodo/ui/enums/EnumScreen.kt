@@ -2,16 +2,15 @@ package com.bonsai.sciencetodo.ui.enums
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -36,6 +35,8 @@ import com.bonsai.sciencetodo.data.fake.FakeEnumeratorDao
 import com.bonsai.sciencetodo.model.Enumeration
 import com.bonsai.sciencetodo.model.Enumerator
 import com.bonsai.sciencetodo.ui.AppVmProvider
+import com.bonsai.sciencetodo.ui.common.MoreMenu
+import com.bonsai.sciencetodo.ui.common.MoreMenuItem
 import com.bonsai.sciencetodo.ui.common.StdDialog
 import com.bonsai.sciencetodo.ui.common.StdIconButton
 import com.bonsai.sciencetodo.ui.common.StdRowCard
@@ -49,12 +50,14 @@ fun EnumScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    CreateEnumDialog(
-        uiState.newEnumName,
-        uiState.isValidEnumName,
-        viewModel::clearNewEnum,
-        viewModel::saveNewEnum,
-        viewModel::updateNewEnum,
+    NewEnumerationDialog(
+        uiState.newEnumeration,
+        viewModel.newEnumerationFunctions
+    )
+
+    CreateEnumeratorDialog(
+        uiState.newEnumerator,
+        viewModel.newEnumeratorFunctions
     )
 
     Scaffold(
@@ -62,7 +65,7 @@ fun EnumScreen(
             StdTopAppBar(title = "Enumerations")
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = viewModel::createNewEnum) {
+            FloatingActionButton(onClick = { viewModel.newEnumerationFunctions.start(Unit) }) {
                 Icon(Icons.Default.Add, contentDescription = "Create Enum")
             }
         }
@@ -71,39 +74,54 @@ fun EnumScreen(
             EnumList(
                 enumerations = uiState.enumerations,
                 enumeratorMap = uiState.enumeratorMap,
-                editingEnumeration = uiState.editingEnumeration,
-                editingEnumerator = uiState.editingEnumerator,
-                onEditEnumerationName = viewModel::editEnumerationName,
-                saveEnumerationName = viewModel::saveEditEnumeration,
-                onEditEnumeratorName = viewModel::editEnumeratorName,
-                onEditEnumeration = viewModel::editEnumeration,
-                onEditEnumerator = viewModel::editEnumerator,
+                enumerationNameEdit = uiState.enumerationNameEdit,
+                enumerationNameEditFunctions = viewModel.enumerationNameEditFunctions,
+                enumeratorNameEdit = uiState.enumeratorNameEdit,
+                enumeratorNameEditFunctions = viewModel.enumeratorNameEditFunctions,
                 onMoveEnumerator = viewModel::moveEnumerator,
                 onDeleteEnumerator = viewModel::deleteEnumerator,
+                onAddEnumerator = viewModel.newEnumeratorFunctions.start
             )
         }
     }
 }
 
 @Composable
-fun CreateEnumDialog(
-    newEnumName: String?,
-    isValidEnumName: Boolean,
-    onCancelDialog: () -> Unit,
-    onSaveDialog: () -> Unit,
-    onEditValue: (String) -> Unit,
-) {
-    if (newEnumName == null) return;
+fun NewEnumerationDialog(
+    newEnumeration: NewEnumeration?,
+    editFunctions: EditFunctions<Unit>
+    ) {
+    if (newEnumeration == null) return
 
     StdDialog(
         showDialog = true,
-        onDismiss = onCancelDialog,
-        onAccept = onSaveDialog,
-        enableAccept = isValidEnumName
+        onDismiss = editFunctions.clear,
+        onAccept = editFunctions.save,
+        enableAccept = newEnumeration.isValid
     ) {
         TextField(
-            value = newEnumName,
-            onValueChange = onEditValue
+            value = newEnumeration.name,
+            onValueChange = editFunctions.update
+        )
+    }
+}
+
+@Composable
+fun CreateEnumeratorDialog(
+    newEnumerator: NewEnumerator?,
+    editFunctions: EditFunctions<Int>
+) {
+    if (newEnumerator == null) return
+
+    StdDialog(
+        showDialog = true,
+        onDismiss = editFunctions.clear,
+        onAccept = editFunctions.save,
+        enableAccept = newEnumerator.isValid,
+    ) {
+        TextField(
+            value = newEnumerator.name,
+            onValueChange = editFunctions.update
         )
     }
 }
@@ -112,16 +130,14 @@ fun CreateEnumDialog(
 fun EnumList(
     enumerations: List<Enumeration>,
     enumeratorMap: Map<Int, List<Enumerator>>,
-    editingEnumeration: Pair<Int, String>?,
-    editingEnumerator: Pair<Int, String>?,
-    onEditEnumerationName: (String) -> Unit,
-    saveEnumerationName: () -> Unit,
-    onEditEnumeratorName: (String) -> Unit,
-    onEditEnumeration: (enumeration: Enumeration) -> Unit,
-    onEditEnumerator: (enumerator: Enumerator) -> Unit,
+    enumerationNameEdit: EnumerationNameEdit?,
+    enumerationNameEditFunctions: EditFunctions<Enumeration>,
+    enumeratorNameEdit: EnumeratorNameEdit?,
+    enumeratorNameEditFunctions: EditFunctions<Enumerator>,
     onMoveEnumerator: (enumerator: Enumerator, newIndex: Int) -> Unit,
     onDeleteEnumerator: (enumerator: Enumerator) -> Unit,
-    modifier: Modifier = Modifier
+    onAddEnumerator: (Int) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     LazyColumn(
         modifier = modifier
@@ -132,33 +148,22 @@ fun EnumList(
             Column(
                 verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.gap_small)),
             ) {
-                StdRowCard {
-                    if (editingEnumeration != null && editingEnumeration.first == enumeration.id) {
-                        TextField(
-                            value = editingEnumeration.second,
-                            onValueChange = onEditEnumerationName,
-                        )
-                    } else {
-                        Text(
-                            text = enumeration.name,
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                    }
-                    Spacer(modifier = Modifier.weight(1f))
-                    if (editingEnumeration != null && editingEnumeration.first == enumeration.id) {
-                        StdIconButton(Icons.Filled.Done, saveEnumerationName)
-                    } else {
-                        StdIconButton(Icons.Filled.Edit, { onEditEnumeration(enumeration) })
-                    }
-                }
+                EnumerationCard(
+                    enumeration = enumeration,
+                    enumerationNameEdit = enumerationNameEdit,
+                    editFunctions = enumerationNameEditFunctions,
+                )
                 EnumeratorList(
                     enumeration = enumeration,
                     enumeratorMap = enumeratorMap,
-                    editingEnumerator = editingEnumerator,
-                    onEditEnumeratorValue = onEditEnumeratorName,
-                    onEditEnumerator = onEditEnumerator,
+                    enumeratorNameEdit = enumeratorNameEdit,
+                    editFunctions = enumeratorNameEditFunctions,
                     onMoveEnumerator = onMoveEnumerator,
                     onDeleteEnumerator = onDeleteEnumerator,
+                )
+                EnumControls(
+                    enumerationId = enumeration.id,
+                    onAddEnumerator = onAddEnumerator
                 )
             }
         }
@@ -166,12 +171,42 @@ fun EnumList(
 }
 
 @Composable
+fun EnumerationCard(
+    enumeration: Enumeration,
+    enumerationNameEdit: EnumerationNameEdit?,
+    editFunctions: EditFunctions<Enumeration>
+) {
+    StdRowCard {
+        if (enumerationNameEdit != null && enumerationNameEdit.id == enumeration.id) {
+            TextField(
+                value = enumerationNameEdit.name,
+                onValueChange = editFunctions.update,
+            )
+            StdIconButton(Icons.Filled.Clear, editFunctions.clear )
+            StdIconButton(Icons.Filled.Done, editFunctions.save)
+
+        } else {
+            Text(
+                text = enumeration.name,
+                style = MaterialTheme.typography.titleLarge
+            )
+        }
+        Spacer(modifier = Modifier.weight(1f))
+
+        MoreMenu(
+            listOf(
+                MoreMenuItem("edit name") { editFunctions.start(enumeration) }
+            )
+        )
+    }
+}
+
+@Composable
 fun EnumeratorList(
     enumeration: Enumeration,
     enumeratorMap: Map<Int, List<Enumerator>>,
-    editingEnumerator: Pair<Int, String>?,
-    onEditEnumeratorValue: (String) -> Unit,
-    onEditEnumerator: (enumerator: Enumerator) -> Unit,
+    enumeratorNameEdit: EnumeratorNameEdit?,
+    editFunctions: EditFunctions<Enumerator>,
     onMoveEnumerator: (enumerator: Enumerator, newIndex: Int) -> Unit,
     onDeleteEnumerator: (enumerator: Enumerator) -> Unit,
 ) {
@@ -180,32 +215,47 @@ fun EnumeratorList(
     enumeratorList.indices.forEach { index ->
         val enumerator = enumeratorList[index]
         StdRowCard(
-            modifier = Modifier.padding(start = dimensionResource(R.dimen.indent))
+            modifier = Modifier.padding(start = dimensionResource(R.dimen.indent)),
         ) {
-            if (editingEnumerator != null && editingEnumerator.first == enumerator.id) {
+            if (enumeratorNameEdit != null && enumeratorNameEdit.id == enumerator.id) {
                 TextField(
-                    value = editingEnumerator.second,
-                    onValueChange = onEditEnumeratorValue,
+                    value = enumeratorNameEdit.name,
+                    onValueChange = editFunctions.update,
                 )
+                Spacer(modifier = Modifier.weight(1f))
+                StdIconButton(imageVector = Icons.Filled.Clear, onClick = editFunctions.clear )
+                StdIconButton(imageVector = Icons.Filled.Done, onClick = editFunctions.save )
             } else {
                 Text(
                     text = enumerator.name
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
-            StdIconButton(Icons.Filled.Edit, { onEditEnumerator(enumerator) })
+            val menuItems = mutableListOf(
+                MoreMenuItem("edit name") { editFunctions.start(enumerator) },
+                MoreMenuItem("delete") { onDeleteEnumerator(enumerator) },
+            )
             if (index > 0) {
-                StdIconButton(
-                    Icons.Filled.KeyboardArrowUp,
-                    { onMoveEnumerator(enumerator, index - 1) })
+                menuItems.add(MoreMenuItem("move up") {onMoveEnumerator(enumerator, index - 1)})
             }
-            if (index < enumeratorMap.size - 1) {
-                StdIconButton(
-                    Icons.Filled.KeyboardArrowDown,
-                    { onMoveEnumerator(enumerator, index + 1) })
+            if (index < enumeratorList.size - 1) {
+                menuItems.add(MoreMenuItem("move down") {onMoveEnumerator(enumerator, index + 1)})
             }
-            StdIconButton(Icons.Filled.KeyboardArrowDown, { onDeleteEnumerator(enumerator) })
+
+            MoreMenu(
+                moreMenuItems = menuItems
+            )
         }
+    }
+}
+
+@Composable
+fun EnumControls(
+    enumerationId: Int,
+    onAddEnumerator: (Int) -> Unit,
+) {
+    Row() {
+        StdIconButton(Icons.Filled.Add, { onAddEnumerator(enumerationId)})
     }
 }
 

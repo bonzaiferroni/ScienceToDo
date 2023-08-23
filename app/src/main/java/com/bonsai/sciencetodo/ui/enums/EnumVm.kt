@@ -33,55 +33,72 @@ class EnumVm(
     }
 
     // New Enum
-    fun createNewEnum() {
+    val newEnumerationFunctions = EditFunctions(
+        start = this::startNewEnumeration,
+        update = this::updateNewEnumeration,
+        clear = this::clearNewEnumeration,
+        save = this::saveNewEnumeration,
+    )
+
+    private fun startNewEnumeration(unit: Unit) {
         _uiState.value = _uiState.value.copy(
-            newEnumName = "",
-            isValidEnumName = false,
+            newEnumeration = NewEnumeration(""),
         )
     }
 
-    fun clearNewEnum() {
-        updateNewEnum(null)
+    private fun clearNewEnumeration() {
+        _uiState.value = _uiState.value.copy(
+            newEnumeration = null
+        )
     }
 
-    fun saveNewEnum() {
-        val name = _uiState.value.newEnumName
+    private fun saveNewEnumeration() {
+        val newEnumeration = _uiState.value.newEnumeration
             ?: throw IllegalStateException("No new enum name to save")
-        if (name.isBlank())
+        if (!newEnumeration.isValid)
             throw IllegalStateException("New enum name cannot be blank")
 
-        val enumeration = Enumeration(0, name)
+        val enumeration = Enumeration(0, newEnumeration.name)
         viewModelScope.launch {
             enumRepository.enumerationDao.insert(enumeration)
-            clearNewEnum()
+            clearNewEnumeration()
         }
     }
 
-    fun updateNewEnum(name: String?) {
+    private fun updateNewEnumeration(name: String) {
         _uiState.value = _uiState.value.copy(
-            newEnumName = name,
-            isValidEnumName = !name.isNullOrBlank()
+            newEnumeration = NewEnumeration(name),
         )
     }
 
-    // edit enumeration
-    fun editEnumeration(enumeration: Enumeration) {
+    // enumeration name edit
+    val enumerationNameEditFunctions = EditFunctions(
+        start = this::startEnumerationNameEdit,
+        update = this::updateEnumerationNameEdit,
+        clear = this::clearEnumerationNameEdit,
+        save = this::saveEnumerationNameEdit,
+    )
+
+    private fun startEnumerationNameEdit(enumeration: Enumeration) {
         _uiState.value = _uiState.value.copy(
-            editingEnumeration = Pair(enumeration.id, enumeration.name)
+            enumerationNameEdit = EnumerationNameEdit(enumeration.id, enumeration.name)
         )
     }
 
-    fun editEnumerationName(name: String) {
-        val (id, _) = uiState.value.editingEnumeration
+    private fun updateEnumerationNameEdit(name: String) {
+        val (id, _) = uiState.value.enumerationNameEdit
             ?: throw IllegalStateException("No edited enumeration")
         _uiState.value = _uiState.value.copy(
-            editingEnumeration = Pair(id, name)
+            enumerationNameEdit = EnumerationNameEdit(id, name)
         )
     }
 
-    fun saveEditEnumeration() {
-        val (id, name) = uiState.value.editingEnumeration
-            ?: throw IllegalStateException("No edited enumeration to save")
+    private fun saveEnumerationNameEdit() {
+        val editEnumerationName = uiState.value.enumerationNameEdit
+            ?: throw IllegalStateException("editEnumerationName is null")
+        if (!editEnumerationName.isValid)
+            throw IllegalStateException("Invalid EnumerationNameEdit")
+        val (id, name) = editEnumerationName
         var enumeration = uiState.value.enumerations
             .firstOrNull { it.id == id }
             ?: throw IllegalStateException("No enumeration with id: $id")
@@ -92,35 +109,44 @@ class EnumVm(
 
         viewModelScope.launch {
             enumRepository.enumerationDao.update(enumeration)
-            clearEditEnumeration()
+            clearEnumerationNameEdit()
         }
     }
 
-    fun clearEditEnumeration() {
+    private fun clearEnumerationNameEdit() {
         _uiState.value = uiState.value.copy(
-            editingEnumeration = null
+            enumerationNameEdit = null
         )
     }
 
-    // edit Enumerator
-    fun editEnumerator(enumerator: Enumerator) {
+    // enumerator name edit
+    val enumeratorNameEditFunctions = EditFunctions(
+        start = this::startEnumeratorNameEdit,
+        update = this::updateEnumeratorNameEdit,
+        clear = this::clearEnumeratorNameEdit,
+        save = this::saveEnumeratorNameEdit
+    )
+
+    private fun startEnumeratorNameEdit(enumerator: Enumerator) {
         _uiState.value = _uiState.value.copy(
-            editingEnumerator = Pair(enumerator.id, enumerator.name)
+            enumeratorNameEdit = EnumeratorNameEdit(enumerator.id, enumerator.name)
         )
     }
 
-    fun editEnumeratorName(name: String) {
-        val (id, _) = uiState.value.editingEnumerator
+    private fun updateEnumeratorNameEdit(name: String) {
+        val (id, _) = uiState.value.enumeratorNameEdit
             ?: throw IllegalStateException("No editing enumerator")
 
         _uiState.value = _uiState.value.copy(
-            editingEnumerator = Pair(id, name)
+            enumeratorNameEdit = EnumeratorNameEdit(id, name)
         )
     }
 
-    fun saveEditEnumerator() {
-        val (id, name) = uiState.value.editingEnumerator
-            ?: throw IllegalStateException("No editing enumerator to save")
+    private fun saveEnumeratorNameEdit() {
+        val editEnumeratorName = uiState.value.enumeratorNameEdit
+        if (editEnumeratorName?.isValid != true)
+            throw IllegalStateException("EditEnumerationName is invalid")
+        val (id, name) = editEnumeratorName
         var enumerator = uiState.value.enumeratorMap.values
             .flatten()
             .firstOrNull { it.id == id }
@@ -132,13 +158,13 @@ class EnumVm(
 
         viewModelScope.launch {
             enumRepository.enumeratorDao.update(enumerator)
-            clearEditEnumerator()
+            clearEnumeratorNameEdit()
         }
     }
 
-    fun clearEditEnumerator() {
+    private fun clearEnumeratorNameEdit() {
         _uiState.value = uiState.value.copy(
-            editingEnumerator = null
+            enumeratorNameEdit = null
         )
     }
 
@@ -146,15 +172,77 @@ class EnumVm(
     }
 
     fun deleteEnumerator(enumerator: Enumerator) {
+    }
 
+    // new enumerator functions
+    val newEnumeratorFunctions = EditFunctions(
+        start = this::startNewEnumerator,
+        update = this::updateNewEnumerator,
+        save = this::saveNewEnumerator,
+        clear = this::clearNewEnumerator,
+    )
+
+    private fun startNewEnumerator(enumerationId: Int) {
+        _uiState.value = _uiState.value.copy(
+            newEnumerator = NewEnumerator(enumerationId, "")
+        )
+    }
+
+    private fun clearNewEnumerator() {
+        _uiState.value = _uiState.value.copy(
+            newEnumerator = null
+        )
+    }
+
+    private fun saveNewEnumerator() {
+        val newEnumerator = _uiState.value.newEnumerator
+        if (newEnumerator?.isValid != true)
+            throw IllegalStateException("newEnumerator name is not valid")
+
+        val enumerator = Enumerator(0, newEnumerator.enumerationId, newEnumerator.name)
+
+        viewModelScope.launch {
+            enumRepository.enumeratorDao.insert(enumerator)
+            clearNewEnumerator()
+        }
+    }
+
+    private fun updateNewEnumerator(name: String) {
+        val newEnumerator = _uiState.value.newEnumerator
+            ?: throw IllegalStateException("newEnumerator data is null")
+
+        _uiState.value = _uiState.value.copy(
+            newEnumerator = newEnumerator.copy(
+                name = name,
+            )
+        )
     }
 }
 
 data class EnumState(
     val enumerations: List<Enumeration> = emptyList(),
     val enumeratorMap: Map<Int, List<Enumerator>> = emptyMap(),
-    val newEnumName: String? = null,
-    val isValidEnumName: Boolean = false,
-    val editingEnumeration: Pair<Int, String>? = null,
-    val editingEnumerator: Pair<Int, String>? = null,
+    val newEnumeration: NewEnumeration? = null,
+    val enumerationNameEdit: EnumerationNameEdit? = null,
+    val newEnumerator: NewEnumerator? = null,
+    val enumeratorNameEdit: EnumeratorNameEdit? = null,
 )
+
+data class NewEnumeration(override val name: String) : ValidateName
+data class EnumerationNameEdit(val id: Int, override val name: String) : ValidateName
+data class NewEnumerator(val enumerationId: Int, override val name: String) : ValidateName
+data class EnumeratorNameEdit(val id: Int, override val name: String) : ValidateName
+
+data class EditFunctions<T>(
+    val start: (T) -> Unit = { },
+    val update: (String) -> Unit = { },
+    val clear: () -> Unit = { },
+    val save: () -> Unit = { },
+)
+
+interface ValidateName {
+    val name: String
+
+    val isValid: Boolean
+        get() = name.isNotBlank()
+}

@@ -17,7 +17,8 @@ import com.bonsai.sciencetodo.R
 @Composable
 fun StdRowCard(
     modifier: Modifier = Modifier,
-    content: @Composable RowScope.() -> Unit,
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.spacedBy(dimensionResource(R.dimen.gap_medium)),
+    content: @Composable RowScope.() -> Unit
 ) {
     Card(
         modifier = modifier
@@ -25,7 +26,7 @@ fun StdRowCard(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.gap_medium)),
+            horizontalArrangement = horizontalArrangement,
             modifier = Modifier
                 .padding(dimensionResource(R.dimen.padding_small))
         ) {
