@@ -49,7 +49,7 @@ fun StdDialog(
                 verticalArrangement = Arrangement
                     .spacedBy(dimensionResource(R.dimen.gap_large)),
                 modifier = modifier
-                    .padding(dimensionResource(R.dimen.padding_medium))
+                    .padding(dimensionResource(R.dimen.padding_medium)),
             ) {
                 if (headerText != null) {
                     Text(

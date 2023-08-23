@@ -3,6 +3,7 @@ package com.bonsai.sciencetodo.ui.enums
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -101,7 +102,9 @@ fun NewEnumerationDialog(
     ) {
         TextField(
             value = newEnumeration.name,
-            onValueChange = editFunctions.update
+            onValueChange = editFunctions.update,
+            label = { Text(text = "new enumeration")},
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }
@@ -121,7 +124,9 @@ fun CreateEnumeratorDialog(
     ) {
         TextField(
             value = newEnumerator.name,
-            onValueChange = editFunctions.update
+            onValueChange = editFunctions.update,
+            label = { Text(text = "new enum member")},
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }
