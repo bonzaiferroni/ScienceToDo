@@ -26,7 +26,9 @@ class EnumVm(
         viewModelScope.launch {
             enumRepository.enumeratorDao.getAll().collect { enumerators ->
                 _uiState.value = _uiState.value.copy(
-                    enumeratorMap = enumerators.groupBy { it.enumerationId }
+                    enumeratorMap = enumerators
+                        .groupBy { it.enumerationId }
+                        .mapValues { (_, list) -> list.sortedBy { it.orderIndex } }
                 )
             }
         }
@@ -174,7 +176,31 @@ class EnumVm(
         )
     }
 
-    fun moveEnumerator(enumerator: Enumerator, index: Int) {
+    fun moveEnumerator(enumerator: Enumerator, newOrderIndex: Int) {
+        val enumerators = uiState.value.enumeratorMap[enumerator.enumerationId]
+            ?: throw IllegalStateException("Enumeration Id ${enumerator.enumerationId} not found")
+
+        val moveUp = newOrderIndex < enumerator.orderIndex
+
+        val updatedEnumerators = enumerators.map { otherEnumerator ->
+            val (id, enumerationId, name, orderIndex) = otherEnumerator
+            val updatedOrderIndex = if (id == enumerator.id) {
+                newOrderIndex
+            } else if (orderIndex == newOrderIndex) {
+                if (moveUp) {
+                    orderIndex + 1
+                } else {
+                    orderIndex - 1
+                }
+            } else {
+                orderIndex
+            }
+            Enumerator(id, enumerationId, name, updatedOrderIndex)
+        }
+
+        viewModelScope.launch {
+            enumRepository.enumeratorDao.updateAll(updatedEnumerators)
+        }
     }
 
     fun deleteEnumerator(enumerator: Enumerator) {
@@ -207,8 +233,11 @@ class EnumVm(
         val newEnumerator = _uiState.value.newEnumerator
         if (newEnumerator?.isValid != true)
             throw IllegalStateException("newEnumerator name is not valid")
+        val (enumerationId, name) = newEnumerator
+        val enumeratorListSize = uiState.value.enumeratorMap[enumerationId]?.size
+            ?: 0
 
-        val enumerator = Enumerator(0, newEnumerator.enumerationId, newEnumerator.name)
+        val enumerator = Enumerator(0, enumerationId, name, enumeratorListSize)
 
         viewModelScope.launch {
             enumRepository.enumeratorDao.insert(enumerator)
@@ -237,10 +266,24 @@ data class EnumState(
     val enumeratorNameEdit: EnumeratorNameEdit? = null,
 )
 
-data class NewEnumeration(override val name: String) : ValidateName
-data class EnumerationNameEdit(val id: Int, override val name: String) : ValidateName
-data class NewEnumerator(val enumerationId: Int, override val name: String) : ValidateName
-data class EnumeratorNameEdit(val id: Int, override val name: String) : ValidateName
+data class NewEnumeration(
+    override val name: String
+) : ValidateName
+
+data class EnumerationNameEdit(
+    val id: Int,
+    override val name: String
+) : ValidateName
+
+data class NewEnumerator(
+    val enumerationId: Int,
+    override val name: String,
+) : ValidateName
+
+data class EnumeratorNameEdit(
+    val id: Int,
+    override val name: String
+) : ValidateName
 
 data class EditFunctions<T>(
     val start: (T) -> Unit = { },

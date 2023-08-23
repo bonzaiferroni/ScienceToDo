@@ -32,6 +32,10 @@ class FakeEnumeratorDao : EnumeratorDao {
         TODO("Not yet implemented")
     }
 
+    override suspend fun updateAll(enumerators: List<Enumerator>): Int {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun delete(enumerator: Enumerator) {
         TODO("Not yet implemented")
     }

@@ -29,6 +29,9 @@ interface EnumeratorDao {
     @Update
     suspend fun update(enumerator: Enumerator)
 
+    @Update
+    suspend fun updateAll(enumerators: List<Enumerator>): Int
+
     @Delete
     suspend fun delete(enumerator: Enumerator)
 

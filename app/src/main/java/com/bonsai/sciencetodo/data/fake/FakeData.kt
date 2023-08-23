@@ -47,10 +47,11 @@ object FakeData {
     val fakeEnumerators by lazy {
         val enumeration = fakeEnumerations.first { it.name == "Meal"}
         var id = 0
+        var orderIndex = 0
         listOf(
-            Enumerator(++id, enumeration.id, "Breakfast"),
-            Enumerator(++id, enumeration.id, "Lunch"),
-            Enumerator(++id, enumeration.id, "Dinner"),
+            Enumerator(++id, enumeration.id, "Breakfast", orderIndex++),
+            Enumerator(++id, enumeration.id, "Lunch", orderIndex++),
+            Enumerator(++id, enumeration.id, "Dinner", orderIndex),
         )
     }
 

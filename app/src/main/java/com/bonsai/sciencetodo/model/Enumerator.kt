@@ -24,4 +24,5 @@ data class Enumerator(
     @ColumnInfo(name = "enumeration_id")
     val enumerationId: Int,
     val name: String,
+    val orderIndex: Int,
 )
