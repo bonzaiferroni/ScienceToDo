@@ -74,6 +74,7 @@ fun EnumScreen(
                 editingEnumeration = uiState.editingEnumeration,
                 editingEnumerator = uiState.editingEnumerator,
                 onEditEnumerationName = viewModel::editEnumerationName,
+                saveEnumerationName = viewModel::saveEditEnumeration,
                 onEditEnumeratorName = viewModel::editEnumeratorName,
                 onEditEnumeration = viewModel::editEnumeration,
                 onEditEnumerator = viewModel::editEnumerator,
@@ -114,6 +115,7 @@ fun EnumList(
     editingEnumeration: Pair<Int, String>?,
     editingEnumerator: Pair<Int, String>?,
     onEditEnumerationName: (String) -> Unit,
+    saveEnumerationName: () -> Unit,
     onEditEnumeratorName: (String) -> Unit,
     onEditEnumeration: (enumeration: Enumeration) -> Unit,
     onEditEnumerator: (enumerator: Enumerator) -> Unit,
@@ -144,7 +146,7 @@ fun EnumList(
                     }
                     Spacer(modifier = Modifier.weight(1f))
                     if (editingEnumeration != null && editingEnumeration.first == enumeration.id) {
-                        StdIconButton(Icons.Filled.Done, { onEditEnumeration(enumeration) })
+                        StdIconButton(Icons.Filled.Done, saveEnumerationName)
                     } else {
                         StdIconButton(Icons.Filled.Edit, { onEditEnumeration(enumeration) })
                     }

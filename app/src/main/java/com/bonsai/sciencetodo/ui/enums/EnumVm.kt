@@ -75,7 +75,7 @@ class EnumVm(
         val (id, _) = uiState.value.editingEnumeration
             ?: throw IllegalStateException("No edited enumeration")
         _uiState.value = _uiState.value.copy(
-            editingEnumerator = Pair(id, name)
+            editingEnumeration = Pair(id, name)
         )
     }
 
