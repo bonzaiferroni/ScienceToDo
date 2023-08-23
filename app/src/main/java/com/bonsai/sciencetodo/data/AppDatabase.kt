@@ -33,7 +33,7 @@ import com.bonsai.sciencetodo.model.Variable
         DataFlow::class, Variable::class, Observation::class,
         Enumeration::class, Enumerator::class, EnumValue:: class, EnumVarJoin::class,
         StringValue::class, IntValue::class, FloatValue::class, BooleanValue::class],
-    version = 8
+    version = 9
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {

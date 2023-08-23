@@ -1,6 +1,8 @@
 package com.bonsai.sciencetodo.ui.common
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,7 +15,7 @@ import androidx.compose.ui.res.dimensionResource
 import com.bonsai.sciencetodo.R
 
 @Composable
-fun StdCard(
+fun StdRowCard(
     modifier: Modifier = Modifier,
     content: @Composable RowScope.() -> Unit,
 ) {
@@ -24,6 +26,25 @@ fun StdCard(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.gap_medium)),
+            modifier = Modifier
+                .padding(dimensionResource(R.dimen.padding_small))
+        ) {
+            content()
+        }
+    }
+}
+
+@Composable
+fun StdColumnCard(
+    modifier: Modifier = Modifier,
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+    ) {
+        Column (
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.gap_medium)),
             modifier = Modifier
                 .padding(dimensionResource(R.dimen.padding_small))
         ) {

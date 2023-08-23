@@ -37,9 +37,9 @@ import com.bonsai.sciencetodo.data.fake.FakeVariableDao
 import com.bonsai.sciencetodo.model.DataFlow
 import com.bonsai.sciencetodo.ui.AppScreens
 import com.bonsai.sciencetodo.ui.AppVmProvider
-import com.bonsai.sciencetodo.ui.StdTopAppBar
-import com.bonsai.sciencetodo.ui.common.StdCard
 import com.bonsai.sciencetodo.ui.common.StdIconButton
+import com.bonsai.sciencetodo.ui.common.StdRowCard
+import com.bonsai.sciencetodo.ui.common.StdTopAppBar
 import com.bonsai.sciencetodo.ui.datavalues.ObservationDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -72,7 +72,7 @@ fun HomeScreen(
             StdTopAppBar(title = "Science ToDo") {
                 DropdownMenuItem(
                     text = { Text("Create Enum") },
-                    onClick = {  }
+                    onClick = { navController?.navigate(AppScreens.Enum.name) }
                 )
             }
         },
@@ -115,7 +115,7 @@ fun DataFlowList(
             .fillMaxSize()
     ) {
         items(dataFlows) { dataFlow ->
-            StdCard {
+            StdRowCard {
                 Text(
                     text = dataFlow.name,
                     style = MaterialTheme.typography.titleLarge

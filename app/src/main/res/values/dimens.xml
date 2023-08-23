@@ -5,5 +5,6 @@
     <dimen name="padding_large">24dp</dimen>
     <dimen name="gap_small">4dp</dimen>
     <dimen name="gap_medium">8dp</dimen>
-    <dimen name="gap_large">16.dp</dimen>
+    <dimen name="gap_large">16dp</dimen>
+    <dimen name="indent">32dp</dimen>
 </resources>

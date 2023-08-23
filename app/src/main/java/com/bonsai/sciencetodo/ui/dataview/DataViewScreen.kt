@@ -17,7 +17,7 @@ import com.bonsai.sciencetodo.R
 import com.bonsai.sciencetodo.data.DataRepository
 import com.bonsai.sciencetodo.ui.AppScreens
 import com.bonsai.sciencetodo.ui.AppVmProvider
-import com.bonsai.sciencetodo.ui.StdTopAppBar
+import com.bonsai.sciencetodo.ui.common.StdTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

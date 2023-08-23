@@ -35,12 +35,12 @@ import com.bonsai.sciencetodo.model.Variable
 import com.bonsai.sciencetodo.model.VariableType
 import com.bonsai.sciencetodo.ui.AppScreens
 import com.bonsai.sciencetodo.ui.AppVmProvider
-import com.bonsai.sciencetodo.ui.StdTopAppBar
 import com.bonsai.sciencetodo.ui.common.EnumDropdown
 import com.bonsai.sciencetodo.ui.common.RowTextButton
-import com.bonsai.sciencetodo.ui.common.StdCard
 import com.bonsai.sciencetodo.ui.common.StdDialog
 import com.bonsai.sciencetodo.ui.common.StdIconButton
+import com.bonsai.sciencetodo.ui.common.StdRowCard
+import com.bonsai.sciencetodo.ui.common.StdTopAppBar
 import com.bonsai.sciencetodo.ui.datavalues.ObservationDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -141,7 +141,7 @@ fun VariableCard(
     onRemoveVariable: (variable: Variable) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    StdCard(modifier = modifier) {
+    StdRowCard(modifier = modifier) {
         Text(text = variable.name)
         Spacer(modifier = Modifier.weight(1f))
         Text(
