@@ -223,10 +223,10 @@ fun ValueField(
 
 @Composable
 fun AutoCompleteTextField(
+    text: String,
     suggestions: List<String>,
     onValueChanged: (String) -> Unit
 ) {
-    var text by remember { mutableStateOf("") }
     var isDropdownExpanded by remember { mutableStateOf(true) }
 
     // Box is used to overlap the dropdown on the UI
@@ -234,7 +234,6 @@ fun AutoCompleteTextField(
         TextField(
             value = text,
             onValueChange = {
-                text = it
                 isDropdownExpanded = true
                 onValueChanged(it)
             },
@@ -257,7 +256,6 @@ fun AutoCompleteTextField(
                 DropdownMenuItem(
                     text = { Text(suggestion) },
                     onClick = {
-                        text = suggestion
                         isDropdownExpanded = false
                         onValueChanged(suggestion)
                     }

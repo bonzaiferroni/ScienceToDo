@@ -177,6 +177,7 @@ fun AddVariableControl(
         )
         if (newVariable.variableType == VariableType.Enum) {
             AutoCompleteTextField(
+                text = newVariable.enumName,
                 suggestions = newVariable.enumSuggestions,
                 onValueChanged = newVariableFunctions::updateEnum
             )
