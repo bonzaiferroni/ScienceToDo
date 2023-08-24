@@ -28,6 +28,7 @@ object AppVmProvider {
                 scienceToDoApplication().database.datasetDao(),
                 scienceToDoApplication().database.variableDao(),
                 scienceToDoApplication().observationRepository,
+                scienceToDoApplication().enumRepository,
             )
         }
         initializer {

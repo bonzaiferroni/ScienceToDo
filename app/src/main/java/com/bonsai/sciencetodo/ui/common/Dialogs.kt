@@ -37,7 +37,8 @@ fun StdDialog(
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(
-            dismissOnClickOutside = false
+            dismissOnClickOutside = false,
+            usePlatformDefaultWidth = false,
         )
     ) {
         Surface(

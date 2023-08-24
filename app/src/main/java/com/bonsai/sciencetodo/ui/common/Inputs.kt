@@ -1,16 +1,19 @@
 package com.bonsai.sciencetodo.ui.common
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,8 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -27,6 +28,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.PopupProperties
 import com.bonsai.sciencetodo.R
 import com.chargemap.compose.numberpicker.ListItemPicker
 import com.chargemap.compose.numberpicker.NumberPicker
@@ -219,33 +221,50 @@ fun ValueField(
     )
 }
 
-// unable to get focusRequester working
 @Composable
-fun ValueField_Alpha(
-    value: String,
-    label: String,
-    keyboardType: KeyboardType,
-    onValueChange: (String) -> Unit,
-    focusRequester: FocusRequester,
-    nextFocusRequester: FocusRequester?,
-    imeAction: ImeAction
+fun AutoCompleteTextField(
+    suggestions: List<String>,
+    onValueSelected: (String) -> Unit
 ) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = { Text(label) },
-        singleLine = true,
-        keyboardOptions = KeyboardOptions.Default.copy(
-            keyboardType = keyboardType,
-            imeAction = imeAction
-        ),
-        keyboardActions = KeyboardActions(
-            onNext = {
-                nextFocusRequester?.requestFocus()
+    var text by remember { mutableStateOf("") }
+    var isDropdownExpanded by remember { mutableStateOf(true) }
+    val filteredSuggestions = suggestions.filter { it.contains(text, true) }
+
+    // Box is used to overlap the dropdown on the UI
+    Box {
+        TextField(
+            value = text,
+            onValueChange = {
+                text = it
+                isDropdownExpanded = true
+            },
+            label = { Text("Enter text") },
+            modifier = Modifier
+                .fillMaxWidth()
+        )
+
+        // Display suggestions
+        DropdownMenu(
+            expanded = isDropdownExpanded && filteredSuggestions.isNotEmpty(),
+            properties = PopupProperties(
+                focusable = false,
+                dismissOnBackPress = true,
+                dismissOnClickOutside = true
+            ),
+            onDismissRequest = { isDropdownExpanded = false }
+        ) {
+            filteredSuggestions.forEach { suggestion ->
+                DropdownMenuItem(
+                    text = { Text(suggestion) },
+                    onClick = {
+                        text = suggestion
+                        isDropdownExpanded = false
+                        onValueSelected(suggestion)
+                    }
+                )
             }
-        ),
-        modifier = Modifier.focusRequester(focusRequester)
-    )
+        }
+    }
 }
 
 @Preview(showBackground = true)

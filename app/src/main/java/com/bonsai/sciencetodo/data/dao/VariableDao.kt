@@ -24,7 +24,7 @@ interface VariableDao {
     fun getByName(name: String): Flow<Variable>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(variable: Variable)
+    suspend fun insert(variable: Variable): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(variables: List<Variable>)

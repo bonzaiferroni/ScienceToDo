@@ -28,13 +28,16 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.bonsai.sciencetodo.R
+import com.bonsai.sciencetodo.data.EnumRepository
 import com.bonsai.sciencetodo.data.ObservationRepository
 import com.bonsai.sciencetodo.data.fake.FakeDatasetDao
 import com.bonsai.sciencetodo.data.fake.FakeVariableDao
+import com.bonsai.sciencetodo.model.Enumeration
 import com.bonsai.sciencetodo.model.Variable
 import com.bonsai.sciencetodo.model.VariableType
 import com.bonsai.sciencetodo.ui.AppScreens
 import com.bonsai.sciencetodo.ui.AppVmProvider
+import com.bonsai.sciencetodo.ui.common.AutoCompleteTextField
 import com.bonsai.sciencetodo.ui.common.EnumDropdown
 import com.bonsai.sciencetodo.ui.common.RowTextButton
 import com.bonsai.sciencetodo.ui.common.StdDialog
@@ -55,6 +58,7 @@ fun DatasetScreen(
         val route = AppScreens.DataView.getRoute(datasetId)
         navController?.navigate(route)
     }
+    val newVariableFunctions = viewModel.NewVariableFunctions()
 
     ObservationDialog(
         viewModel::saveDataDialog,
@@ -79,17 +83,13 @@ fun DatasetScreen(
             DataButtons(
                 viewModel::openDataDialog,
                 { onOpenDataView(uiState.dataset.id) },
-                viewModel::openAddVariableDialog
+                newVariableFunctions::start
             )
             VariableList(uiState.variables, viewModel::removeVariable)
             AddVariableControl(
-                showDialog = uiState.showAddVariableDialog,
-                newVariableName = uiState.newVariableName,
-                newVariableType = uiState.newVariableType,
-                updateVariableName = viewModel::updateVariableName,
-                updateVariableType = viewModel::updateVariableType,
-                onCloseDialog = viewModel::cancelAddVariableDialog,
-                onAccept = viewModel::addVariable
+                uiState.newVariable,
+                newVariableFunctions,
+                enumerations = uiState.enumerations,
             )
         }
     }
@@ -155,33 +155,33 @@ fun VariableCard(
 
 @Composable
 fun AddVariableControl(
-    showDialog: Boolean,
-    newVariableName: String,
-    newVariableType: VariableType,
-    updateVariableType: (variableType: VariableType) -> Unit,
-    updateVariableName: (variableName: String) -> Unit,
-    onCloseDialog: () -> Unit,
-    onAccept: () -> Unit,
+    newVariable: NewVariable?,
+    newVariableFunctions: DatasetVm.NewVariableFunctions,
+    enumerations: List<Enumeration>
 ) {
-    val enableAccept = newVariableType != VariableType.Undefined && newVariableName.isNotBlank()
+    if (newVariable == null) return
 
     StdDialog(
-        showDialog = showDialog,
-        onDismiss = onCloseDialog,
-        onAccept = onAccept,
+        showDialog = true,
+        onDismiss = newVariableFunctions::clear,
+        onAccept = newVariableFunctions::save,
         headerText = "add variable",
-        enableAccept = enableAccept
+        enableAccept = newVariable.isValid
     ) {
         TextField(
-            value = newVariableName,
-            onValueChange = updateVariableName,
+            value = newVariable.name,
+            onValueChange = newVariableFunctions::updateName,
             modifier = Modifier.fillMaxWidth(),
             label = { Text(text = "add variable") }
         )
         EnumDropdown<VariableType>(
-            selectedValue = newVariableType,
-            onSelectValue = updateVariableType,
+            selectedValue = newVariable.variableType,
+            onSelectValue = newVariableFunctions::updateType,
         )
+        if (newVariable.variableType == VariableType.Enum) {
+            val enumerationNames = enumerations.map { it.name }
+            AutoCompleteTextField(suggestions = enumerationNames, onValueSelected = { })
+        }
     }
 }
 
@@ -212,7 +212,8 @@ fun PreviewDatasetScreen() {
             datasetDao = FakeDatasetDao(),
             variableDao = FakeVariableDao(),
             savedStateHandle = savedStateHandle,
-            observationRepository = ObservationRepository.getFake()
+            observationRepository = ObservationRepository.getFake(),
+            enumRepository = EnumRepository.getFake(),
         )
     )
 }

@@ -35,6 +35,7 @@ import com.bonsai.sciencetodo.data.fake.FakeEnumeratorDao
 import com.bonsai.sciencetodo.model.Enumeration
 import com.bonsai.sciencetodo.model.Enumerator
 import com.bonsai.sciencetodo.ui.AppVmProvider
+import com.bonsai.sciencetodo.ui.common.EditFunctions
 import com.bonsai.sciencetodo.ui.common.MoreMenu
 import com.bonsai.sciencetodo.ui.common.MoreMenuItem
 import com.bonsai.sciencetodo.ui.common.StdDialog

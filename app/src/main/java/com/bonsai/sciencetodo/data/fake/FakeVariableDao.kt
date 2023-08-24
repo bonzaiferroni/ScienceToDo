@@ -24,7 +24,7 @@ class FakeVariableDao : VariableDao {
         TODO("Not yet implemented")
     }
 
-    override suspend fun insert(variable: Variable) {
+    override suspend fun insert(variable: Variable):Long {
         TODO("Not yet implemented")
     }
 
