@@ -94,9 +94,18 @@ class DatasetVm(
 
     inner class NewVariableFunctions {
 
-        fun start() { newVariableState = NewVariable() }
+        private val enumSuggestions: List<String>
+            get() = uiState.value.enumerations.map { it.name }
 
-        fun clear() { newVariableState = null }
+        fun start() {
+            newVariableState = NewVariable(
+                enumSuggestions = enumSuggestions
+            )
+        }
+
+        fun clear() {
+            newVariableState = null
+        }
 
         fun updateName(name: String) {
             newVariableState = newVariableState?.copy(name = name)
@@ -106,8 +115,15 @@ class DatasetVm(
             newVariableState = newVariableState?.copy(variableType = variableType)
         }
 
-        fun updateEnumId(enumerationId: Int?) {
-            newVariableState = newVariableState?.copy(enumerationId = enumerationId)
+        fun updateEnum(enumName: String) {
+            val suggestions = enumSuggestions.filter { it.contains(enumName, true) }
+            val enumeration = uiState.value.enumerations.firstOrNull() {
+                it.name.uppercase() == enumName.uppercase()
+            }
+            newVariableState = newVariableState?.copy(
+                enumerationId = enumeration?.id,
+                enumSuggestions = suggestions
+            )
         }
 
         fun save() {
@@ -149,6 +165,7 @@ data class NewVariable(
     val name: String = "",
     val variableType: VariableType = VariableType.Undefined,
     val enumerationId: Int? = null,
+    val enumSuggestions: List<String> = emptyList()
 ) {
     val isValid: Boolean
         get() {

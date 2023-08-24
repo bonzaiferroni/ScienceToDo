@@ -32,7 +32,6 @@ import com.bonsai.sciencetodo.data.EnumRepository
 import com.bonsai.sciencetodo.data.ObservationRepository
 import com.bonsai.sciencetodo.data.fake.FakeDatasetDao
 import com.bonsai.sciencetodo.data.fake.FakeVariableDao
-import com.bonsai.sciencetodo.model.Enumeration
 import com.bonsai.sciencetodo.model.Variable
 import com.bonsai.sciencetodo.model.VariableType
 import com.bonsai.sciencetodo.ui.AppScreens
@@ -89,7 +88,6 @@ fun DatasetScreen(
             AddVariableControl(
                 uiState.newVariable,
                 newVariableFunctions,
-                enumerations = uiState.enumerations,
             )
         }
     }
@@ -157,7 +155,6 @@ fun VariableCard(
 fun AddVariableControl(
     newVariable: NewVariable?,
     newVariableFunctions: DatasetVm.NewVariableFunctions,
-    enumerations: List<Enumeration>
 ) {
     if (newVariable == null) return
 
@@ -179,8 +176,10 @@ fun AddVariableControl(
             onSelectValue = newVariableFunctions::updateType,
         )
         if (newVariable.variableType == VariableType.Enum) {
-            val enumerationNames = enumerations.map { it.name }
-            AutoCompleteTextField(suggestions = enumerationNames, onValueSelected = { })
+            AutoCompleteTextField(
+                suggestions = newVariable.enumSuggestions,
+                onValueChanged = newVariableFunctions::updateEnum
+            )
         }
     }
 }

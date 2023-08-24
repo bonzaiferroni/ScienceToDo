@@ -224,11 +224,10 @@ fun ValueField(
 @Composable
 fun AutoCompleteTextField(
     suggestions: List<String>,
-    onValueSelected: (String) -> Unit
+    onValueChanged: (String) -> Unit
 ) {
     var text by remember { mutableStateOf("") }
     var isDropdownExpanded by remember { mutableStateOf(true) }
-    val filteredSuggestions = suggestions.filter { it.contains(text, true) }
 
     // Box is used to overlap the dropdown on the UI
     Box {
@@ -237,6 +236,7 @@ fun AutoCompleteTextField(
             onValueChange = {
                 text = it
                 isDropdownExpanded = true
+                onValueChanged(it)
             },
             label = { Text("Enter text") },
             modifier = Modifier
@@ -245,7 +245,7 @@ fun AutoCompleteTextField(
 
         // Display suggestions
         DropdownMenu(
-            expanded = isDropdownExpanded && filteredSuggestions.isNotEmpty(),
+            expanded = isDropdownExpanded && suggestions.isNotEmpty(),
             properties = PopupProperties(
                 focusable = false,
                 dismissOnBackPress = true,
@@ -253,13 +253,13 @@ fun AutoCompleteTextField(
             ),
             onDismissRequest = { isDropdownExpanded = false }
         ) {
-            filteredSuggestions.forEach { suggestion ->
+            suggestions.forEach { suggestion ->
                 DropdownMenuItem(
                     text = { Text(suggestion) },
                     onClick = {
                         text = suggestion
                         isDropdownExpanded = false
-                        onValueSelected(suggestion)
+                        onValueChanged(suggestion)
                     }
                 )
             }
