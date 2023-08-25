@@ -7,12 +7,15 @@ import com.bonsai.sciencetodo.data.ObservationRepository
 import com.bonsai.sciencetodo.data.dao.DatasetDao
 import com.bonsai.sciencetodo.data.dao.VariableDao
 import com.bonsai.sciencetodo.model.Dataset
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeVm(
+@HiltViewModel
+class HomeVm @Inject constructor(
     private val datasetDao: DatasetDao,
     private val variableDao: VariableDao,
     private val observationRepository: ObservationRepository,

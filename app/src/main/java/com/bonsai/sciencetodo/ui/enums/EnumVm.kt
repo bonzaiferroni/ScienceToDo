@@ -5,11 +5,14 @@ import androidx.lifecycle.viewModelScope
 import com.bonsai.sciencetodo.data.EnumRepository
 import com.bonsai.sciencetodo.model.Enumeration
 import com.bonsai.sciencetodo.model.Enumerator
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class EnumVm(
+@HiltViewModel
+class EnumVm @Inject constructor (
     private val enumRepository: EnumRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(EnumState())

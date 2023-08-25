@@ -28,7 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.bonsai.sciencetodo.R
 import com.bonsai.sciencetodo.data.ObservationRepository
@@ -36,7 +36,6 @@ import com.bonsai.sciencetodo.data.fake.FakeDatasetDao
 import com.bonsai.sciencetodo.data.fake.FakeVariableDao
 import com.bonsai.sciencetodo.model.Dataset
 import com.bonsai.sciencetodo.ui.AppScreens
-import com.bonsai.sciencetodo.ui.AppVmProvider
 import com.bonsai.sciencetodo.ui.common.StdIconButton
 import com.bonsai.sciencetodo.ui.common.StdRowCard
 import com.bonsai.sciencetodo.ui.common.StdTopAppBar
@@ -47,7 +46,7 @@ import com.bonsai.sciencetodo.ui.datavalues.ObservationDialog
 fun HomeScreen(
     modifier: Modifier = Modifier,
     navController: NavController? = null,
-    viewModel: HomeVm = viewModel(factory = AppVmProvider.Factory)
+    viewModel: HomeVm = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val onClickCard: (datasetId: Int) -> Unit = { datasetId ->

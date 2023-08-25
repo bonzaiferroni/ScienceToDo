@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
     id("com.google.devtools.ksp")
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -79,5 +81,13 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.lazytable)
     implementation(libs.numberpicker)
+    // installed for hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+}
 
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
 }

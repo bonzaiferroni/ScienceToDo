@@ -24,8 +24,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.bonsai.sciencetodo.R
 import com.bonsai.sciencetodo.data.EnumRepository
@@ -35,7 +35,6 @@ import com.bonsai.sciencetodo.data.fake.FakeVariableDao
 import com.bonsai.sciencetodo.model.Variable
 import com.bonsai.sciencetodo.model.VariableType
 import com.bonsai.sciencetodo.ui.AppScreens
-import com.bonsai.sciencetodo.ui.AppVmProvider
 import com.bonsai.sciencetodo.ui.common.AutoCompleteTextField
 import com.bonsai.sciencetodo.ui.common.EnumDropdown
 import com.bonsai.sciencetodo.ui.common.RowTextButton
@@ -50,7 +49,7 @@ import com.bonsai.sciencetodo.ui.datavalues.ObservationDialog
 fun DatasetScreen(
     modifier: Modifier = Modifier,
     navController: NavController? = null,
-    viewModel: DatasetVm = viewModel(factory = AppVmProvider.Factory)
+    viewModel: DatasetVm = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val onOpenDataView: (datasetId: Int) -> Unit = { datasetId ->

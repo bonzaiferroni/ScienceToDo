@@ -10,20 +10,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.bonsai.sciencetodo.R
 import com.bonsai.sciencetodo.data.DataRepository
 import com.bonsai.sciencetodo.ui.AppScreens
-import com.bonsai.sciencetodo.ui.AppVmProvider
 import com.bonsai.sciencetodo.ui.common.StdTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DataViewScreen(
     navController: NavController? = null,
-    viewModel: DataViewVm = viewModel(factory = AppVmProvider.Factory)
+    viewModel: DataViewVm = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val tableContent = uiState.dataTableContent

@@ -14,19 +14,21 @@ import com.bonsai.sciencetodo.model.Enumeration
 import com.bonsai.sciencetodo.model.Variable
 import com.bonsai.sciencetodo.model.VariableType
 import com.bonsai.sciencetodo.ui.AppScreens
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DatasetVm(
+@HiltViewModel
+class DatasetVm @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val datasetDao: DatasetDao,
     private val variableDao: VariableDao,
     private val observationRepository: ObservationRepository,
     private val enumRepository: EnumRepository,
 ) : ViewModel() {
-    private val datasetId: Int =
-        checkNotNull(savedStateHandle[AppScreens.datasetIdArg])
+    private val datasetId: Int = checkNotNull(savedStateHandle[AppScreens.datasetIdArg])
 
     private val _uiState = MutableStateFlow(DataProfileState())
     val uiState: StateFlow<DataProfileState> = _uiState

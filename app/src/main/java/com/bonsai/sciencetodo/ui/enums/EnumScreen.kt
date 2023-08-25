@@ -24,7 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.bonsai.sciencetodo.R
 import com.bonsai.sciencetodo.data.EnumRepository
@@ -34,7 +34,6 @@ import com.bonsai.sciencetodo.data.fake.FakeEnumerationDao
 import com.bonsai.sciencetodo.data.fake.FakeEnumeratorDao
 import com.bonsai.sciencetodo.model.Enumeration
 import com.bonsai.sciencetodo.model.Enumerator
-import com.bonsai.sciencetodo.ui.AppVmProvider
 import com.bonsai.sciencetodo.ui.common.MoreMenu
 import com.bonsai.sciencetodo.ui.common.MoreMenuItem
 import com.bonsai.sciencetodo.ui.common.StdDialog
@@ -46,7 +45,7 @@ import com.bonsai.sciencetodo.ui.common.StdTopAppBar
 @Composable
 fun EnumScreen(
     navController: NavController? = null,
-    viewModel: EnumVm = viewModel(factory = AppVmProvider.Factory)
+    viewModel: EnumVm = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 

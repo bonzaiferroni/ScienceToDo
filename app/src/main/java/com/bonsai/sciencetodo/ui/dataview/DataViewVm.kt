@@ -7,11 +7,14 @@ import com.bonsai.sciencetodo.data.DataRepository
 import com.bonsai.sciencetodo.model.BaseValue
 import com.bonsai.sciencetodo.model.Dataset
 import com.bonsai.sciencetodo.ui.AppScreens
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DataViewVm(
+@HiltViewModel
+class DataViewVm @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val dataRepository: DataRepository,
 ) : ViewModel() {

@@ -48,21 +48,4 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun enumeratorDao(): EnumeratorDao
     abstract fun enumValueDao(): EnumValueDao
     abstract fun enumVarJoinDao(): EnumVarJoinDao
-
-    companion object {
-        @Volatile
-        private var INSTANCE: AppDatabase? = null
-
-        fun getDatabase(context: Context): AppDatabase {
-            return Room.databaseBuilder(
-                context,
-                AppDatabase::class.java, "science-todo"
-            )
-                .fallbackToDestructiveMigration()
-                .build()
-                .also {
-                    INSTANCE = it
-                }
-        }
-    }
 }
