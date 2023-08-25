@@ -18,6 +18,12 @@ import com.bonsai.sciencetodo.model.FloatValue
 import com.bonsai.sciencetodo.model.IntValue
 import com.bonsai.sciencetodo.model.Observation
 import com.bonsai.sciencetodo.model.StringValue
+import com.bonsai.sciencetodo.ui.observation.NewBoolean
+import com.bonsai.sciencetodo.ui.observation.NewEnum
+import com.bonsai.sciencetodo.ui.observation.NewFloat
+import com.bonsai.sciencetodo.ui.observation.NewInteger
+import com.bonsai.sciencetodo.ui.observation.NewString
+import com.bonsai.sciencetodo.ui.observation.NewValueBox
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 

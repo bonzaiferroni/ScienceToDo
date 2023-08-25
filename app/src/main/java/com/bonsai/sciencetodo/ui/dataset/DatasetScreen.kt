@@ -42,7 +42,6 @@ import com.bonsai.sciencetodo.ui.common.StdDialog
 import com.bonsai.sciencetodo.ui.common.StdIconButton
 import com.bonsai.sciencetodo.ui.common.StdRowCard
 import com.bonsai.sciencetodo.ui.common.StdTopAppBar
-import com.bonsai.sciencetodo.ui.datavalues.ObservationDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,12 +56,6 @@ fun DatasetScreen(
         navController?.navigate(route)
     }
     val newVariableFunctions = viewModel.NewVariableFunctions()
-
-    ObservationDialog(
-        viewModel::saveDataDialog,
-        viewModel::cancelDataDialog,
-        uiState.newValueBoxes
-    )
 
     Scaffold(
         topBar = {
@@ -79,7 +72,7 @@ fun DatasetScreen(
         ) {
             DatasetDetails(uiState.dataset.name, uiState.observationCount)
             DataButtons(
-                viewModel::openDataDialog,
+                { AppScreens.Observation.openObservation(navController, uiState.dataset.id) },
                 { onOpenDataView(uiState.dataset.id) },
                 newVariableFunctions::start
             )

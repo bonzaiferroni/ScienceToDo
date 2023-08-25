@@ -2,7 +2,7 @@ package com.bonsai.sciencetodo.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bonsai.sciencetodo.data.NewValueBox
+import com.bonsai.sciencetodo.ui.observation.NewValueBox
 import com.bonsai.sciencetodo.data.ObservationRepository
 import com.bonsai.sciencetodo.data.dao.DatasetDao
 import com.bonsai.sciencetodo.data.dao.VariableDao

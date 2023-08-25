@@ -1,4 +1,4 @@
-package com.bonsai.sciencetodo.data
+package com.bonsai.sciencetodo.ui.observation
 
 import com.bonsai.sciencetodo.model.Variable
 import com.bonsai.sciencetodo.model.VariableType

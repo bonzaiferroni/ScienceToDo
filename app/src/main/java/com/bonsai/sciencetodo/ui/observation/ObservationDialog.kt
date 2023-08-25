@@ -1,4 +1,4 @@
-package com.bonsai.sciencetodo.ui.datavalues
+package com.bonsai.sciencetodo.ui.observation
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,14 +17,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.bonsai.sciencetodo.R
-import com.bonsai.sciencetodo.data.NewBoolean
-import com.bonsai.sciencetodo.data.NewEnum
-import com.bonsai.sciencetodo.data.NewFloat
-import com.bonsai.sciencetodo.data.NewInteger
-import com.bonsai.sciencetodo.data.NewString
-import com.bonsai.sciencetodo.data.NewValueBox
 import com.bonsai.sciencetodo.data.fake.FakeData
-import com.bonsai.sciencetodo.data.isValid
 import com.bonsai.sciencetodo.ui.common.BooleanField
 import com.bonsai.sciencetodo.ui.common.EnumField
 import com.bonsai.sciencetodo.ui.common.FloatField

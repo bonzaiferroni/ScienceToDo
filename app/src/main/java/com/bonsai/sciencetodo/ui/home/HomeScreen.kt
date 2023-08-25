@@ -39,12 +39,10 @@ import com.bonsai.sciencetodo.ui.AppScreens
 import com.bonsai.sciencetodo.ui.common.StdIconButton
 import com.bonsai.sciencetodo.ui.common.StdRowCard
 import com.bonsai.sciencetodo.ui.common.StdTopAppBar
-import com.bonsai.sciencetodo.ui.datavalues.ObservationDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    modifier: Modifier = Modifier,
     navController: NavController? = null,
     viewModel: HomeVm = hiltViewModel()
 ) {
@@ -80,7 +78,6 @@ fun HomeScreen(
                 Icon(Icons.Default.Add, contentDescription = "Add Dataset")
             }
         },
-        modifier = modifier
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
             DatasetList(
@@ -91,12 +88,6 @@ fun HomeScreen(
             )
         }
     }
-
-    ObservationDialog(
-        viewModel::saveDataDialog,
-        viewModel::cancelDataDialog,
-        uiState.newValueBoxes
-    )
 }
 
 @Composable
