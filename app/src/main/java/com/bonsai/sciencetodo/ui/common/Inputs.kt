@@ -15,6 +15,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,6 +31,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.PopupProperties
 import com.bonsai.sciencetodo.R
+import com.bonsai.sciencetodo.ui.observation.NewBoolean
+import com.bonsai.sciencetodo.ui.observation.NewEnum
+import com.bonsai.sciencetodo.ui.observation.NewFloat
+import com.bonsai.sciencetodo.ui.observation.NewInteger
+import com.bonsai.sciencetodo.ui.observation.NewString
 import com.chargemap.compose.numberpicker.ListItemPicker
 import com.chargemap.compose.numberpicker.NumberPicker
 
@@ -105,100 +111,71 @@ inline fun <reified T : Enum<T>> EnumPicker(
 
 @Composable
 fun StringField(
-    onValueChange: (String) -> Unit,
+    newString: NewString,
 ) {
-    var value by remember { mutableStateOf("") }
-
-    val parseValue: (String) -> Unit = {
-        value = it
-        onValueChange(it)
-    }
+    val text by newString.textState.collectAsState()
 
     ValueField(
-        value = value,
+        value = text,
         label = "Text",
         keyboardType = KeyboardType.Decimal,
-        onValueChange = parseValue,
+        onValueChange = newString::setText,
     )
 }
 
 @Composable
 fun FloatField(
-    onValueChange: (Float?) -> Unit,
+    newFloat: NewFloat,
 ) {
-    var value by remember { mutableStateOf("") }
-
-    val parseValue: (String) -> Unit = {
-        value = it
-        onValueChange(it.toFloatOrNull())
-    }
+    val text by newFloat.textState.collectAsState()
 
     ValueField(
-        value = value,
+        value = text,
         label = "Decimal",
         keyboardType = KeyboardType.Decimal,
-        onValueChange = parseValue
+        onValueChange = newFloat::setText,
     )
 }
 
 @Composable
 fun IntegerField(
-    onValueChange: (Int?) -> Unit,
+    newInteger: NewInteger,
 ) {
-    var value by remember { mutableStateOf("") }
-
-    val parseValue: (String) -> Unit = {
-        value = it
-        onValueChange(it.toIntOrNull())
-    }
+    val text by newInteger.textState.collectAsState()
 
     ValueField(
-        value = value,
+        value = text,
         label = "Integer",
         keyboardType = KeyboardType.Number,
-        onValueChange = parseValue
+        onValueChange = newInteger::setText
     )
 }
 
 @Composable
 fun BooleanField(
-    onValueChange: (Boolean?) -> Unit,
+    newBoolean: NewBoolean,
 ) {
-    var value by remember { mutableStateOf("") }
-
-    val parseValue: (String) -> Unit = {
-        val parsedValue = if (it.startsWith('t')) "true"
-        else if (it.startsWith('f')) "false"
-        else it
-        value = parsedValue
-        onValueChange(parsedValue.toBooleanStrictOrNull())
-    }
+    val text by newBoolean.textState.collectAsState()
 
     ValueField(
-        value = value,
+        value = text,
         label = "Boolean",
         keyboardType = KeyboardType.Text,
-        onValueChange = parseValue
+        onValueChange = newBoolean::setText
     )
 }
 
 @Composable
 fun EnumField(
-    onValueChange: (Int?) -> Unit,
+    newEnum: NewEnum,
 ) {
-    // TODO: implement enum support
-    var value by remember { mutableStateOf("") }
-
-    val parseValue: (String) -> Unit = {
-        value = it
-        onValueChange(it.toIntOrNull())
-    }
+    val text by newEnum.textState.collectAsState()
 
     ValueField(
-        value = value,
-        label = "Integer",
-        keyboardType = KeyboardType.Number,
-        onValueChange = parseValue
+        value = text,
+        label = newEnum.variable.name,
+        keyboardType = KeyboardType.Text,
+        onValueChange = newEnum::setText
     )
 }
 

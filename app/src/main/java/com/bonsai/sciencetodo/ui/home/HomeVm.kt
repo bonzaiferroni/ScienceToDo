@@ -17,8 +17,6 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeVm @Inject constructor(
     private val datasetDao: DatasetDao,
-    private val variableDao: VariableDao,
-    private val observationRepository: ObservationRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
@@ -49,52 +47,12 @@ class HomeVm @Inject constructor(
         datasetDao.insert(newFlow)
         _uiState.value = _uiState.value.copy(showDialog = false, newDatasetName = "")
     }
-
-    fun openDataDialog(datasetId: Int) {
-        viewModelScope.launch {
-            variableDao.getByFlowId(datasetId)
-                .map { variables ->
-                    variables.map { NewValueBox.getBox(it) }
-                }
-                .collect {
-                    _uiState.value = _uiState.value.copy(
-                        newValueBoxes = it,
-                        newDataTargetId = datasetId
-                    )
-                }
-        }
-    }
-
-    fun saveDataDialog() {
-        val newValueBoxes = _uiState.value.newValueBoxes
-            ?: throw NullPointerException("newDataValues is null")
-        val datasetId = _uiState.value.newDataTargetId
-            ?: throw NullPointerException("newDataTargetId is null")
-
-        viewModelScope.launch {
-            observationRepository.createObservation(datasetId, newValueBoxes)
-        }
-
-        clearNewDataState()
-    }
-
-    fun cancelDataDialog() {
-        clearNewDataState()
-    }
-
-    private fun clearNewDataState() {
-        _uiState.value = _uiState.value.copy(
-            newValueBoxes = null,
-            newDataTargetId = null
-        )
-    }
 }
 
 data class HomeUiState(
     val datasets: List<Dataset> = emptyList(),
     val showDialog: Boolean = false,
     val newDatasetName: String = "",
-    val newValueBoxes: List<NewValueBox>? = null,
     val newDataTargetId: Int? = null,
     val showCreateEnum: Boolean = false,
 )

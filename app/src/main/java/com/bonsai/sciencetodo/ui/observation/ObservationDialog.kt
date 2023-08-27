@@ -18,12 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.bonsai.sciencetodo.R
 import com.bonsai.sciencetodo.data.fake.FakeData
-import com.bonsai.sciencetodo.ui.common.BooleanField
-import com.bonsai.sciencetodo.ui.common.EnumField
-import com.bonsai.sciencetodo.ui.common.FloatField
-import com.bonsai.sciencetodo.ui.common.IntegerField
 import com.bonsai.sciencetodo.ui.common.StdDialog
-import com.bonsai.sciencetodo.ui.common.StringField
 import java.util.Locale
 
 @Composable
@@ -60,7 +55,7 @@ fun ObservationDialog(
                         modifier = Modifier.fillMaxWidth(),
                         style = MaterialTheme.typography.labelSmall
                     )
-                    when (newValueBox) {
+                    /*when (newValueBox) {
                         is NewInteger -> {
                             IntegerField(
                                 onValueChange = {
@@ -105,7 +100,7 @@ fun ObservationDialog(
                                 },
                             )
                         }
-                    }
+                    }*/
                 }
             }
         }
@@ -116,7 +111,7 @@ fun ObservationDialog(
 @Composable
 fun PreviewAddDataForm() {
     val newValueBoxes = FakeData.fakeVariables.filter { it.datasetId == 1 }.map { variable ->
-        NewValueBox.getBox(variable)
+        NewValueBox.getBox(variable) { }
     }
 
     ObservationDialog({}, {}, newValueBoxes)

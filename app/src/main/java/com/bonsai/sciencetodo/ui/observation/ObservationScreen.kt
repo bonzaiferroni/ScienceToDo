@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,9 +28,11 @@ import com.bonsai.sciencetodo.ui.common.EnumField
 import com.bonsai.sciencetodo.ui.common.FloatField
 import com.bonsai.sciencetodo.ui.common.IntegerField
 import com.bonsai.sciencetodo.ui.common.RowIconButton
+import com.bonsai.sciencetodo.ui.common.StdTopAppBar
 import com.bonsai.sciencetodo.ui.common.StringField
 import java.util.Locale
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ObservationScreen(
     navController: NavController? = null,
@@ -36,91 +40,76 @@ fun ObservationScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    val (newValueBoxes, variables, enableAccept) = uiState
+    val (dataset, newValueBoxes, enableAccept) = uiState
 
-    Column(
-        modifier = Modifier.padding(dimensionResource(R.dimen.padding_small)),
-        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.gap_medium))
-    ) {
-        newValueBoxes.forEach { newValueBox ->
-            val variable = newValueBox.variable
-
-            Surface(
-                color = MaterialTheme.colorScheme.background,
-                shape = MaterialTheme.shapes.extraLarge
+    Scaffold(
+        topBar = {
+            StdTopAppBar(
+                title = "Observation: ${dataset.name}",
+                navigateUp = { navController?.navigateUp() }
+            )
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier.padding(paddingValues),
+        ) {
+            Column(
+                modifier = Modifier.padding(dimensionResource(R.dimen.padding_small)),
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.gap_medium))
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .padding(dimensionResource(R.dimen.padding_medium))
-                ) {
-                    Text(
-                        text = variable.name.uppercase(Locale.getDefault()),
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth(),
-                        style = MaterialTheme.typography.labelSmall
-                    )
-                    when (newValueBox) {
-                        is NewInteger -> {
-                            IntegerField(
-                                onValueChange = {
-                                    newValueBox.value = it
-                                },
-                            )
-                        }
 
-                        is NewString -> {
-                            StringField(
-                                onValueChange = {
-                                    newValueBox.value = it
-                                },
-                            )
-                        }
+                // value input card
+                newValueBoxes.forEach { newValueBox ->
+                    val variable = newValueBox.variable
 
-                        is NewFloat -> {
-                            FloatField(
-                                onValueChange = {
-                                    newValueBox.value = it
-                                },
-                            )
-                        }
+                    Surface(
+                        color = MaterialTheme.colorScheme.background,
+                        shape = MaterialTheme.shapes.extraLarge
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier
+                                .padding(dimensionResource(R.dimen.padding_medium))
+                        ) {
 
-                        is NewBoolean -> {
-                            BooleanField(
-                                onValueChange = {
-                                    newValueBox.value = it
-                                },
+                            // header
+                            Text(
+                                text = variable.name.uppercase(Locale.getDefault()),
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth(),
+                                style = MaterialTheme.typography.labelSmall
                             )
-                        }
 
-                        is NewEnum -> {
-                            EnumField(
-                                onValueChange = {
-                                    newValueBox.value = it
-                                },
-                            )
+                            // input field
+                            when (newValueBox) {
+                                is NewInteger -> IntegerField(newValueBox)
+                                is NewString -> StringField(newValueBox)
+                                is NewFloat -> FloatField(newValueBox)
+                                is NewBoolean -> BooleanField(newValueBox)
+                                is NewEnum -> EnumField(newValueBox)
+                            }
                         }
                     }
                 }
-            }
-        }
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement
-                .spacedBy(dimensionResource(R.dimen.gap_medium)),
-        ) {
-            RowIconButton(
-                imageVector = Icons.Default.Close,
-                contentDescription = "close dialog",
-                onClick = { navController?.navigateUp() }
-            )
-            RowIconButton(
-                imageVector = Icons.Default.Check,
-                contentDescription = "add variable",
-                onClick = { viewModel.saveObservation { navController?.navigateUp() } },
-                enabled = enableAccept,
-            )
+                // accept and cancel
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.gap_medium)),
+                ) {
+                    RowIconButton(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "close dialog",
+                        onClick = { navController?.navigateUp() }
+                    )
+                    RowIconButton(
+                        imageVector = Icons.Default.Check,
+                        contentDescription = "add variable",
+                        onClick = { viewModel.saveObservation { navController?.navigateUp() } },
+                        enabled = enableAccept,
+                    )
+                }
+            }
         }
     }
 }

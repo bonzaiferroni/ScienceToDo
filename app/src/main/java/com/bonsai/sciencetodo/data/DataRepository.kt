@@ -17,9 +17,11 @@ import com.bonsai.sciencetodo.data.fake.FakeObservationDao
 import com.bonsai.sciencetodo.data.fake.FakeStringValueDao
 import com.bonsai.sciencetodo.data.fake.FakeVariableDao
 import com.bonsai.sciencetodo.model.BaseValue
+import com.bonsai.sciencetodo.model.Dataset
 import com.bonsai.sciencetodo.model.Variable
 import com.bonsai.sciencetodo.model.VariableType
 import com.bonsai.sciencetodo.ui.dataview.DataTableContent
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
 class DataRepository(
@@ -32,6 +34,14 @@ class DataRepository(
     val booleanValueDao: BooleanValueDao,
     val enumValueDao: EnumValueDao,
 ) {
+    fun getDataset(id: Int): Flow<Dataset> {
+        return datasetDao.getById(id)
+    }
+
+    fun getVariablesByDatasetId(id: Int): Flow<List<Variable>> {
+        return variableDao.getByFlowId(id)
+    }
+
     suspend fun getTableContent(datasetId: Int): DataTableContent {
         val variables = variableDao.getByFlowId(datasetId).first()
         val observations = observationDao.getByFlowId(datasetId).first()

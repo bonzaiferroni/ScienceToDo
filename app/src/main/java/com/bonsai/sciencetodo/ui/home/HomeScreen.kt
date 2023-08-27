@@ -31,9 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.bonsai.sciencetodo.R
-import com.bonsai.sciencetodo.data.ObservationRepository
 import com.bonsai.sciencetodo.data.fake.FakeDatasetDao
-import com.bonsai.sciencetodo.data.fake.FakeVariableDao
 import com.bonsai.sciencetodo.model.Dataset
 import com.bonsai.sciencetodo.ui.AppScreens
 import com.bonsai.sciencetodo.ui.common.StdIconButton
@@ -84,7 +82,7 @@ fun HomeScreen(
                 uiState.datasets,
                 onClickCard,
                 onOpenDataView,
-                viewModel::openDataDialog
+                navController
             )
         }
     }
@@ -95,7 +93,7 @@ fun DatasetList(
     datasets: List<Dataset>,
     onOpenFlow: (datasetId: Int) -> Unit,
     onOpenDataView: (datasetId: Int) -> Unit,
-    onOpenDataDialog: (datasetId: Int) -> Unit,
+    navController: NavController?,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -111,7 +109,9 @@ fun DatasetList(
                     style = MaterialTheme.typography.titleLarge
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                StdIconButton(Icons.Filled.Add, { onOpenDataDialog(dataset.id) })
+                StdIconButton(Icons.Filled.Add, {
+                    AppScreens.Observation.openObservation(navController, dataset.id) }
+                )
                 StdIconButton(Icons.Filled.Search, { onOpenDataView(dataset.id) })
                 StdIconButton(Icons.Filled.ArrowForward, { onOpenFlow(dataset.id) })
             }
@@ -163,8 +163,6 @@ fun HomeScreenPreview() {
     HomeScreen(
         viewModel = HomeVm(
             datasetDao = FakeDatasetDao(),
-            variableDao = FakeVariableDao(),
-            ObservationRepository.getFake()
         )
     )
 }
