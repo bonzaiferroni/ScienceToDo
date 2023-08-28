@@ -20,6 +20,10 @@ class FakeEnumeratorDao : EnumeratorDao {
         TODO("Not yet implemented")
     }
 
+    override fun getByEnumerationId(enumerationId: Int): Flow<List<Enumerator>> {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun insert(enumerator: Enumerator) {
         TODO("Not yet implemented")
     }

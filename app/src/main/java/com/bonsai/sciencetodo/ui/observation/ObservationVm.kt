@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bonsai.sciencetodo.data.DataRepository
+import com.bonsai.sciencetodo.data.EnumRepository
 import com.bonsai.sciencetodo.data.ObservationRepository
 import com.bonsai.sciencetodo.model.Dataset
 import com.bonsai.sciencetodo.ui.AppScreens
@@ -18,21 +19,30 @@ class ObservationVm @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val observationRepository: ObservationRepository,
     private val dataRepository: DataRepository,
+    private val enumRepository: EnumRepository,
 ) : ViewModel() {
     private val datasetId: Int = checkNotNull(savedStateHandle[AppScreens.datasetIdArg])
 
     private val _uiState = MutableStateFlow(ObservationState())
     val uiState: StateFlow<ObservationState> = _uiState
 
-    init {
-        val onSetValue = this::validateBoxes
+    private val newValues: MutableMap<Int, NewValue> = mutableMapOf()
 
+    private val newValueStateManager = NewValueStateManager(
+        observationRepository = observationRepository,
+        dataRepository = dataRepository,
+        enumRepository = enumRepository
+    )
+
+    init {
         viewModelScope.launch {
             dataRepository.getVariablesByDatasetId(datasetId).collect { variables ->
+                newValues.clear()
+                variables.forEach { variable ->
+                    newValues[variable.id] = newValueStateManager.getBox(variable)
+                }
                 _uiState.value = _uiState.value.copy(
-                    newValueBoxes = variables.map { variable ->
-                        NewValueBox.getBox(variable, onSetValue)
-                    }
+                    newValues = newValues,
                 )
             }
         }
@@ -45,25 +55,27 @@ class ObservationVm @Inject constructor(
         }
     }
 
-    fun saveObservation(callback: () -> Unit) {
-        val newDataValues = _uiState.value.newValueBoxes
-
-        viewModelScope.launch {
-            observationRepository.createObservation(datasetId, newDataValues)
-            callback()
-        }
+    fun setValue(newValue: NewValue, text: String) {
+        val updatedNewValue = newValueStateManager.setValue(newValue, text)
+        newValues[newValue.variable.id] = updatedNewValue
+        _uiState.value = uiState.value.copy(
+            newValues = newValues,
+            enableAccept = newValues.isValid()
+        )
     }
 
-    private fun validateBoxes() {
-        val uiState = uiState.value
-        _uiState.value = uiState.copy (
-            enableAccept = uiState.newValueBoxes.isValid(),
-        )
+    fun saveObservation(callback: () -> Unit) {
+        val newValues = _uiState.value.newValues
+
+        viewModelScope.launch {
+            observationRepository.createObservation(datasetId, newValues.values.toList())
+            callback()
+        }
     }
 }
 
 data class ObservationState(
     val dataset: Dataset = Dataset(0, ""),
-    val newValueBoxes: List<NewValueBox> = emptyList(),
+    val newValues: Map<Int, NewValue> = emptyMap(),
     val enableAccept: Boolean = false,
 )

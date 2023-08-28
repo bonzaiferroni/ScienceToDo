@@ -23,7 +23,7 @@ import com.bonsai.sciencetodo.ui.observation.NewEnum
 import com.bonsai.sciencetodo.ui.observation.NewFloat
 import com.bonsai.sciencetodo.ui.observation.NewInteger
 import com.bonsai.sciencetodo.ui.observation.NewString
-import com.bonsai.sciencetodo.ui.observation.NewValueBox
+import com.bonsai.sciencetodo.ui.observation.NewValue
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 
@@ -35,10 +35,10 @@ class ObservationRepository(
     private val booleanValueDao: BooleanValueDao,
     private val enumValueDao: EnumValueDao,
 ) {
-    suspend fun createObservation(datasetId: Int, newValueBoxes: List<NewValueBox>) {
+    suspend fun createObservation(datasetId: Int, newValues: List<NewValue>) {
         val observation = createObservation(datasetId)
 
-        newValueBoxes.forEach {
+        newValues.forEach {
             insertNewDataValue(observation.id, it)
         }
     }
@@ -53,33 +53,33 @@ class ObservationRepository(
         return observation.copy(id = id.toInt())
     }
 
-    private suspend fun insertNewDataValue(observationId: Int, newValueBox: NewValueBox) {
-        if (!newValueBox.isValid()) throw IllegalArgumentException("Invalid data")
-        val variable = newValueBox.variable
+    private suspend fun insertNewDataValue(observationId: Int, newValue: NewValue) {
+        if (!newValue.isValid()) throw IllegalArgumentException("Invalid data")
+        val variable = newValue.variable
 
-        when (newValueBox) {
+        when (newValue) {
             is NewInteger -> {
-                val value = checkNotNull(newValueBox.value)
+                val value = checkNotNull(newValue.value)
                 val dataValue = IntValue(0, variable.id, observationId, value)
                 intValueDao.insert(dataValue)
             }
             is NewString -> {
-                val value = checkNotNull(newValueBox.value)
+                val value = checkNotNull(newValue.text)
                 val dataValue = StringValue(0, variable.id, observationId, value)
                 stringValueDao.insert(dataValue)
             }
             is NewFloat -> {
-                val value = checkNotNull(newValueBox.value)
+                val value = checkNotNull(newValue.value)
                 val dataValue = FloatValue(0, variable.id, observationId, value)
                 floatValueDao.insert(dataValue)
             }
             is NewBoolean -> {
-                val value = checkNotNull(newValueBox.value)
+                val value = checkNotNull(newValue.value)
                 val dataValue = BooleanValue(0, variable.id, observationId, value)
                 booleanValueDao.insert(dataValue)
             }
             is NewEnum -> {
-                val value = checkNotNull(newValueBox.value)
+                val value = checkNotNull(newValue.value)
                 val dataValue = EnumValue(0, variable.id, observationId, value)
                 enumValueDao.insert(dataValue)
             }

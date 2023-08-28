@@ -17,7 +17,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.bonsai.sciencetodo.R
-import com.bonsai.sciencetodo.data.fake.FakeData
 import com.bonsai.sciencetodo.ui.common.StdDialog
 import java.util.Locale
 
@@ -25,9 +24,9 @@ import java.util.Locale
 fun ObservationDialog(
     onSaveDialog: () -> Unit,
     onCancelDialog: () -> Unit,
-    newValueBoxes: List<NewValueBox>?,
+    newValues: List<NewValue>?,
 ) {
-    if (newValueBoxes == null) return
+    if (newValues == null) return
 
     var enableAccept by remember { mutableStateOf(false) }
 
@@ -37,7 +36,7 @@ fun ObservationDialog(
         onAccept = onSaveDialog,
         enableAccept = enableAccept
     ) {
-        newValueBoxes.forEach { newValueBox ->
+        newValues.forEach { newValueBox ->
             val variable = newValueBox.variable
 
             Surface(
@@ -110,9 +109,9 @@ fun ObservationDialog(
 @Preview
 @Composable
 fun PreviewAddDataForm() {
-    val newValueBoxes = FakeData.fakeVariables.filter { it.datasetId == 1 }.map { variable ->
-        NewValueBox.getBox(variable) { }
+    /*val newValueBoxes = FakeData.fakeVariables.filter { it.datasetId == 1 }.map { variable ->
+        NewValue.getBox(variable) { }
     }
 
-    ObservationDialog({}, {}, newValueBoxes)
+    ObservationDialog({}, {}, newValueBoxes)*/
 }

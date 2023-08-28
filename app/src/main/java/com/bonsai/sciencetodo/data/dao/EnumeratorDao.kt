@@ -20,6 +20,9 @@ interface EnumeratorDao {
     @Query("SELECT * FROM enumerator WHERE name LIKE :name")
     fun getByName(name: String): Flow<Enumerator>
 
+    @Query("SELECT * FROM enumerator WHERE enumeration_id = :enumerationId")
+    fun getByEnumerationId(enumerationId: Int): Flow<List<Enumerator>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(enumerator: Enumerator)
 

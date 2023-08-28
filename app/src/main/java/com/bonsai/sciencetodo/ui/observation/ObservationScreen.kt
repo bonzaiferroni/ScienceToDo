@@ -59,7 +59,7 @@ fun ObservationScreen(
             ) {
 
                 // value input card
-                newValueBoxes.forEach { newValueBox ->
+                newValueBoxes.forEach { (_, newValueBox) ->
                     val variable = newValueBox.variable
 
                     Surface(
@@ -82,11 +82,27 @@ fun ObservationScreen(
 
                             // input field
                             when (newValueBox) {
-                                is NewInteger -> IntegerField(newValueBox)
-                                is NewString -> StringField(newValueBox)
-                                is NewFloat -> FloatField(newValueBox)
-                                is NewBoolean -> BooleanField(newValueBox)
-                                is NewEnum -> EnumField(newValueBox)
+                                is NewInteger -> IntegerField(newValueBox.text) {
+                                    viewModel.setValue(newValueBox, it)
+                                }
+
+                                is NewString -> StringField(newValueBox.text) {
+                                    viewModel.setValue(newValueBox, it)
+                                }
+
+                                is NewFloat -> FloatField(newValueBox.text) {
+                                    viewModel.setValue(newValueBox, it)
+                                }
+
+                                is NewBoolean -> BooleanField(newValueBox.text) {
+                                    viewModel.setValue(newValueBox, it)
+                                }
+
+                                is NewEnum -> EnumField(
+                                    newValueBox.text, newValueBox.suggestions
+                                ) {
+                                    viewModel.setValue(newValueBox, it)
+                                }
                             }
                         }
                     }

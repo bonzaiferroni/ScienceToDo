@@ -15,7 +15,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,11 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.PopupProperties
 import com.bonsai.sciencetodo.R
-import com.bonsai.sciencetodo.ui.observation.NewBoolean
-import com.bonsai.sciencetodo.ui.observation.NewEnum
-import com.bonsai.sciencetodo.ui.observation.NewFloat
-import com.bonsai.sciencetodo.ui.observation.NewInteger
-import com.bonsai.sciencetodo.ui.observation.NewString
 import com.chargemap.compose.numberpicker.ListItemPicker
 import com.chargemap.compose.numberpicker.NumberPicker
 
@@ -111,72 +105,66 @@ inline fun <reified T : Enum<T>> EnumPicker(
 
 @Composable
 fun StringField(
-    newString: NewString,
+    text: String,
+    onValueChange: (String) -> Unit,
 ) {
-    val text by newString.textState.collectAsState()
-
     ValueField(
         value = text,
         label = "Text",
         keyboardType = KeyboardType.Decimal,
-        onValueChange = newString::setText,
+        onValueChange = onValueChange,
     )
 }
 
 @Composable
 fun FloatField(
-    newFloat: NewFloat,
+    text: String,
+    onValueChange: (String) -> Unit,
 ) {
-    val text by newFloat.textState.collectAsState()
-
     ValueField(
         value = text,
         label = "Decimal",
         keyboardType = KeyboardType.Decimal,
-        onValueChange = newFloat::setText,
+        onValueChange = onValueChange,
     )
 }
 
 @Composable
 fun IntegerField(
-    newInteger: NewInteger,
+    text: String,
+    onValueChange: (String) -> Unit
 ) {
-    val text by newInteger.textState.collectAsState()
-
     ValueField(
         value = text,
         label = "Integer",
         keyboardType = KeyboardType.Number,
-        onValueChange = newInteger::setText
+        onValueChange = onValueChange
     )
 }
 
 @Composable
 fun BooleanField(
-    newBoolean: NewBoolean,
+    text: String,
+    onValueChange: (String) -> Unit
 ) {
-    val text by newBoolean.textState.collectAsState()
-
     ValueField(
         value = text,
         label = "Boolean",
         keyboardType = KeyboardType.Text,
-        onValueChange = newBoolean::setText
+        onValueChange = onValueChange
     )
 }
 
 @Composable
 fun EnumField(
-    newEnum: NewEnum,
+    text: String,
+    suggestions: List<String>,
+    onValueChange: (String) -> Unit
 ) {
-    val text by newEnum.textState.collectAsState()
-
-    ValueField(
-        value = text,
-        label = newEnum.variable.name,
-        keyboardType = KeyboardType.Text,
-        onValueChange = newEnum::setText
-    )
+    AutoCompleteTextField(
+        text = text,
+        suggestions = suggestions,
+        onValueChanged = onValueChange)
 }
 
 @Composable
@@ -202,7 +190,10 @@ fun ValueField(
 fun AutoCompleteTextField(
     text: String,
     suggestions: List<String>,
-    onValueChanged: (String) -> Unit
+    onValueChanged: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    label: String = "Enter text",
+    imeAction: ImeAction = ImeAction.Done
 ) {
     var isDropdownExpanded by remember { mutableStateOf(true) }
 
@@ -214,9 +205,12 @@ fun AutoCompleteTextField(
                 isDropdownExpanded = true
                 onValueChanged(it)
             },
-            label = { Text("Enter text") },
-            modifier = Modifier
-                .fillMaxWidth()
+            label = { Text(label) },
+            modifier = modifier
+                .fillMaxWidth(),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = imeAction
+            )
         )
 
         // Display suggestions
