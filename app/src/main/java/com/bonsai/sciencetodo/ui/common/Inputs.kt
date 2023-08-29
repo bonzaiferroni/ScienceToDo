@@ -111,30 +111,14 @@ fun StringField(
     suggestions: List<String>,
     onValueChange: (String) -> Unit,
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.gap_large))
-    ) {
-        ValueField(
-            value = text,
-            label = "Text",
-            keyboardType = KeyboardType.Text,
-            onValueChange = onValueChange,
-            modifier = Modifier.weight(1f)
-        )
-
-        ListItemPicker(
-            label = { it },
-            value = pickerState,
-            onValueChange = onValueChange,
-            list = suggestions,
-            textStyle = TextStyle.Default.copy(
-                color = MaterialTheme.colorScheme.onBackground
-            ),
-            dividersColor = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.weight(1f)
-        )
-    }
+    ValuePickerField(
+        text = text,
+        pickerState = pickerState,
+        suggestions = suggestions,
+        label = "Text",
+        keyboardType = KeyboardType.Text,
+        onValueChange = onValueChange
+    )
 }
 
 @Composable
@@ -144,30 +128,14 @@ fun FloatField(
     suggestions: List<String>,
     onValueChange: (String) -> Unit,
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.gap_large))
-    ) {
-        ValueField(
-            value = text,
-            label = "Decimal",
-            keyboardType = KeyboardType.Decimal,
-            onValueChange = onValueChange,
-            modifier = Modifier.weight(1f)
-        )
-
-        ListItemPicker(
-            label = { it },
-            value = pickerState,
-            onValueChange = onValueChange,
-            list = suggestions,
-            textStyle = TextStyle.Default.copy(
-                color = MaterialTheme.colorScheme.onBackground
-            ),
-            dividersColor = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.weight(1f)
-        )
-    }
+    ValuePickerField(
+        text = text,
+        pickerState = pickerState,
+        suggestions = suggestions,
+        label = "Decimal",
+        keyboardType = KeyboardType.Decimal,
+        onValueChange = onValueChange
+    )
 }
 
 @Composable
@@ -177,30 +145,14 @@ fun IntegerField(
     suggestions: List<String>,
     onValueChange: (String) -> Unit
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.gap_large))
-    ) {
-        ValueField(
-            value = text,
-            label = "Integer",
-            keyboardType = KeyboardType.Number,
-            onValueChange = onValueChange,
-            modifier = Modifier.weight(1f)
-        )
-
-        ListItemPicker(
-            label = { it },
-            value = pickerState,
-            onValueChange = onValueChange,
-            list = suggestions,
-            textStyle = TextStyle.Default.copy(
-                color = MaterialTheme.colorScheme.onBackground
-            ),
-            dividersColor = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.weight(1f)
-        )
-    }
+    ValuePickerField(
+        text = text,
+        pickerState = pickerState,
+        suggestions = suggestions,
+        label = "Integer",
+        keyboardType = KeyboardType.Number,
+        onValueChange = onValueChange
+    )
 }
 
 @Composable
@@ -209,30 +161,14 @@ fun BooleanField(
     pickerState: String,
     onValueChange: (String) -> Unit
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.gap_large))
-    ) {
-        ValueField(
-            value = text,
-            label = "Boolean",
-            keyboardType = KeyboardType.Text,
-            onValueChange = onValueChange,
-            modifier = Modifier.weight(1f)
-        )
-
-        ListItemPicker(
-            label = { it },
-            value = pickerState,
-            onValueChange = onValueChange,
-            list = listOf("false", pickerNullText, "true"),
-            textStyle = TextStyle.Default.copy(
-                color = MaterialTheme.colorScheme.onBackground
-            ),
-            dividersColor = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.weight(1f)
-        )
-    }
+    ValuePickerField(
+        text = text,
+        pickerState = pickerState,
+        suggestions = listOf("false", pickerNullText, "true"),
+        label = "Boolean",
+        keyboardType = KeyboardType.Text,
+        onValueChange = onValueChange
+    )
 }
 
 @Composable
@@ -242,14 +178,33 @@ fun EnumField(
     suggestions: List<String>,
     onValueChange: (String) -> Unit
 ) {
+    ValuePickerField(
+        text = text,
+        pickerState = pickerState,
+        suggestions = suggestions,
+        label = "Enumerator",
+        keyboardType = KeyboardType.Text,
+        onValueChange = onValueChange
+    )
+}
+
+@Composable
+fun ValuePickerField(
+    text: String,
+    pickerState: String,
+    suggestions: List<String>,
+    label: String,
+    keyboardType: KeyboardType,
+    onValueChange: (String) -> Unit,
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.gap_large))
     ) {
         ValueField(
             value = text,
-            label = "Enumerator",
-            keyboardType = KeyboardType.Text,
+            label = label,
+            keyboardType = keyboardType,
             onValueChange = onValueChange,
             modifier = Modifier.weight(1f)
         )
