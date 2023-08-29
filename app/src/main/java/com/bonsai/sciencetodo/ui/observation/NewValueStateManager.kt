@@ -16,10 +16,28 @@ class NewValueStateManager(
     suspend fun getBox(variable: Variable): NewValue = when (variable.type) {
         VariableType.Undefined -> throw IllegalArgumentException("undefined variableType")
         VariableType.Integer -> NewInteger(variable)
-        VariableType.String -> NewString(variable)
-        VariableType.Float -> NewFloat(variable)
+        VariableType.String -> initString(variable)
+        VariableType.Float -> initFloat(variable)
         VariableType.Boolean -> NewBoolean(variable)
         VariableType.Enum -> initEnum(variable)
+    }
+
+    private suspend fun initFloat(variable: Variable): NewFloat {
+        val previousValues = dataRepository.floatValueDao.getByVariableId(variable.id, 10).first()
+            .map { it.value.toString() }
+        return NewFloat(
+            variable = variable,
+            suggestions = listOf("?") + previousValues
+        )
+    }
+
+    private suspend fun initString(variable: Variable): NewString {
+        val previousValues = dataRepository.stringValueDao.getByVariableId(variable.id, 10).first()
+            .map { it.value }
+        return NewString(
+            variable = variable,
+            suggestions = listOf("?") + previousValues
+        )
     }
 
     private suspend fun initEnum(variable: Variable): NewEnum {
@@ -54,13 +72,17 @@ class NewValueStateManager(
     private fun setString(newString: NewString, text: String): NewString {
         return newString.copy(
             text = text,
+            pickerState = if (newString.suggestions.contains(text)) text else
+                newString.pickerState
         )
     }
 
     private fun setFloat(newFloat: NewFloat, text: String): NewFloat {
         return newFloat.copy(
             value = text.toFloatOrNull(),
-            text = text
+            text = text,
+            pickerState = if (newFloat.suggestions.contains(text)) text else
+                newFloat.pickerState
         )
     }
 
@@ -78,7 +100,9 @@ class NewValueStateManager(
         }
         return newBoolean.copy(
             value = newValue.toBooleanStrictOrNull(),
-            text = newValue
+            text = newValue,
+            pickerState = if (NewBoolean.pickerList.contains(newValue)) newValue else
+                newBoolean.pickerState
         )
     }
 
@@ -97,6 +121,6 @@ fun List<Enumerator>.filterNames(text: String): List<String> = listOf("?") + thi
     .map { it.name }
 
 fun List<Enumerator>.findEnumerator(text: String): Enumerator? = this
-    .firstOrNull{it.name.uppercase() == text.uppercase()}
+    .firstOrNull { it.name.uppercase() == text.uppercase() }
 
 fun Map<Int, NewValue>.isValid(): Boolean = this.all { it.value.isValid() }

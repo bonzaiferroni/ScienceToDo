@@ -19,6 +19,8 @@ data class NewInteger(
 data class NewString(
     override val variable: Variable,
     val text: String = "",
+    val pickerState: String = "?",
+    val suggestions: List<String>,
 ) : NewValue {
     override fun isValid() = text.isNotBlank()
 }
@@ -26,6 +28,8 @@ data class NewString(
 data class NewFloat(
     override val variable: Variable,
     val text: String = "",
+    val pickerState: String = "?",
+    val suggestions: List<String>,
     val value: Float? = null,
 ) : NewValue {
     override fun isValid() = value != null
@@ -34,9 +38,15 @@ data class NewFloat(
 data class NewBoolean(
     override val variable: Variable,
     val text: String = "",
+    val pickerState: String = "?",
     val value: Boolean? = null,
 ) : NewValue {
+
     override fun isValid() = value != null
+
+    companion object {
+        val pickerList = listOf("false", "?", "true")
+    }
 }
 
 data class NewEnum(

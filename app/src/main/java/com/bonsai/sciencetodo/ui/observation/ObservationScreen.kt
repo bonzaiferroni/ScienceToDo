@@ -86,22 +86,33 @@ fun ObservationScreen(
                                     viewModel.setValue(newValueBox, it)
                                 }
 
-                                is NewString -> StringField(newValueBox.text) {
+                                is NewString -> StringField(
+                                    text = newValueBox.text,
+                                    pickerState = newValueBox.pickerState,
+                                    suggestions = newValueBox.suggestions,
+                                ) {
                                     viewModel.setValue(newValueBox, it)
                                 }
 
-                                is NewFloat -> FloatField(newValueBox.text) {
+                                is NewFloat -> FloatField(
+                                    text = newValueBox.text,
+                                    pickerState = newValueBox.pickerState,
+                                    suggestions = newValueBox.suggestions,
+                                ) {
                                     viewModel.setValue(newValueBox, it)
                                 }
 
-                                is NewBoolean -> BooleanField(newValueBox.text) {
+                                is NewBoolean -> BooleanField(
+                                    text = newValueBox.text,
+                                    pickerState = newValueBox.pickerState
+                                ) {
                                     viewModel.setValue(newValueBox, it)
                                 }
 
                                 is NewEnum -> EnumField(
-                                    newValueBox.text,
-                                    newValueBox.pickerState,
-                                    newValueBox.suggestions
+                                    text = newValueBox.text,
+                                    pickerState = newValueBox.pickerState,
+                                    suggestions = newValueBox.suggestions
                                 ) {
                                     viewModel.setValue(newValueBox, it)
                                 }

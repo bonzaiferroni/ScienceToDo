@@ -23,6 +23,10 @@ class FakeIntValueDao : IntValueDao {
         return flowOf(fakeIntValues.filter { it.variableId == id })
     }
 
+    override fun getByVariableId(id: Int, count: Int): Flow<List<IntValue>> {
+        TODO("Not yet implemented")
+    }
+
     override fun getCountByVariableId(id: Int): Flow<Int> {
         return flowOf(fakeIntValues.filter { it.variableId == id }.size)
     }

@@ -20,8 +20,14 @@ interface IntValueDao {
     @Query("SELECT * FROM int_value WHERE observation_id = :id")
     fun getByObservationId(id: Int): Flow<List<IntValue>>
 
-    @Query("SELECT * FROM int_value WHERE variable_id = :id")
+    @Query("SELECT * FROM int_value WHERE variable_id = :id ")
     fun getByVariableId(id: Int): Flow<List<IntValue>>
+
+    @Query("SELECT * FROM int_value " +
+            "WHERE variable_id = :id " +
+            "ORDER BY id DESC " +
+            "LIMIT :count")
+    fun getByVariableId(id: Int, count: Int): Flow<List<IntValue>>
 
     @Query("SELECT COUNT(*) FROM int_value WHERE variable_id = :id")
     fun getCountByVariableId(id: Int): Flow<Int>
