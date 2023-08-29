@@ -11,6 +11,8 @@ sealed interface NewValue {
 data class NewInteger(
     override val variable: Variable,
     val text: String = "",
+    val pickerState: String = "?",
+    val suggestions: List<String>,
     val value: Int? = null,
 ) : NewValue {
     override fun isValid() = value != null

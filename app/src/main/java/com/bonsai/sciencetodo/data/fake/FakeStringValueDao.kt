@@ -23,7 +23,7 @@ class FakeStringValueDao : StringValueDao {
         return flowOf(fakeStringValues.filter { it.variableId == id })
     }
 
-    override fun getByVariableId(id: Int, count: Int): Flow<List<StringValue>> {
+    override fun getDistinctValuesByVariableId(id: Int, count: Int): Flow<List<String>> {
         TODO("Not yet implemented")
     }
 

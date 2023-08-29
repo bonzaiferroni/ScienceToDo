@@ -23,11 +23,11 @@ interface StringValueDao {
     @Query("SELECT * FROM string_value WHERE variable_id = :id")
     fun getByVariableId(id: Int): Flow<List<StringValue>>
 
-    @Query("SELECT * FROM string_value " +
+    @Query("SELECT DISTINCT value FROM string_value " +
             "WHERE variable_id = :id " +
             "ORDER BY id DESC " +
             "LIMIT :count")
-    fun getByVariableId(id: Int, count: Int): Flow<List<StringValue>>
+    fun getDistinctValuesByVariableId(id: Int, count: Int): Flow<List<String>>
 
     @Query("SELECT COUNT(*) FROM string_value WHERE variable_id = :id")
     fun getCountByVariableId(id: Int): Flow<Int>

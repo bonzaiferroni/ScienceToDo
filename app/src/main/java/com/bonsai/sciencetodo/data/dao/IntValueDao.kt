@@ -23,11 +23,11 @@ interface IntValueDao {
     @Query("SELECT * FROM int_value WHERE variable_id = :id ")
     fun getByVariableId(id: Int): Flow<List<IntValue>>
 
-    @Query("SELECT * FROM int_value " +
+    @Query("SELECT DISTINCT value FROM int_value " +
             "WHERE variable_id = :id " +
             "ORDER BY id DESC " +
             "LIMIT :count")
-    fun getByVariableId(id: Int, count: Int): Flow<List<IntValue>>
+    fun getDistinctByVariableId(id: Int, count: Int): Flow<List<Int>>
 
     @Query("SELECT COUNT(*) FROM int_value WHERE variable_id = :id")
     fun getCountByVariableId(id: Int): Flow<Int>

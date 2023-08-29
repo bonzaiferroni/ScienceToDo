@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
@@ -53,13 +55,13 @@ fun ObservationScreen(
         Column(
             modifier = Modifier.padding(paddingValues),
         ) {
-            Column(
-                modifier = Modifier.padding(dimensionResource(R.dimen.padding_small)),
-                verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.gap_medium))
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.gap_medium)),
+                modifier = Modifier
+                    .padding(dimensionResource(R.dimen.padding_small))
+                    .weight(1f)
             ) {
-
-                // value input card
-                newValueBoxes.forEach { newValueBox ->
+                items(newValueBoxes) { newValueBox ->
                     val variable = newValueBox.variable
 
                     Surface(
@@ -82,7 +84,11 @@ fun ObservationScreen(
 
                             // input field
                             when (newValueBox) {
-                                is NewInteger -> IntegerField(newValueBox.text) {
+                                is NewInteger -> IntegerField(
+                                    text = newValueBox.text,
+                                    pickerState = newValueBox.pickerState,
+                                    suggestions = newValueBox.suggestions,
+                                ) {
                                     viewModel.setValue(newValueBox, it)
                                 }
 
@@ -120,24 +126,25 @@ fun ObservationScreen(
                         }
                     }
                 }
+            }
 
-                // accept and cancel
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.gap_medium)),
-                ) {
-                    RowIconButton(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "close dialog",
-                        onClick = { navController?.navigateUp() }
-                    )
-                    RowIconButton(
-                        imageVector = Icons.Default.Check,
-                        contentDescription = "add variable",
-                        onClick = { viewModel.saveObservation { navController?.navigateUp() } },
-                        enabled = enableAccept,
-                    )
-                }
+            // accept and cancel
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.gap_medium)),
+                modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
+            ) {
+                RowIconButton(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = "close dialog",
+                    onClick = { navController?.navigateUp() }
+                )
+                RowIconButton(
+                    imageVector = Icons.Default.Check,
+                    contentDescription = "add variable",
+                    onClick = { viewModel.saveObservation { navController?.navigateUp() } },
+                    enabled = enableAccept,
+                )
             }
         }
     }

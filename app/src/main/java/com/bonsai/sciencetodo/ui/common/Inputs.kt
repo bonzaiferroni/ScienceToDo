@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.PopupProperties
 import com.bonsai.sciencetodo.R
+import com.bonsai.sciencetodo.ui.observation.pickerNullText
 import com.chargemap.compose.numberpicker.ListItemPicker
 import com.chargemap.compose.numberpicker.NumberPicker
 
@@ -167,20 +168,39 @@ fun FloatField(
             modifier = Modifier.weight(1f)
         )
     }
-
 }
 
 @Composable
 fun IntegerField(
     text: String,
+    pickerState: String,
+    suggestions: List<String>,
     onValueChange: (String) -> Unit
 ) {
-    ValueField(
-        value = text,
-        label = "Integer",
-        keyboardType = KeyboardType.Number,
-        onValueChange = onValueChange
-    )
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.gap_large))
+    ) {
+        ValueField(
+            value = text,
+            label = "Integer",
+            keyboardType = KeyboardType.Number,
+            onValueChange = onValueChange,
+            modifier = Modifier.weight(1f)
+        )
+
+        ListItemPicker(
+            label = { it },
+            value = pickerState,
+            onValueChange = onValueChange,
+            list = suggestions,
+            textStyle = TextStyle.Default.copy(
+                color = MaterialTheme.colorScheme.onBackground
+            ),
+            dividersColor = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.weight(1f)
+        )
+    }
 }
 
 @Composable
@@ -205,7 +225,7 @@ fun BooleanField(
             label = { it },
             value = pickerState,
             onValueChange = onValueChange,
-            list = listOf("false", "?", "true"),
+            list = listOf("false", pickerNullText, "true"),
             textStyle = TextStyle.Default.copy(
                 color = MaterialTheme.colorScheme.onBackground
             ),
