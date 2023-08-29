@@ -3,6 +3,7 @@ package com.bonsai.sciencetodo.ui.observation
 import com.bonsai.sciencetodo.data.DataRepository
 import com.bonsai.sciencetodo.data.EnumRepository
 import com.bonsai.sciencetodo.data.ObservationRepository
+import com.bonsai.sciencetodo.model.Enumerator
 import com.bonsai.sciencetodo.model.Variable
 import com.bonsai.sciencetodo.model.VariableType
 import kotlinx.coroutines.flow.first
@@ -21,6 +22,17 @@ class NewValueStateManager(
         VariableType.Enum -> initEnum(variable)
     }
 
+    private suspend fun initEnum(variable: Variable): NewEnum {
+        val enumeration = enumRepository.enumVarJoinDao.getEnumerationByVariableId(variable.id)
+            .first()
+        val enumerators = enumRepository.enumeratorDao.getByEnumerationId(enumeration.id).first()
+        return NewEnum(
+            variable = variable,
+            enumerators = enumerators,
+            suggestions = listOf("?") + enumerators.map { it.name }
+        )
+    }
+
     fun setValue(newValue: NewValue, text: String): NewValue {
         return when (newValue) {
             is NewBoolean -> setBoolean(newValue, text)
@@ -29,17 +41,6 @@ class NewValueStateManager(
             is NewInteger -> setInteger(newValue, text)
             is NewString -> setString(newValue, text)
         }
-    }
-
-    private suspend fun initEnum(variable: Variable): NewEnum {
-        val enumeration = enumRepository.enumVarJoinDao.getEnumerationByVariableId(variable.id)
-            .first()
-        val enumerators = enumRepository.enumeratorDao.getByEnumerationId(enumeration.id).first()
-        return NewEnum(
-            variable = variable,
-            enumerators = enumerators,
-            suggestions = enumerators.map { it.name }
-        )
     }
 
     private fun setInteger(newInteger: NewInteger, text: String): NewInteger {
@@ -83,7 +84,19 @@ class NewValueStateManager(
 
     private fun setEnum(newEnum: NewEnum, text: String): NewEnum {
         return newEnum.copy(
-            text = text,
+            text = if (text == "?") newEnum.text else text,
+            value = newEnum.enumerators.findEnumerator(text)?.id,
+            pickerState = if (text == "?") text else
+                newEnum.enumerators.findEnumerator(text)?.name ?: newEnum.pickerState
         )
     }
 }
+
+fun List<Enumerator>.filterNames(text: String): List<String> = listOf("?") + this
+    .filter { it.name.uppercase() == text.uppercase() }
+    .map { it.name }
+
+fun List<Enumerator>.findEnumerator(text: String): Enumerator? = this
+    .firstOrNull{it.name.uppercase() == text.uppercase()}
+
+fun Map<Int, NewValue>.isValid(): Boolean = this.all { it.value.isValid() }

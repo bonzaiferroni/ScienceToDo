@@ -42,7 +42,7 @@ class ObservationVm @Inject constructor(
                     newValues[variable.id] = newValueStateManager.getBox(variable)
                 }
                 _uiState.value = _uiState.value.copy(
-                    newValues = newValues,
+                    newValues = newValues.values.toList(),
                 )
             }
         }
@@ -59,7 +59,7 @@ class ObservationVm @Inject constructor(
         val updatedNewValue = newValueStateManager.setValue(newValue, text)
         newValues[newValue.variable.id] = updatedNewValue
         _uiState.value = uiState.value.copy(
-            newValues = newValues,
+            newValues = newValues.values.toList(),
             enableAccept = newValues.isValid()
         )
     }
@@ -68,7 +68,7 @@ class ObservationVm @Inject constructor(
         val newValues = _uiState.value.newValues
 
         viewModelScope.launch {
-            observationRepository.createObservation(datasetId, newValues.values.toList())
+            observationRepository.createObservation(datasetId, newValues.toList())
             callback()
         }
     }
@@ -76,6 +76,6 @@ class ObservationVm @Inject constructor(
 
 data class ObservationState(
     val dataset: Dataset = Dataset(0, ""),
-    val newValues: Map<Int, NewValue> = emptyMap(),
+    val newValues: List<NewValue> = emptyList(),
     val enableAccept: Boolean = false,
 )

@@ -42,15 +42,12 @@ data class NewBoolean(
 data class NewEnum(
     override val variable: Variable,
     val text: String = "",
+    val pickerState: String = "?",
     val value: Int? = null,
     val suggestions: List<String> = emptyList(),
     val enumerators: List<Enumerator> = emptyList(),
 ) : NewValue {
+
+
     override fun isValid() = value != null
 }
-
-fun Map<Int, NewValue>.isValid(): Boolean = this.all { it.value.isValid() }
-
-fun List<Enumerator>.filterNames(text: String): List<String> = this
-    .filter { it.name.uppercase() == text.uppercase() }
-    .map { it.name }

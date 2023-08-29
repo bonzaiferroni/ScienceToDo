@@ -158,13 +158,27 @@ fun BooleanField(
 @Composable
 fun EnumField(
     text: String,
+    pickerState: String,
     suggestions: List<String>,
     onValueChange: (String) -> Unit
 ) {
-    AutoCompleteTextField(
-        text = text,
-        suggestions = suggestions,
-        onValueChanged = onValueChange)
+    ValueField(
+        value = text,
+        label = "Enumerator",
+        keyboardType = KeyboardType.Text,
+        onValueChange = onValueChange
+    )
+
+    ListItemPicker(
+        label = { it },
+        value = pickerState,
+        onValueChange = onValueChange,
+        list = suggestions,
+        textStyle = TextStyle.Default.copy(
+            color = MaterialTheme.colorScheme.onBackground
+        ),
+        dividersColor = MaterialTheme.colorScheme.primary
+    )
 }
 
 @Composable

@@ -59,7 +59,7 @@ fun ObservationScreen(
             ) {
 
                 // value input card
-                newValueBoxes.forEach { (_, newValueBox) ->
+                newValueBoxes.forEach { newValueBox ->
                     val variable = newValueBox.variable
 
                     Surface(
@@ -99,7 +99,9 @@ fun ObservationScreen(
                                 }
 
                                 is NewEnum -> EnumField(
-                                    newValueBox.text, newValueBox.suggestions
+                                    newValueBox.text,
+                                    newValueBox.pickerState,
+                                    newValueBox.suggestions
                                 ) {
                                     viewModel.setValue(newValueBox, it)
                                 }
