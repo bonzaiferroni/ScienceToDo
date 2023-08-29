@@ -3,6 +3,7 @@ package com.bonsai.sciencetodo.data
 import androidx.room.TypeConverter
 import com.bonsai.sciencetodo.model.VariableType
 import java.time.Instant
+import java.time.LocalTime
 
 class Converters {
     @TypeConverter
@@ -17,4 +18,14 @@ class Converters {
 
     @TypeConverter
     fun toInteger(value: VariableType): Int = value.dbValue
+
+    @TypeConverter
+    fun fromLocalTimeToSeconds(localTime: LocalTime?): Int? {
+        return localTime?.toSecondOfDay()
+    }
+
+    @TypeConverter
+    fun fromSecondsToLocalTime(secondOfDay: Int?): LocalTime? {
+        return secondOfDay?.let { LocalTime.ofSecondOfDay(it.toLong()) }
+    }
 }

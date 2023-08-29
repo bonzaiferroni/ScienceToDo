@@ -40,7 +40,7 @@ class DatasetVm @Inject constructor(
         }
 
         viewModelScope.launch {
-            variableDao.getByFlowId(datasetId).collect {
+            variableDao.getByDatasetId(datasetId).collect {
                 _uiState.value = _uiState.value.copy(variables = it)
             }
         }

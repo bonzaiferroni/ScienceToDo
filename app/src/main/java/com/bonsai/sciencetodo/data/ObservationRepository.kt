@@ -48,7 +48,9 @@ class ObservationRepository(
     }
 
     private suspend fun createObservation(datasetId: Int): Observation {
-        val observation = Observation(0, datasetId, Instant.now())
+        // TODO: gather "observedAt"
+        val currentInstant = Instant.now()
+        val observation = Observation(0, datasetId, currentInstant, currentInstant)
         val id = observationDao.insert(observation)
         return observation.copy(id = id.toInt())
     }

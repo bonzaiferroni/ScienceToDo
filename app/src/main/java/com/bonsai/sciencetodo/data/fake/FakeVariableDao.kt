@@ -16,7 +16,7 @@ class FakeVariableDao : VariableDao {
         return flowOf(fakeVariables.first { it.id == id})
     }
 
-    override fun getByFlowId(id: Int): Flow<List<Variable>> {
+    override fun getByDatasetId(id: Int): Flow<List<Variable>> {
         return flowOf(fakeVariables.filter { it.datasetId == id })
     }
 

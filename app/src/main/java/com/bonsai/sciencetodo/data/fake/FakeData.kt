@@ -57,13 +57,10 @@ object FakeData {
 
     val fakeObservations by lazy {
         val foodData = fakeDatasets.first { it.name == "Food" }
-        var id = 0
-        var minusSeconds = 100L
-        listOf(
-            Observation(++id, foodData.id, Instant.now().minusSeconds(--minusSeconds)),
-            Observation(++id, foodData.id, Instant.now().minusSeconds(--minusSeconds)),
-            Observation(++id, foodData.id, Instant.now().minusSeconds(--minusSeconds)),
-        )
+        listOf(0, 1, 2).map { id ->
+            val instant = Instant.now().minusSeconds(id.toLong())
+            Observation(id, foodData.id, instant, instant)
+        }
     }
 
     val fakeIntValues by lazy {

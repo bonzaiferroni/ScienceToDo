@@ -12,6 +12,7 @@ import com.bonsai.sciencetodo.data.dao.EnumValueDao
 import com.bonsai.sciencetodo.data.dao.FloatValueDao
 import com.bonsai.sciencetodo.data.dao.IntValueDao
 import com.bonsai.sciencetodo.data.dao.ObservationDao
+import com.bonsai.sciencetodo.data.dao.ReminderDao
 import com.bonsai.sciencetodo.data.dao.StringValueDao
 import com.bonsai.sciencetodo.data.dao.VariableDao
 import dagger.Module
@@ -82,6 +83,12 @@ class AppModule {
     @Singleton
     fun provideEnumValueDao(appDatabase: AppDatabase): EnumValueDao {
         return appDatabase.enumValueDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideReminderDao(appDatabase: AppDatabase): ReminderDao {
+        return appDatabase.reminderDao()
     }
 
     @Provides

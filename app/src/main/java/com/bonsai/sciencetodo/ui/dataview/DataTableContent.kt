@@ -28,7 +28,7 @@ class DataTableContent(
             return variables[column - 1].name
         }
         if (column == 0) {
-            return formatter.format(observations[row - 1].instant)
+            return formatter.format(observations[row - 1].recordedAt)
         }
         return when (val dataValue = dataMatrix[column - 1][row - 1]) {
             is IntValue -> dataValue.value.toString()

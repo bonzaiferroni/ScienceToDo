@@ -39,11 +39,11 @@ class DataRepository(
     }
 
     fun getVariablesByDatasetId(id: Int): Flow<List<Variable>> {
-        return variableDao.getByFlowId(id)
+        return variableDao.getByDatasetId(id)
     }
 
     suspend fun getTableContent(datasetId: Int): DataTableContent {
-        val variables = variableDao.getByFlowId(datasetId).first()
+        val variables = variableDao.getByDatasetId(datasetId).first()
         val observations = observationDao.getByFlowId(datasetId).first()
 
         val variableIds = variables.map { v -> v.id }

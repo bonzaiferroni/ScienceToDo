@@ -6,12 +6,13 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.time.Instant
+import java.time.LocalTime
 
 @Entity(
-    tableName = "observation",
+    tableName = "reminder",
     foreignKeys = [
         ForeignKey(
-            entity = Dataset::class,
+            entity = Reminder::class,
             parentColumns = ["id"],
             childColumns = ["dataset_id"],
             onDelete = ForeignKey.CASCADE
@@ -19,11 +20,12 @@ import java.time.Instant
     ],
     indices = [Index("dataset_id")]
 )
-data class Observation (
+data class Reminder (
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     @ColumnInfo(name = "dataset_id")
     val datasetId: Int,
-    val recordedAt: Instant,
-    val observedAt: Instant,
-    )
+    val lastRecorded: Instant,
+    val intervalSeconds: Int?,
+    val baseTime: LocalTime?,
+)
