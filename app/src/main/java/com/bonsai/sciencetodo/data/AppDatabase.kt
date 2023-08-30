@@ -12,7 +12,7 @@ import com.bonsai.sciencetodo.data.dao.EnumeratorDao
 import com.bonsai.sciencetodo.data.dao.FloatValueDao
 import com.bonsai.sciencetodo.data.dao.IntValueDao
 import com.bonsai.sciencetodo.data.dao.ObservationDao
-import com.bonsai.sciencetodo.data.dao.ReminderDao
+import com.bonsai.sciencetodo.data.dao.RoutineDao
 import com.bonsai.sciencetodo.data.dao.StringValueDao
 import com.bonsai.sciencetodo.data.dao.VariableDao
 import com.bonsai.sciencetodo.model.BooleanValue
@@ -24,7 +24,7 @@ import com.bonsai.sciencetodo.model.Enumerator
 import com.bonsai.sciencetodo.model.FloatValue
 import com.bonsai.sciencetodo.model.IntValue
 import com.bonsai.sciencetodo.model.Observation
-import com.bonsai.sciencetodo.model.Reminder
+import com.bonsai.sciencetodo.model.Routine
 import com.bonsai.sciencetodo.model.StringValue
 import com.bonsai.sciencetodo.model.Variable
 
@@ -33,8 +33,8 @@ import com.bonsai.sciencetodo.model.Variable
         Dataset::class, Variable::class, Observation::class,
         Enumeration::class, Enumerator::class, EnumValue::class, EnumVarJoin::class,
         StringValue::class, IntValue::class, FloatValue::class, BooleanValue::class,
-        Reminder::class],
-    version = 13
+        Routine::class],
+    version = 14
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -49,5 +49,5 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun enumeratorDao(): EnumeratorDao
     abstract fun enumValueDao(): EnumValueDao
     abstract fun enumVarJoinDao(): EnumVarJoinDao
-    abstract fun reminderDao(): ReminderDao
+    abstract fun routineDao(): RoutineDao
 }

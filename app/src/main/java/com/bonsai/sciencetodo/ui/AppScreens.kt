@@ -42,6 +42,14 @@ sealed interface AppScreens {
         }
     }
 
+    data object Routine : AppScreens {
+        override val name = "routine"
+    }
+
+    data object NewRoutine : AppScreens {
+        override val name = "newRoutine"
+    }
+
     fun getIntNavArg(argName: String): NamedNavArgument {
         return navArgument(argName) { type = NavType.IntType }
     }

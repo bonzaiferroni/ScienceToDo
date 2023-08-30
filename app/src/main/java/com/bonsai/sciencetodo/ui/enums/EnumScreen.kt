@@ -61,7 +61,10 @@ fun EnumScreen(
 
     Scaffold(
         topBar = {
-            StdTopAppBar(title = "Enumerations")
+            StdTopAppBar(
+                title = "Enumerations",
+                navigateUp = { navController?.navigateUp() },
+            )
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { viewModel.newEnumerationFunctions.start(Unit) }) {
@@ -102,7 +105,7 @@ fun NewEnumerationDialog(
         TextField(
             value = newEnumeration.name,
             onValueChange = editFunctions.update,
-            label = { Text(text = "new enumeration")},
+            label = { Text(text = "new enumeration") },
             modifier = Modifier.fillMaxWidth()
         )
     }
@@ -124,7 +127,7 @@ fun CreateEnumeratorDialog(
         TextField(
             value = newEnumerator.name,
             onValueChange = editFunctions.update,
-            label = { Text(text = "new enum member")},
+            label = { Text(text = "new enum member") },
             modifier = Modifier.fillMaxWidth()
         )
     }

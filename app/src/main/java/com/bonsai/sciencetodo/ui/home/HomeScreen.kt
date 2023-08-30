@@ -69,6 +69,10 @@ fun HomeScreen(
                     text = { Text("Enumerations") },
                     onClick = { navController?.navigate(AppScreens.Enum.name) }
                 )
+                DropdownMenuItem(
+                    text = { Text("Routines") },
+                    onClick = { navController?.navigate(AppScreens.Routine.name) }
+                )
             }
         },
         floatingActionButton = {

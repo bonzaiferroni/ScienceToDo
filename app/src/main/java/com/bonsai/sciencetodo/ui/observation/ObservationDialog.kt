@@ -56,7 +56,7 @@ fun ObservationDialog(
                     )
                     /*when (newValueBox) {
                         is NewInteger -> {
-                            IntegerField(
+                            com.bonsai.sciencetodo.ui.observation.IntegerField(
                                 onValueChange = {
                                     newValueBox.value = it
                                     enableAccept = newValueBoxes.isValid()
@@ -65,7 +65,7 @@ fun ObservationDialog(
                         }
 
                         is NewString -> {
-                            StringField(
+                            com.bonsai.sciencetodo.ui.observation.StringField(
                                 onValueChange = {
                                     newValueBox.value = it
                                     enableAccept = newValueBoxes.isValid()
@@ -74,7 +74,7 @@ fun ObservationDialog(
                         }
 
                         is NewFloat -> {
-                            FloatField(
+                            com.bonsai.sciencetodo.ui.observation.FloatField(
                                 onValueChange = {
                                     newValueBox.value = it
                                     enableAccept = newValueBoxes.isValid()
@@ -83,7 +83,7 @@ fun ObservationDialog(
                         }
 
                         is NewBoolean -> {
-                            BooleanField(
+                            com.bonsai.sciencetodo.ui.observation.BooleanField(
                                 onValueChange = {
                                     newValueBox.value = it
                                     enableAccept = newValueBoxes.isValid()
@@ -92,7 +92,7 @@ fun ObservationDialog(
                         }
 
                         is NewEnum -> {
-                            EnumField(
+                            com.bonsai.sciencetodo.ui.observation.EnumField(
                                 onValueChange = {
                                     newValueBox.value = it
                                     enableAccept = newValueBoxes.isValid()

@@ -25,13 +25,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.bonsai.sciencetodo.R
-import com.bonsai.sciencetodo.ui.common.BooleanField
-import com.bonsai.sciencetodo.ui.common.EnumField
-import com.bonsai.sciencetodo.ui.common.FloatField
-import com.bonsai.sciencetodo.ui.common.IntegerField
 import com.bonsai.sciencetodo.ui.common.RowIconButton
 import com.bonsai.sciencetodo.ui.common.StdTopAppBar
-import com.bonsai.sciencetodo.ui.common.StringField
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)

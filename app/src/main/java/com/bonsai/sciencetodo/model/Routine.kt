@@ -5,14 +5,13 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import java.time.Instant
 import java.time.LocalTime
 
 @Entity(
-    tableName = "reminder",
+    tableName = "routine",
     foreignKeys = [
         ForeignKey(
-            entity = Reminder::class,
+            entity = Routine::class,
             parentColumns = ["id"],
             childColumns = ["dataset_id"],
             onDelete = ForeignKey.CASCADE
@@ -20,12 +19,11 @@ import java.time.LocalTime
     ],
     indices = [Index("dataset_id")]
 )
-data class Reminder (
+data class Routine (
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     @ColumnInfo(name = "dataset_id")
     val datasetId: Int,
-    val lastRecorded: Instant,
-    val intervalSeconds: Int?,
     val baseTime: LocalTime?,
+    val intervalSeconds: Int?,
 )

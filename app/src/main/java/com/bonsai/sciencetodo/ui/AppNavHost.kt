@@ -15,6 +15,8 @@ import com.bonsai.sciencetodo.ui.dataview.DataViewScreen
 import com.bonsai.sciencetodo.ui.enums.EnumScreen
 import com.bonsai.sciencetodo.ui.home.HomeScreen
 import com.bonsai.sciencetodo.ui.observation.ObservationScreen
+import com.bonsai.sciencetodo.ui.routine.NewRoutineScreen
+import com.bonsai.sciencetodo.ui.routine.RoutineScreen
 
 @Composable
 fun AppNavHost(
@@ -52,6 +54,16 @@ fun AppNavHost(
             arguments = AppScreens.Observation.getNavArgs(),
         ) {
             ObservationScreen(navController = navController)
+        }
+        composable(
+            route = AppScreens.Routine.name
+        ) {
+            RoutineScreen(navController = navController)
+        }
+        composable(
+            route = AppScreens.NewRoutine.name
+        ) {
+            NewRoutineScreen(navController = navController)
         }
     }
 }
